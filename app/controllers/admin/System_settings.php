@@ -719,115 +719,18 @@ class system_settings extends MY_Controller
 
         $this->form_validation->set_rules('group', lang("group"), 'is_natural_no_zero');
         if ($this->form_validation->run() == true) {
-
-            $data = array(
-                'products-index' => $this->input->post('products-index'),
-                'products-edit' => $this->input->post('products-edit'),
-                'products-add' => $this->input->post('products-add'),
-                'products-delete' => $this->input->post('products-delete'),
-                'products-cost' => $this->input->post('products-cost'),
-                'products-price' => $this->input->post('products-price'),
-                'customers-index' => $this->input->post('customers-index'),
-                'customers-edit' => $this->input->post('customers-edit'),
-                'customers-add' => $this->input->post('customers-add'),
-                'customers-delete' => $this->input->post('customers-delete'),
-                'suppliers-index' => $this->input->post('suppliers-index'),
-                'suppliers-edit' => $this->input->post('suppliers-edit'),
-                'suppliers-add' => $this->input->post('suppliers-add'),
-                'suppliers-delete' => $this->input->post('suppliers-delete'),
-                'sales-index' => $this->input->post('sales-index'),
-                'sales-edit' => $this->input->post('sales-edit'),
-                'sales-add' => $this->input->post('sales-add'),
-                'sales-delete' => $this->input->post('sales-delete'),
-                'communication-index' => $this->input->post('communication-index'),
-                'communication-edit' => $this->input->post('communication-edit'),
-                'communication-add' => $this->input->post('communication-add'),
-                'communication-delete' => $this->input->post('communication-delete'),
-                'sales-email' => $this->input->post('sales-email'),
-                'sales-pdf' => $this->input->post('sales-pdf'),
-                'sales-deliveries' => $this->input->post('sales-deliveries'),
-                'sales-edit_delivery' => $this->input->post('sales-edit_delivery'),
-                'sales-add_delivery' => $this->input->post('sales-add_delivery'),
-                'sales-delete_delivery' => $this->input->post('sales-delete_delivery'),
-                'sales-email_delivery' => $this->input->post('sales-email_delivery'),
-                'sales-pdf_delivery' => $this->input->post('sales-pdf_delivery'),
-                'sales-gift_cards' => $this->input->post('sales-gift_cards'),
-                'sales-edit_gift_card' => $this->input->post('sales-edit_gift_card'),
-                'sales-add_gift_card' => $this->input->post('sales-add_gift_card'),
-                'sales-delete_gift_card' => $this->input->post('sales-delete_gift_card'),
-                'quotes-index' => $this->input->post('quotes-index'),
-                'quotes-edit' => $this->input->post('quotes-edit'),
-                'quotes-add' => $this->input->post('quotes-add'),
-                'quotes-delete' => $this->input->post('quotes-delete'),
-                'quotes-email' => $this->input->post('quotes-email'),
-                'quotes-pdf' => $this->input->post('quotes-pdf'),
-                'purchases-index' => $this->input->post('purchases-index'),
-                'purchases-edit' => $this->input->post('purchases-edit'),
-                'purchases-add' => $this->input->post('purchases-add'),
-                'purchases-delete' => $this->input->post('purchases-delete'),
-                'purchases-email' => $this->input->post('purchases-email'),
-                'purchases-pdf' => $this->input->post('purchases-pdf'),
-                'transfers-index' => $this->input->post('transfers-index'),
-                'transfers-edit' => $this->input->post('transfers-edit'),
-                'transfers-add' => $this->input->post('transfers-add'),
-                'transfers-delete' => $this->input->post('transfers-delete'),
-                'transfers-email' => $this->input->post('transfers-email'),
-                'transfers-pdf' => $this->input->post('transfers-pdf'),
-                'transfers-csv' => $this->input->post('transfers-csv'),
-                'transfers-transfer_by_fattura' => $this->input->post('transfers-transfer_by_fattura'),
-                'transfers-transfer_by_fattura_privati' => $this->input->post('transfers-transfer_by_fattura_privati'),
-                'tax_calculations-index' => $this->input->post('tax_calculations-index'),
-                'tax_calculations-view' => $this->input->post('tax_calculations-view'),
-                'tax_calculations-edit' => $this->input->post('tax_calculations-edit'),
-                'tax_calculations-settings' => $this->input->post('tax_calculations-settings'),
-                'tax_calculations-inps_slabs' => $this->input->post('tax_calculations-inps_slabs'),
-                'tax_calculations-add_inps_slab' => $this->input->post('tax_calculations-add_inps_slab'),
-                'tax_calculations-edit_inps_slab' => $this->input->post('tax_calculations-edit_inps_slab'),
-                'tax_calculations-delete_inps_slab' => $this->input->post('tax_calculations-delete_inps_slab'),
-                'sales-return_sales' => $this->input->post('sales-return_sales'),
-                'reports-quantity_alerts' => $this->input->post('reports-quantity_alerts'),
-                'reports-expiry_alerts' => $this->input->post('reports-expiry_alerts'),
-                'reports-products' => $this->input->post('reports-products'),
-                'reports-daily_sales' => $this->input->post('reports-daily_sales'),
-                'reports-monthly_sales' => $this->input->post('reports-monthly_sales'),
-                'reports-payments' => $this->input->post('reports-payments'),
-                'reports-sales' => $this->input->post('reports-sales'),
-                'reports-purchases' => $this->input->post('reports-purchases'),
-                'reports-customers' => $this->input->post('reports-customers'),
-                'reports-suppliers' => $this->input->post('reports-suppliers'),
-                'sales-payments' => $this->input->post('sales-payments'),
-                'purchases-payments' => $this->input->post('purchases-payments'),
-                'purchases-expenses' => $this->input->post('purchases-expenses'),
-                'products-adjustments' => $this->input->post('products-adjustments'),
-                'bulk_actions' => $this->input->post('bulk_actions'),
-                'customers-deposits' => $this->input->post('customers-deposits'),
-                'customers-delete_deposit' => $this->input->post('customers-delete_deposit'),
-                'products-barcode' => $this->input->post('products-barcode'),
-                'purchases-return_purchases' => $this->input->post('purchases-return_purchases'),
-                'reports-expenses' => $this->input->post('reports-expenses'),
-                'reports-daily_purchases' => $this->input->post('reports-daily_purchases'),
-                'reports-monthly_purchases' => $this->input->post('reports-monthly_purchases'),
-                'products-stock_count' => $this->input->post('products-stock_count'),
-                'edit_price' => $this->input->post('edit_price'),
-                'returns-index' => $this->input->post('returns-index'),
-                'returns-edit' => $this->input->post('returns-edit'),
-                'returns-add' => $this->input->post('returns-add'),
-                'returns-delete' => $this->input->post('returns-delete'),
-                'returns-email' => $this->input->post('returns-email'),
-                'returns-pdf' => $this->input->post('returns-pdf'),
-                'reports-tax' => $this->input->post('reports-tax'),
-                'document-file_manager' => $this->input->post('document-file_manager'),
-                'document-folder_download' => $this->input->post('document-folder_download'),
-                'document-upload' => $this->input->post('document-upload'),
-                'document-file_delete' => $this->input->post('document-file_delete'),
-                'document-folder_create' => $this->input->post('document-folder_create'),
-            );
-
-            if (POS) {
-                $data['pos-index'] = $this->input->post('pos-index');
-            }
-
-            //$this->sma->print_arrays($data);
+            // Only immigrants and document permissions are shown; merge with current so others are preserved.
+            $current = $this->settings_model->getGroupPermissions($id);
+            $data = $current ? (array) $current : array();
+            $data['immigrants-index'] = $this->input->post('immigrants-index');
+            $data['immigrants-add'] = $this->input->post('immigrants-add');
+            $data['immigrants-edit'] = $this->input->post('immigrants-edit');
+            $data['immigrants-delete'] = $this->input->post('immigrants-delete');
+            $data['document-file_manager'] = $this->input->post('document-file_manager');
+            $data['document-folder_create'] = $this->input->post('document-folder_create');
+            $data['document-folder_download'] = $this->input->post('document-folder_download');
+            $data['document-upload'] = $this->input->post('document-upload');
+            $data['document-file_delete'] = $this->input->post('document-file_delete');
         }
 
 

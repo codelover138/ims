@@ -144,6 +144,26 @@ class Db_model extends CI_Model
         return FALSE;
     }
 
+    /**
+     * @param int|null $created_by If set (non-owner/admin), only immigrants created by this user_id
+     */
+    public function getLatestImmigrants($created_by = null)
+    {
+        $this->db->select('id, primary_id, first_name, surname');
+        if ($created_by !== null) {
+            $this->db->where('created_by', (int) $created_by);
+        }
+        $this->db->order_by('id', 'desc');
+        $q = $this->db->get('immigrants', 5);
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return array();
+    }
+
     public function getBestSeller($start_date = NULL, $end_date = NULL)
     {
         if (!$start_date) {

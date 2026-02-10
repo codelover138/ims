@@ -272,206 +272,9 @@
                                         </li>
 
                                         <?php
-                        if ($Owner || $Admin) {
+                        $is_full_admin = $Owner || $Admin || ($this->session->userdata('group_id') == 1);
+                        if ($is_full_admin) {
                             ?>
-
-                                        <li class="mm_products">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-barcode"></i>
-                                                <span class="text"> <?= lang('products'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <li id="products_index">
-                                                    <a class="submenu" href="<?= admin_url('products'); ?>">
-                                                        <i class="fa fa-barcode"></i>
-                                                        <span class="text"> <?= lang('list_products'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="products_add">
-                                                    <a class="submenu" href="<?= admin_url('products/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i>
-                                                        <span class="text"> <?= lang('add_product'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        </li>
-
-                                        <li
-                                            class="mm_sales <?= strtolower($this->router->fetch_method()) == 'sales' ? 'mm_pos' : '' ?>">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-heart"></i>
-                                                <span class="text"> <?= lang('sales'); ?>
-                                                </span> <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <li id="sales_index">
-                                                    <a class="submenu" href="<?= admin_url('sales'); ?>">
-                                                        <i class="fa fa-heart"></i>
-                                                        <span class="text"> <?= lang('list_sales'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <li id="sales_add">
-                                                    <a class="submenu" href="<?= admin_url('sales/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i>
-                                                        <span class="text"> <?= lang('add_sale'); ?></span>
-                                                    </a>
-                                                </li>
-
-
-                                                <li id="sales_gift_cards">
-                                                    <a class="submenu" href="<?= admin_url('sales/gift_cards'); ?>">
-                                                        <i class="fa fa-gift"></i>
-                                                        <span class="text"> <?= lang('list_gift_cards'); ?></span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-
-                                        <li class="mm_communication">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-star"></i>
-                                                <span class="text"> <?= lang('Communication'); ?>
-                                                </span> <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-
-                                                <li id="communication_index">
-                                                    <a class="submenu" href="<?= admin_url('communication/'); ?>">
-                                                        <i class="fa fa-th-list"></i>
-                                                        <span class="text"> <?= lang('List_Communication'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="communication_add">
-                                                    <a class="submenu" href="<?= admin_url('communication/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i>
-                                                        <span class="text"> <?= lang('Add_Communication'); ?></span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-
-                                        <li class="mm_transfers">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-star-o"></i>
-                                                <span class="text"> <?= lang('transfers'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <?php if (!$this->data['GP'] || !empty($this->data['GP']['transfers-index'])): ?>
-                                                <li id="transfers_index">
-                                                    <a class="submenu" href="<?= admin_url('transfers'); ?>">
-                                                        <i class="fa fa-star-o"></i><span class="text">
-                                                            <?= lang('list_transfers'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php endif; ?>
-                                                <?php if (!$this->data['GP'] || !empty($this->data['GP']['transfers-transfer_by_fattura_privati'])): ?>
-                                                <li id="transfers_transfer_by_fattura_privati">
-                                                    <a class="submenu"
-                                                        href="<?= admin_url('transfers/transfer_by_fattura_privati'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('Add_Transfer_Fattura_Privati'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php endif; ?>
-                                                <?php if (!$this->data['GP'] || !empty($this->data['GP']['transfers-transfer_by_fattura'])): ?>
-                                                <li id="transfers_transfer_by_fattura">
-                                                    <a class="submenu"
-                                                        href="<?= admin_url('transfers/transfer_by_fattura'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('Add_Transfer_By_Fattura'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php endif; ?>
-                                            </ul>
-                                        </li>
-                                        <li class="mm_tax_calculations">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-star-o"></i>
-                                                <span class="text"> <?= lang('tax_calculations'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <?php if (!$this->data['GP'] || !empty($this->data['GP']['tax_calculations-index'])): ?>
-                                                <li id="tax_calculations_index">
-                                                    <a class="submenu" href="<?= admin_url('tax_calculations'); ?>">
-                                                        <i class="fa fa-star-o"></i><span class="text">
-                                                            <?= lang('list_tax_calculations'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php endif; ?>
-                                                <?php if (!$this->data['GP'] || !empty($this->data['GP']['tax_calculations-inps_slabs'])): ?>
-                                                <li id="tax_calculations_inps_slabs">
-                                                    <a class="submenu"
-                                                        href="<?= admin_url('tax_calculations/inps_slabs'); ?>">
-                                                        <i class="fa fa-list"></i><span class="text">
-                                                            <?= lang('inps_slabs'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php endif; ?>
-                                                <?php if (!$this->data['GP'] || !empty($this->data['GP']['tax_calculations-add_inps_slab'])): ?>
-                                                <li id="tax_calculations_add_inps_slab">
-                                                    <a class="submenu"
-                                                        href="<?= admin_url('tax_calculations/edit_inps_slab'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_inps_slab'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php endif; ?>
-                                            </ul>
-                                        </li>
-
-                                        <li class="mm_payments">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-dollar"></i>
-                                                <span class="text"> <?= lang('payments'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <li id="payments_index">
-                                                    <a class="submenu" href="<?= admin_url('payments'); ?>">
-                                                        <i class="fa fa-dollar"></i><span class="text">
-                                                            <?= lang('List_Payments'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="payments_add">
-                                                    <a class="submenu" href="<?= admin_url('payments/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        </li>
-
-
-                                        <li class="mm_purchases">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-star"></i>
-                                                <span class="text"> <?= lang('purchases'); ?>
-                                                </span> <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-
-                                                <li id="purchases_expenses">
-                                                    <a class="submenu" href="<?= admin_url('purchases/expenses'); ?>">
-                                                        <i class="fa fa-dollar"></i>
-                                                        <span class="text"> <?= lang('list_expenses'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="purchases_add_expense">
-                                                    <a class="submenu" href="<?= admin_url('purchases/add_expense'); ?>"
-                                                        data-toggle="modal" data-target="#myModal">
-                                                        <i class="fa fa-plus-circle"></i>
-                                                        <span class="text"> <?= lang('add_expense'); ?></span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-
                                         <li class="mm_auth mm_customers mm_suppliers mm_billers">
                                             <a class="dropmenu" href="#">
                                                 <i class="fa fa-users"></i>
@@ -492,34 +295,28 @@
                                                             <?= lang('new_user'); ?></span>
                                                     </a>
                                                 </li>
-                                                <li id="billers_index">
-                                                    <a class="submenu" href="<?= admin_url('billers'); ?>">
-                                                        <i class="fa fa-users"></i><span class="text">
-                                                            <?= lang('list_billers'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="billers_index">
-                                                    <a class="submenu" href="<?= admin_url('billers/add'); ?>"
-                                                        data-toggle="modal" data-target="#myModal">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_biller'); ?></span>
-                                                    </a>
-                                                </li>
                                                 <?php } ?>
-                                                <li id="customers_index">
-                                                    <a class="submenu" href="<?= admin_url('customers'); ?>">
-                                                        <i class="fa fa-users"></i><span class="text">
-                                                            <?= lang('list_customers'); ?></span>
+                                            </ul>
+                                        </li>
+                                        <li class="mm_immigrants">
+                                            <a class="dropmenu" href="#">
+                                                <i class="fa fa-globe"></i>
+                                                <span class="text"> <?= lang('immigrants'); ?> </span>
+                                                <span class="chevron closed"></span>
+                                            </a>
+                                            <ul>
+                                                <li id="immigrants_index">
+                                                    <a class="submenu" href="<?= admin_url('immigrants'); ?>">
+                                                        <i class="fa fa-list"></i><span class="text">
+                                                            <?= lang('list_immigrants'); ?></span>
                                                     </a>
                                                 </li>
-                                                <li id="customers_index">
-                                                    <a class="submenu" href="<?= admin_url('customers/add'); ?>"
-                                                        data-toggle="modal" data-target="#myModal">
+                                                <li id="immigrants_add">
+                                                    <a class="submenu" href="<?= admin_url('immigrants/add'); ?>">
                                                         <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_customer'); ?></span>
+                                                            <?= lang('add_immigrant'); ?></span>
                                                     </a>
                                                 </li>
-
                                             </ul>
                                         </li>
                                         <li class="mm_notifications">
@@ -573,55 +370,7 @@
                                                             <?= lang('change_logo'); ?></span>
                                                     </a>
                                                 </li>
-                                                <li id="system_settings_currencies">
-                                                    <a href="<?= admin_url('system_settings/currencies') ?>">
-                                                        <i class="fa fa-money"></i><span class="text">
-                                                            <?= lang('currencies'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="system_settings_customer_groups">
-                                                    <a href="<?= admin_url('system_settings/customer_groups') ?>">
-                                                        <i class="fa fa-chain"></i><span class="text">
-                                                            <?= lang('customer_groups'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="system_settings_price_groups">
-                                                    <a href="<?= admin_url('system_settings/price_groups') ?>">
-                                                        <i class="fa fa-dollar"></i><span class="text">
-                                                            <?= lang('price_groups'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="system_settings_categories">
-                                                    <a href="<?= admin_url('system_settings/categories') ?>">
-                                                        <i class="fa fa-folder-open"></i><span class="text">
-                                                            <?= lang('categories'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="system_settings_expense_categories">
-                                                    <a href="<?= admin_url('system_settings/expense_categories') ?>">
-                                                        <i class="fa fa-folder-open"></i><span class="text">
-                                                            <?= lang('expense_categories'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="system_settings_units">
-                                                    <a href="<?= admin_url('system_settings/units') ?>">
-                                                        <i class="fa fa-wrench"></i><span class="text">
-                                                            <?= lang('units'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="system_settings_brands">
-                                                    <a href="<?= admin_url('system_settings/brands') ?>">
-                                                        <i class="fa fa-th-list"></i><span class="text">
-                                                            <?= lang('brands'); ?></span>
-                                                    </a>
-                                                </li>
 
-                                                <li id="system_settings_tax_rates">
-                                                    <a href="<?= admin_url('system_settings/tax_rates') ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('tax_rates'); ?></span>
-                                                    </a>
-                                                </li>
                                                 <li id="system_settings_warehouses">
                                                     <a href="<?= admin_url('system_settings/warehouses') ?>">
                                                         <i class="fa fa-building-o"></i><span class="text">
@@ -650,93 +399,6 @@
                                             </ul>
                                         </li>
                                         <?php } ?>
-                                        <li class="mm_reports">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-bar-chart-o"></i>
-                                                <span class="text"> <?= lang('reports'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <li id="reports_index">
-                                                    <a href="<?= admin_url('reports') ?>">
-                                                        <i class="fa fa-bars"></i><span class="text">
-                                                            <?= lang('overview_chart'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <li id="reports_best_sellers">
-                                                    <a href="<?= admin_url('reports/best_sellers') ?>">
-                                                        <i class="fa fa-line-chart"></i><span class="text">
-                                                            <?= lang('best_sellers'); ?></span>
-                                                    </a>
-                                                </li>
-
-
-                                                <li id="reports_products">
-                                                    <a href="<?= admin_url('reports/products') ?>">
-                                                        <i class="fa fa-barcode"></i><span class="text">
-                                                            <?= lang('products_report'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <li id="reports_daily_sales">
-                                                    <a href="<?= admin_url('reports/daily_sales') ?>">
-                                                        <i class="fa fa-calendar"></i><span class="text">
-                                                            <?= lang('daily_sales'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="reports_monthly_sales">
-                                                    <a href="<?= admin_url('reports/monthly_sales') ?>">
-                                                        <i class="fa fa-calendar"></i><span class="text">
-                                                            <?= lang('monthly_sales'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="reports_sales">
-                                                    <a href="<?= admin_url('reports/sales') ?>">
-                                                        <i class="fa fa-heart"></i><span class="text">
-                                                            <?= lang('sales_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="reports_payments">
-                                                    <a href="<?= admin_url('reports/payments') ?>">
-                                                        <i class="fa fa-money"></i><span class="text">
-                                                            <?= lang('payments_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="reports_tax">
-                                                    <a href="<?= admin_url('reports/tax') ?>">
-                                                        <i class="fa fa-area-chart"></i><span class="text">
-                                                            <?= lang('tax_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="reports_profit_loss">
-                                                    <a href="<?= admin_url('reports/profit_loss') ?>">
-                                                        <i class="fa fa-money"></i><span class="text">
-                                                            <?= lang('profit_and_loss'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <li id="reports_expenses">
-                                                    <a href="<?= admin_url('reports/expenses') ?>">
-                                                        <i class="fa fa-star"></i><span class="text">
-                                                            <?= lang('expenses_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="reports_customer_report">
-                                                    <a href="<?= admin_url('reports/customers') ?>">
-                                                        <i class="fa fa-users"></i><span class="text">
-                                                            <?= lang('customers_report'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <li id="reports_staff_report">
-                                                    <a href="<?= admin_url('reports/users') ?>">
-                                                        <i class="fa fa-users"></i><span class="text">
-                                                            <?= lang('staff_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
                                         <?php if ($Owner && file_exists(APPPATH.'controllers'.DIRECTORY_SEPARATOR.'shop'.DIRECTORY_SEPARATOR.'Shop.php')) { ?>
                                         <li class="mm_shop_settings mm_api_settings">
                                             <a class="dropmenu" href="#">
@@ -800,241 +462,43 @@
                                         <?php } ?>
 
                                         <?php
-                        } else { // not owner and not admin
+                        } else { // not owner and not admin – menu by permissions
+                            $show_immigrants = !empty($GP['immigrants-index']) || !empty($GP['immigrants-add']);
                             ?>
-                                        <?php if ($GP['products-index']) { ?>
-                                        <li class="mm_products">
+                                        <?php if ($show_immigrants) { ?>
+                                        <li class="mm_immigrants">
                                             <a class="dropmenu" href="#">
-                                                <i class="fa fa-barcode"></i>
-                                                <span class="text"> <?= lang('products'); ?>
-                                                </span> <span class="chevron closed"></span>
+                                                <i class="fa fa-globe"></i>
+                                                <span class="text"> <?= lang('immigrants'); ?> </span>
+                                                <span class="chevron closed"></span>
                                             </a>
                                             <ul>
-                                                <li id="products_index">
-                                                    <a class="submenu" href="<?= admin_url('products'); ?>">
-                                                        <i class="fa fa-barcode"></i><span class="text">
-                                                            <?= lang('list_products'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php if ($GP['products-add']) { ?>
-                                                <li id="products_add">
-                                                    <a class="submenu" href="<?= admin_url('products/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_product'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-
-                                            </ul>
-                                        </li>
-                                        <?php } ?>
-
-                                        <?php if ($GP['sales-index'] || $GP['sales-add'] ||  $GP['sales-gift_cards']) { ?>
-                                        <li
-                                            class="mm_sales <?= strtolower($this->router->fetch_method()) == 'sales' ? 'mm_pos' : '' ?>">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-heart"></i>
-                                                <span class="text"> <?= lang('sales'); ?>
-                                                </span> <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <li id="sales_index">
-                                                    <a class="submenu" href="<?= admin_url('sales'); ?>">
-                                                        <i class="fa fa-heart"></i><span class="text">
-                                                            <?= lang('list_sales'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <?php if ($GP['sales-add']) { ?>
-                                                <li id="sales_add">
-                                                    <a class="submenu" href="<?= admin_url('sales/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_sale'); ?></span>
+                                                <?php if (!empty($GP['immigrants-index'])) { ?>
+                                                <li id="immigrants_index">
+                                                    <a class="submenu" href="<?= admin_url('immigrants'); ?>">
+                                                        <i class="fa fa-list"></i><span class="text">
+                                                            <?= lang('list_immigrants'); ?></span>
                                                     </a>
                                                 </li>
                                                 <?php }
-                                   if ($GP['sales-gift_cards']) { ?>
-                                                <li id="sales_gift_cards">
-                                                    <a class="submenu" href="<?= admin_url('sales/gift_cards'); ?>">
-                                                        <i class="fa fa-gift"></i><span class="text">
-                                                            <?= lang('gift_cards'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                            </ul>
-                                        </li>
-                                        <?php } ?>
-
-                                        <?php if ($GP['communication-index'] || $GP['communication-add'] ) { ?>
-                                        <li
-                                            class="mm_communication <?= strtolower($this->router->fetch_method()) == 'sales' ? 'mm_pos' : '' ?>">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-heart"></i>
-                                                <span class="text"> <?= lang('Communication'); ?>
-                                                </span> <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <?php if ($GP['communication-index']) { ?>
-                                                <li id="communication_index">
-                                                    <a class="submenu" href="<?= admin_url('communication/'); ?>">
-                                                        <i class="fa fa-th-list"></i>
-                                                        <span class="text"> <?= lang('List_Communication'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <?php }?>
-
-                                                <?php if ($GP['communication-add']) { ?>
-                                                <li id="communication_add">
-                                                    <a class="submenu" href="<?= admin_url('communication/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i>
-                                                        <span class="text"> <?= lang('Add_Communication'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }?>
-
-                                            </ul>
-                                        </li>
-                                        <?php } ?>
-
-                                        <?php if ((isset($GP['transfers-index']) && $GP['transfers-index']) || (isset($GP['transfers-transfer_by_fattura']) && $GP['transfers-transfer_by_fattura']) || (isset($GP['transfers-transfer_by_fattura_privati']) && $GP['transfers-transfer_by_fattura_privati']) || (isset($GP['transfers-csv']) && $GP['transfers-csv'])) { ?>
-                                        <li class="mm_transfers">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-star-o"></i>
-                                                <span class="text"> <?= lang('transfers'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <?php if (isset($GP['transfers-index']) && $GP['transfers-index']) { ?>
-                                                <li id="transfers_index">
-                                                    <a class="submenu" href="<?= admin_url('transfers'); ?>">
-                                                        <i class="fa fa-star-o"></i><span class="text"><?= lang('list_transfers'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                                <?php if (isset($GP['transfers-transfer_by_fattura_privati']) && $GP['transfers-transfer_by_fattura_privati']) { ?>
-                                                <li id="transfers_transfer_by_fattura_privati">
-                                                    <a class="submenu" href="<?= admin_url('transfers/transfer_by_fattura_privati'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text"><?= lang('Add_Transfer_By_Fattura_Privati'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                                <?php if (isset($GP['transfers-transfer_by_fattura']) && $GP['transfers-transfer_by_fattura']) { ?>
-                                                <li id="transfers_transfer_by_fattura">
-                                                    <a class="submenu" href="<?= admin_url('transfers/transfer_by_fattura'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text"><?= lang('Add_Transfer_By_Fattura'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                                <?php if (isset($GP['transfers-csv']) && $GP['transfers-csv']) { ?>
-                                                <li id="transfers_transfer_by_csv">
-                                                    <a class="submenu" href="<?= admin_url('transfers/transfer_by_csv'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text"><?= lang('add_transfer_by_csv'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                            </ul>
-                                        </li>
-                                        <?php } ?>
-
-                                        <?php if ((isset($GP['tax_calculations-index']) && $GP['tax_calculations-index']) || (isset($GP['tax_calculations-view']) && $GP['tax_calculations-view']) || (isset($GP['tax_calculations-settings']) && $GP['tax_calculations-settings']) || (isset($GP['tax_calculations-inps_slabs']) && $GP['tax_calculations-inps_slabs']) || (isset($GP['tax_calculations-add_inps_slab']) && $GP['tax_calculations-add_inps_slab'])) { ?>
-                                        <li class="mm_tax_calculations">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-star-o"></i>
-                                                <span class="text"> <?= lang('tax_calculations'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <?php if (isset($GP['tax_calculations-index']) && $GP['tax_calculations-index']) { ?>
-                                                <li id="tax_calculations_index">
-                                                    <a class="submenu" href="<?= admin_url('tax_calculations'); ?>">
-                                                        <i class="fa fa-star-o"></i><span class="text"><?= lang('list_tax_calculations'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                                <?php if (isset($GP['tax_calculations-settings']) && $GP['tax_calculations-settings']) { ?>
-                                                <li id="tax_calculations_settings">
-                                                    <a class="submenu" href="<?= admin_url('tax_calculations/settings'); ?>">
-                                                        <i class="fa fa-cog"></i><span class="text"><?= lang('tax_settings'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                                <?php if (isset($GP['tax_calculations-inps_slabs']) && $GP['tax_calculations-inps_slabs']) { ?>
-                                                <li id="tax_calculations_inps_slabs">
-                                                    <a class="submenu" href="<?= admin_url('tax_calculations/inps_slabs'); ?>">
-                                                        <i class="fa fa-list"></i><span class="text"><?= lang('inps_slabs'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                                <?php if (isset($GP['tax_calculations-add_inps_slab']) && $GP['tax_calculations-add_inps_slab']) { ?>
-                                                <li id="tax_calculations_add_inps_slab">
-                                                    <a class="submenu" href="<?= admin_url('tax_calculations/edit_inps_slab'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text"><?= lang('add_inps_slab'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                            </ul>
-                                        </li>
-                                        <?php } ?>
-
-                                        <?php if ($GP['purchases-expenses']) { ?>
-                                        <li class="mm_purchases">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-star"></i>
-                                                <span class="text"> <?= lang('purchases'); ?>
-                                                </span> <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <?php if ($GP['purchases-expenses']) { ?>
-                                                <li id="purchases_expenses">
-                                                    <a class="submenu" href="<?= admin_url('purchases/expenses'); ?>">
-                                                        <i class="fa fa-dollar"></i><span class="text">
-                                                            <?= lang('list_expenses'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="purchases_add_expense">
-                                                    <a class="submenu" href="<?= admin_url('purchases/add_expense'); ?>"
-                                                        data-toggle="modal" data-target="#myModal">
+                                                if (!empty($GP['immigrants-add'])) { ?>
+                                                <li id="immigrants_add">
+                                                    <a class="submenu" href="<?= admin_url('immigrants/add'); ?>">
                                                         <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_expense'); ?></span>
+                                                            <?= lang('add_immigrant'); ?></span>
                                                     </a>
                                                 </li>
                                                 <?php } ?>
                                             </ul>
                                         </li>
                                         <?php } ?>
-
-                                        <?php if ($GP['customers-index'] || $GP['customers-add'] ) { ?>
-                                        <li class="mm_auth mm_customers mm_suppliers mm_billers">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-users"></i>
-                                                <span class="text"> <?= lang('people'); ?> </span>
-                                                <span class="chevron closed"></span>
+                                        <li class="mm_notifications">
+                                            <a class="submenu" href="<?= admin_url('notifications'); ?>">
+                                                <i class="fa fa-info-circle"></i><span class="text">
+                                                    <?= lang('notifications'); ?></span>
                                             </a>
-                                            <ul>
-                                                <?php if ($GP['customers-index']) { ?>
-                                                <li id="customers_index">
-                                                    <a class="submenu" href="<?= admin_url('customers'); ?>">
-                                                        <i class="fa fa-users"></i><span class="text">
-                                                            <?= lang('list_customers'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                    if ($GP['customers-add']) { ?>
-                                                <li id="customers_index">
-                                                    <a class="submenu" href="<?= admin_url('customers/add'); ?>"
-                                                        data-toggle="modal" data-target="#myModal">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_customer'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                            </ul>
                                         </li>
-                                        <?php } ?>
-                                        <?php if ($GP['document-file_manager']
-                            ) {
-                                ?>
+                                        <?php if (!empty($GP['document-file_manager'])) { ?>
                                         <li class="mm_document">
                                             <a class="dropmenu" href="#">
                                                 <i class="fa fa-list-alt"></i>
@@ -1042,7 +506,6 @@
                                                 <span class="chevron closed"></span>
                                             </a>
                                             <ul>
-                                                <?php if ($GP['document-file_manager']) { ?>
                                                 <li id="document_file_manager">
                                                     <a class="submenu"
                                                         href="<?= admin_url('document/file_manager'); ?>">
@@ -1050,102 +513,15 @@
                                                             <?= lang('File_Manager'); ?></span>
                                                     </a>
                                                 </li>
-                                                <?php } ?>
                                             </ul>
                                         </li>
                                         <?php } ?>
-
-                                        <?php if ( $GP['reports-products'] || $GP['reports-monthly_sales'] || $GP['reports-sales'] || $GP['reports-payments'] || $GP['reports-customers'] | $GP['reports-expenses']) { ?>
-                                        <li class="mm_reports">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-bar-chart-o"></i>
-                                                <span class="text"> <?= lang('reports'); ?> </span>
-                                                <span class="chevron closed"></span>
+                                        <li class="mm_calendar">
+                                            <a class="submenu" href="<?= admin_url('calendar'); ?>">
+                                                <i class="fa fa-calendar"></i><span class="text">
+                                                    <?= lang('calendar'); ?></span>
                                             </a>
-                                            <ul>
-                                                <?php if ($GP['reports-products']) { ?>
-                                                <li id="reports_products">
-                                                    <a href="<?= admin_url('reports/products') ?>">
-                                                        <i class="fa fa-filter"></i><span class="text">
-                                                            <?= lang('products_report'); ?></span>
-                                                    </a>
-                                                </li>
-
-                                                <li id="reports_categories">
-                                                    <a href="<?= admin_url('reports/categories') ?>">
-                                                        <i class="fa fa-folder-open"></i><span class="text">
-                                                            <?= lang('categories_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="reports_brands">
-                                                    <a href="<?= admin_url('reports/brands') ?>">
-                                                        <i class="fa fa-cubes"></i><span class="text">
-                                                            <?= lang('brands_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                    if ($GP['reports-daily_sales']) { ?>
-                                                <li id="reports_daily_sales">
-                                                    <a href="<?= admin_url('reports/daily_sales') ?>">
-                                                        <i class="fa fa-calendar-o"></i><span class="text">
-                                                            <?= lang('daily_sales'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                    if ($GP['reports-monthly_sales']) { ?>
-                                                <li id="reports_monthly_sales">
-                                                    <a href="<?= admin_url('reports/monthly_sales') ?>">
-                                                        <i class="fa fa-calendar-o"></i><span class="text">
-                                                            <?= lang('monthly_sales'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                    if ($GP['reports-sales']) { ?>
-                                                <li id="reports_sales">
-                                                    <a href="<?= admin_url('reports/sales') ?>">
-                                                        <i class="fa fa-heart"></i><span class="text">
-                                                            <?= lang('sales_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                    if ($GP['reports-payments']) { ?>
-                                                <li id="reports_payments">
-                                                    <a href="<?= admin_url('reports/payments') ?>">
-                                                        <i class="fa fa-money"></i><span class="text">
-                                                            <?= lang('payments_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                    if ($GP['reports-tax']) { ?>
-                                                <li id="reports_tax">
-                                                    <a href="<?= admin_url('reports/tax') ?>">
-                                                        <i class="fa fa-area-chart"></i><span class="text">
-                                                            <?= lang('tax_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-
-                                    if ($GP['reports-expenses']) { ?>
-                                                <li id="reports_expenses">
-                                                    <a href="<?= admin_url('reports/expenses') ?>">
-                                                        <i class="fa fa-star"></i><span class="text">
-                                                            <?= lang('expenses_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                    if ($GP['reports-customers']) { ?>
-                                                <li id="reports_customer_report">
-                                                    <a href="<?= admin_url('reports/customers') ?>">
-                                                        <i class="fa fa-users"></i><span class="text">
-                                                            <?= lang('customers_report'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                     ?>
-                                            </ul>
                                         </li>
-                                        <?php } ?>
-
                                         <?php } ?>
                                     </ul>
                                 </div>
