@@ -1,120 +1,77 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?><!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="utf-8">
-    <title></title>
+    <title><?= lang('forgot_password') ?> - <?= SITE_NAME ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<?= base_url() ?>assets/styles/helpers/bootstrap.o.css" rel="stylesheet">
     <link href="<?= base_url() ?>assets/styles/style.css" rel="stylesheet">
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script src="<?= base_url() ?>assets/js/respond.min.js"></script>
     <![endif]-->
     <style>
-        .btn {
-            margin-top: 10px;
-        }
-
-        span#recaptcha_privacy {
-            display: none;
-        }
-
-        .recaptchatable #recaptcha_response_field {
-            height: 30px;
-            border-right: 1px solid #CCA940 !important;
-        }
-
-        /*#recaptcha_table tr:first-child td:nth-child(3), #recaptcha_table tr:nth-child(2) td:nth-child(2)  { display: none; }
-        #recaptcha_table td, .recaptchatable { padding: 0 !important; border: 0 !important; }
-        #recaptcha_image, #recaptcha_image img { padding: 0 !important; border: 1px solid #CCC; }*/
-        /*#recaptcha_table tr:nth-child(6), #recaptcha_table tr:nth-child(7)  { display: none; }*/
+        body { min-height: 100vh; background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 34%), linear-gradient(135deg, #1f6aa5 0%, #2877b8 45%, #4f95cf 100%); padding: 34px 16px 48px; }
+        .forgot-shell { max-width: 560px; margin: 0 auto; }
+        .forgot-logo { text-align: center; margin-bottom: 18px; }
+        .forgot-logo img { max-width: 340px; width: auto; height: auto; border-radius: 16px; box-shadow: 0 16px 34px rgba(10, 37, 64, 0.22); background: #fff; padding: 8px; }
+        .forgot-card { background: #f7fbff; border-radius: 24px; box-shadow: 0 26px 54px rgba(10, 37, 64, 0.24); overflow: hidden; }
+        .forgot-hero { background: linear-gradient(135deg, #0f3d66 0%, #1f6aa5 100%); color: #fff; padding: 28px 32px 22px; }
+        .forgot-kicker { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.72); margin-bottom: 10px; }
+        .forgot-hero h1 { margin: 0 0 8px; font-size: 30px; font-weight: 700; }
+        .forgot-hero p { margin: 0; color: rgba(255, 255, 255, 0.82); font-size: 15px; line-height: 1.55; }
+        .forgot-body { padding: 28px 32px 32px; }
+        .forgot-alert { border: 0; border-radius: 16px; padding: 16px 18px; margin-bottom: 22px; box-shadow: none; }
+        .forgot-field { margin-bottom: 16px; }
+        .forgot-field label { display: block; margin-bottom: 8px; color: #2a3f57; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+        .forgot-field .input-group { width: 100%; border: 1px solid #d7e6f4; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 10px 24px rgba(18, 44, 74, 0.06); }
+        .forgot-field .input-group-addon { min-width: 52px; background: #f3f8fd; color: #1f6aa5; border: 0; }
+        .forgot-field .form-control { border: 0; height: 52px; box-shadow: none; font-size: 16px; padding: 12px 16px; }
+        .forgot-captcha-preview { border: 1px solid #d7e6f4; border-radius: 16px; min-height: 54px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(18, 44, 74, 0.06); margin-bottom: 14px; position: relative; padding: 10px; }
+        .forgot-captcha-preview .reload-captcha { position: absolute; top: 10px; right: 12px; color: #1f6aa5; }
+        .forgot-actions { display: flex; justify-content: space-between; gap: 14px; margin-top: 24px; }
+        .forgot-actions .btn { border-radius: 14px; padding: 12px 20px; font-size: 15px; font-weight: 700; border: 0; box-shadow: none; }
+        .btn-auth-primary { background: linear-gradient(135deg, #1f6aa5 0%, #2d8bd3 100%); color: #fff; }
+        .btn-auth-secondary { background: #eef5fb; color: #1f6aa5; }
+        .forgot-extra { display: flex; justify-content: space-between; gap: 14px; margin-top: 18px; padding-top: 18px; border-top: 1px solid #deebf6; }
+        .forgot-extra a { font-weight: 700; color: #1f6aa5; }
+        @media (max-width: 640px) { .forgot-hero, .forgot-body { padding-left: 20px; padding-right: 20px; } .forgot-actions, .forgot-extra { flex-direction: column; } .forgot-actions .btn { width: 100%; } }
     </style>
-
 </head>
-
 <body>
-<div class="container">
-    <div class="row">
-        <div id="content" class="col-sm-12 full">
-            <div class="row">
-
-                <div class="login-box">
-                    <div class="text-center"><?php if (LOGO) {
-                            echo '<img src="' . admin_url() . 'assets/images/' . LOGO . '" alt="' . SITE_NAME . '"  />';
-                        } ?></div>
-                    <div style="clear: both; height: 20px;"></div>
-                    <div class="header bblue">
-                        <?= $this->lang->line('forgot_password_heading') ?>
-                    </div>
-                    <?php if ($message) { ?>
-                        <div class="alert alert-danger">
-                            <button data-dismiss="alert" class="close" type="button">×</button>
-                            <?= $message; ?>
-                        </div>
-                    <?php } ?>
-                    <?php echo admin_form_open("auth/forgot_password", 'class="login"'); ?>
-                    <p><?php echo sprintf(lang('forgot_password_subheading'), $identity_label); ?></p>
-                    <fieldset class="col-sm-12">
-                        <div class="form-group">
-                            <div class="controls row">
-                                <div class="input-group col-sm-12">
-                                    <?php // echo sprintf(lang('forgot_password_email_label'), $identity_label);?>
-                                    <?php echo form_input($email); ?>
-
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="controls row">
-                                <div class="input-group col-sm-12"><span
-                                        style="position:absolute; right: 7px; top:4px;"><a href="#"
-                                                                                           class="reload-captcha"><img
-                                                src="<?= base_url() ?>assets/images/reload.png" alt="reload image"/></a></span>
-                                    <div class="text-center"><span class="captcha-image"><?php echo $image; ?></span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="controls row">
-                                <div class="input-group col-sm-12">
-                                    <?php echo form_input($captcha); ?>
-                                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <?php echo form_submit('submit', lang('submit'), 'class="btn btn-primary col-xs-12"'); ?>
-
-
-                        </div>
-
-                    </fieldset>
-
-                    <?php echo form_close(); ?>
-                    <div class="clearfix" style="height: 10px;"></div>
-                    <a href="<?= admin_url('auth/login') ?>"
-                       class="btn btn-warning col-xs-7"><?php echo lang('back_to_login'); ?></a>
-                    <a href="register"
-                       class="btn  btn-success col-xs-4 col-xs-offset-1"><?php echo lang('register'); ?></a>
-                    <!--<a class="pull-right" href="page-register.html">Sign Up!</a>-->
-
-                    <div class="clearfix"></div>
-
-                </div>
-            </div>
-
-        </div>
-
-
+<div class="forgot-shell">
+    <div class="forgot-logo">
+        <?php if (LOGO) { echo '<img src="' . admin_url() . 'assets/images/' . LOGO . '" alt="' . SITE_NAME . '" />'; } ?>
     </div>
-
+    <div class="forgot-card">
+        <div class="forgot-hero">
+            <span class="forgot-kicker">Account Recovery</span>
+            <h1><?= $this->lang->line('forgot_password_heading') ?></h1>
+            <p><?= sprintf(lang('forgot_password_subheading'), $identity_label); ?></p>
+        </div>
+        <div class="forgot-body">
+            <?php if ($message) { ?><div class="alert alert-danger forgot-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><?= $message; ?></div><?php } ?>
+            <?= admin_form_open("auth/forgot_password", 'class="login"'); ?>
+            <div class="forgot-field">
+                <label for="<?= $email['id']; ?>"><?= lang('email_address') ?></label>
+                <div class="input-group"><span class="input-group-addon"><i class="fa fa-envelope"></i></span><?= form_input($email); ?></div>
+            </div>
+            <div class="forgot-captcha-preview"><a href="#" class="reload-captcha"><i class="fa fa-refresh"></i></a><span class="captcha-image"><?= $image; ?></span></div>
+            <div class="forgot-field">
+                <label for="<?= $captcha['id']; ?>">Verification</label>
+                <div class="input-group"><span class="input-group-addon"><i class="fa fa-shield"></i></span><?= form_input($captcha); ?></div>
+            </div>
+            <div class="forgot-actions">
+                <a href="<?= admin_url('auth/login') ?>" class="btn btn-auth-secondary"><?= lang('back_to_login'); ?></a>
+                <?= form_submit('submit', lang('submit'), 'class="btn btn-auth-primary"'); ?>
+            </div>
+            <?= form_close(); ?>
+            <div class="forgot-extra">
+                <a href="<?= admin_url('auth/login') ?>">Return to sign in</a>
+                <a href="register"><?= lang('register') ?></a>
+            </div>
+        </div>
+    </div>
 </div>
-
-
 <script src="<?= base_url() ?>assets/js/jquery-2.0.3.min.js"></script>
 <script src="<?= base_url() ?>assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="<?= base_url() ?>assets/js/bootstrap.min.js"></script>
@@ -123,7 +80,7 @@
         $('.reload-captcha').click(function (event) {
             event.preventDefault();
             $.ajax({
-                url: '<?=base_url();?>auth/reload_captcha',
+                url: '<?= base_url(); ?>auth/reload_captcha',
                 success: function (data) {
                     $('.captcha-image').html(data);
                 }
@@ -131,22 +88,5 @@
         });
     });
 </script>
-
 </body>
 </html>
-
-<!--<h1><?php echo lang('forgot_password_heading'); ?></h1>
-<p><?php echo sprintf(lang('forgot_password_subheading'), $identity_label); ?></p>
-
-<div id="infoMessage"><?php echo $message; ?></div>
-
-<?php echo admin_form_open("auth/forgot_password"); ?>
-
-      <p>
-      	<label for="email"><?php echo sprintf(lang('forgot_password_email_label'), $identity_label); ?></label> <br />
-      	<?php echo form_input($email); ?>
-      </p>
-
-      <p><?php echo form_submit('submit', lang('forgot_password_submit_btn')); ?></p>
-
-<?php echo form_close(); ?>-->

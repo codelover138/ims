@@ -10,8 +10,8 @@
                         '<img alt="" src="' . base_url() . 'assets/images/' . $user->gender . '.png" class="avatar">';
                     ?>
                 </div>
-                <h4><?= lang('login_email'); ?></h4>
-
+                <h4 class="gamma-profile-name"><?= htmlspecialchars(trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: $user->username, ENT_QUOTES, 'UTF-8'); ?></h4>
+                <p class="gamma-profile-role"><?= htmlspecialchars($user->username, ENT_QUOTES, 'UTF-8'); ?></p>
                 <p><i class="fa fa-envelope"></i> <?= $user->email; ?></p>
             </div>
         </div>
@@ -39,9 +39,17 @@
                                 <?php $attrib = array('class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form');
                                 echo admin_form_open('auth/edit_user/' . $user->id, $attrib);
                                 ?>
+                                <div class="gamma-form-hero gamma-form-hero-sm">
+                                    <div>
+                                        <div class="gamma-form-eyebrow">Gamma Workspace</div>
+                                        <h3 class="gamma-form-title gamma-form-title-sm">Edit User Profile</h3>
+                                        <p class="gamma-form-subtitle">Maintain identity, contact, address, recovery, and access details from a single workspace.</p>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="col-md-5">
+                                            <div class="gamma-section-label"><i class="fa fa-id-card-o"></i> Identity and Contact</div>
                                             <div class="form-group">
                                                 <?php echo lang('first_name', 'first_name'); ?>
                                                 <div class="controls">
@@ -54,6 +62,12 @@
 
                                                 <div class="controls">
                                                     <?php echo form_input('last_name', $user->last_name, 'class="form-control" id="last_name" required="required"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="middle_name">Middle Name</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('middle_name', $user->middle_name, 'class="form-control" id="middle_name"'); ?>
                                                 </div>
                                             </div>
                                             <?php if (!$this->ion_auth->in_group('customer', $id) && !$this->ion_auth->in_group('supplier', $id)) { ?>
@@ -72,6 +86,36 @@
                                                 <div class="controls">
                                                     <input type="tel" name="phone" class="form-control" id="phone"
                                                            required="required" value="<?= $user->phone ?>"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="birth_date">Birth Date</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('birth_date', $user->birth_date, 'class="form-control" id="birth_date" placeholder="YYYY-MM-DD HH:MM:SS"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="business_name">Business Name</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('business_name', $user->business_name, 'class="form-control" id="business_name"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email2">Secondary Email</label>
+                                                <div class="controls">
+                                                    <input type="email" name="email2" class="form-control" id="email2" value="<?= htmlspecialchars($user->email2 ?? '', ENT_QUOTES, 'UTF-8'); ?>"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="mobile_phone">Mobile Phone</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('mobile_phone', $user->mobile_phone, 'class="form-control" id="mobile_phone"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="business_phone">Business Phone</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('business_phone', $user->business_phone, 'class="form-control" id="business_phone"'); ?>
                                                 </div>
                                             </div>
 
@@ -129,7 +173,95 @@
 
                                         </div>
                                         <div class="col-md-6 col-md-offset-1">
+                                            <div class="gamma-section-label"><i class="fa fa-map-marker"></i> Address and Recovery</div>
+                                            <div class="form-group">
+                                                <label for="address_search">Address Search</label>
+                                                <input type="text" id="address_search" class="form-control" placeholder="Search address with Google Places">
+                                                <?php if (empty($gamma_google_places_api_key)) { ?>
+                                                    <span class="help-block">Google Places is scaffolded. Add a real API key in app/config/gamma.php to enable autocomplete.</span>
+                                                <?php } else { ?>
+                                                    <span class="help-block">Select an address to auto-fill the fields below.</span>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="unit_number">Unit Number</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('unit_number', $user->unit_number, 'class="form-control" id="unit_number"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="street_number">Street Number</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('street_number', $user->street_number, 'class="form-control" id="street_number"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="street_name">Street Name</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('street_name', $user->street_name, 'class="form-control" id="street_name"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="street_type">Street Type</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('street_type', $user->street_type, 'class="form-control" id="street_type"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="suburb">Suburb</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('suburb', $user->suburb, 'class="form-control" id="suburb"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="state">State</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('state', $user->state, 'class="form-control" id="state"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="country">Country</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('country', $user->country, 'class="form-control" id="country"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="postcode">Postcode</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('postcode', $user->postcode, 'class="form-control" id="postcode"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="security_question">Security Question</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('security_question', $user->security_question, 'class="form-control" id="security_question"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="security_answer">Security Answer</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('security_answer', $user->security_answer, 'class="form-control" id="security_answer"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="departure_date">Departure Date</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('departure_date', $user->departure_date, 'class="form-control" id="departure_date" placeholder="YYYY-MM-DD HH:MM:SS"'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="departure_reason">Departure Reason</label>
+                                                <div class="controls">
+                                                    <?php echo form_input('departure_reason', $user->departure_reason, 'class="form-control" id="departure_reason"'); ?>
+                                                </div>
+                                            </div>
                                             <?php if ($Owner && $id != $this->session->userdata('user_id')) { ?>
+                                                    <div style="margin-bottom: 16px;">
+                                                        <a href="<?= admin_url('auth/send_reset_password/' . $id); ?>" class="btn btn-info">
+                                                            <i class="fa fa-envelope"></i> Send Reset Password Email
+                                                        </a>
+                                                    </div>
+                                                    <div class="gamma-section-label"><i class="fa fa-shield"></i> Access Setup</div>
 
                                                     <div class="row">
                                                         <div class="panel panel-warning">
@@ -330,4 +462,174 @@
             }
         });
     </script>
+<?php } ?>
+<style>
+    .gamma-profile-name {
+        margin: 16px 0 4px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #243847;
+    }
+
+    .gamma-profile-role {
+        margin: 0 0 10px;
+        color: #6d7f8a;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .gamma-form-hero {
+        padding: 18px 22px;
+        margin-bottom: 18px;
+        border: 1px solid #dbe4ea;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #f7fafc 0%, #eef5f9 100%);
+    }
+
+    .gamma-form-hero-sm {
+        margin-top: 4px;
+    }
+
+    .gamma-form-eyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6f8795;
+        margin-bottom: 4px;
+    }
+
+    .gamma-form-title {
+        margin: 0 0 6px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #233746;
+    }
+
+    .gamma-form-title-sm {
+        font-size: 22px;
+    }
+
+    .gamma-form-subtitle {
+        margin: 0;
+        color: #5d707c;
+    }
+
+    .gamma-section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 16px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #edf4f8;
+        color: #335164;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    #edit .form-control {
+        height: 40px;
+        border-radius: 6px;
+        border-color: #ccd7de;
+        box-shadow: none;
+    }
+
+    #edit input.form-control:focus,
+    #edit select.form-control:focus {
+        border-color: #3c8dbc;
+        box-shadow: 0 0 0 3px rgba(60, 141, 188, 0.12);
+    }
+
+    #myTab > li > a {
+        border-radius: 6px 6px 0 0;
+        font-weight: 600;
+    }
+
+    #edit .panel {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 8px 22px rgba(36, 56, 70, 0.06);
+    }
+
+    #edit .panel-heading {
+        font-weight: 700;
+    }
+</style>
+<script type="text/javascript">
+    function initGammaAddressAutocomplete() {
+        var input = document.getElementById('address_search');
+        if (!input || typeof google === 'undefined' || !google.maps || !google.maps.places) {
+            return;
+        }
+
+        var options = {};
+        <?php if (!empty($gamma_google_places_country)) { ?>
+        options.componentRestrictions = { country: '<?= addslashes($gamma_google_places_country); ?>' };
+        <?php } ?>
+
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+        autocomplete.addListener('place_changed', function () {
+            var place = autocomplete.getPlace();
+            if (!place || !place.address_components) {
+                return;
+            }
+
+            var map = {
+                street_number: '',
+                route: '',
+                subpremise: '',
+                locality: '',
+                postal_town: '',
+                sublocality: '',
+                sublocality_level_1: '',
+                administrative_area_level_2: '',
+                administrative_area_level_1: '',
+                administrative_area_level_1_short: '',
+                country: '',
+                country_short: '',
+                postal_code: ''
+            };
+
+            place.address_components.forEach(function (component) {
+                component.types.forEach(function (type) {
+                    if (Object.prototype.hasOwnProperty.call(map, type)) {
+                        map[type] = component.long_name;
+                    }
+                    if (type === 'administrative_area_level_1') {
+                        map.administrative_area_level_1_short = component.short_name || component.long_name;
+                    }
+                    if (type === 'country') {
+                        map.country_short = component.short_name || component.long_name;
+                    }
+                });
+            });
+
+            var suburb = map.locality || map.postal_town || map.sublocality || map.sublocality_level_1 || map.administrative_area_level_2;
+            var state = map.administrative_area_level_1_short || map.administrative_area_level_1;
+            var country = map.country || map.country_short;
+
+            var setValue = function (id, value) {
+                var field = document.getElementById(id);
+                if (field && value) {
+                    field.value = value;
+                }
+            };
+
+            setValue('unit_number', map.subpremise);
+            setValue('street_number', map.street_number);
+            setValue('street_name', map.route);
+            setValue('suburb', suburb);
+            setValue('state', state);
+            setValue('country', country);
+            setValue('postcode', map.postal_code);
+        });
+    }
+</script>
+<?php if (!empty($gamma_google_places_api_key)) { ?>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?= urlencode($gamma_google_places_api_key); ?>&libraries=places&callback=initGammaAddressAutocomplete"></script>
 <?php } ?>

@@ -7,10 +7,35 @@ class Auth extends MY_Controller
     {
         parent::__construct();
         $this->lang->admin_load('auth', $this->Settings->user_language);
+        $this->config->load('gamma', true);
         $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
         $this->load->admin_model('auth_model');
         $this->load->library('ion_auth');
+    }
+
+    protected function getGammaUserProfileDataFromPost()
+    {
+        return array(
+            'middle_name' => $this->input->post('middle_name'),
+            'birth_date' => $this->input->post('birth_date') ?: null,
+            'business_name' => $this->input->post('business_name'),
+            'unit_number' => $this->input->post('unit_number'),
+            'street_number' => $this->input->post('street_number'),
+            'street_name' => $this->input->post('street_name'),
+            'street_type' => $this->input->post('street_type'),
+            'suburb' => $this->input->post('suburb'),
+            'state' => $this->input->post('state'),
+            'country' => $this->input->post('country'),
+            'postcode' => $this->input->post('postcode'),
+            'email2' => $this->input->post('email2'),
+            'mobile_phone' => $this->input->post('mobile_phone'),
+            'business_phone' => $this->input->post('business_phone'),
+            'security_question' => $this->input->post('security_question'),
+            'security_answer' => $this->input->post('security_answer'),
+            'departure_date' => $this->input->post('departure_date') ?: null,
+            'departure_reason' => $this->input->post('departure_reason'),
+        );
     }
 
     function index()
@@ -161,6 +186,8 @@ class Auth extends MY_Controller
             'type' => 'hidden',
             'value' => $user->id,
         );
+        $this->data['gamma_google_places_api_key'] = $this->config->item('gamma_google_places_api_key', 'gamma');
+        $this->data['gamma_google_places_country'] = $this->config->item('gamma_google_places_country', 'gamma');
 
         $this->data['id'] = $id;
 
@@ -409,6 +436,33 @@ class Auth extends MY_Controller
         }
     }
 
+    public function send_reset_password($id = NULL)
+    {
+        if (!$this->loggedIn || (!$this->Owner && !$this->Admin)) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : admin_url('welcome'));
+        }
+
+        if (!$id) {
+            show_404();
+        }
+
+        $user = $this->ion_auth->user($id)->row();
+        if (!$user || empty($user->email)) {
+            $this->session->set_flashdata('error', 'User account or email address was not found.');
+            admin_redirect('auth/profile/' . $id);
+        }
+
+        $forgotten = $this->ion_auth->forgotten_password($user->email);
+        if ($forgotten) {
+            $this->session->set_flashdata('message', $this->ion_auth->messages());
+        } else {
+            $this->session->set_flashdata('error', $this->ion_auth->errors());
+        }
+
+        admin_redirect('auth/profile/' . $id);
+    }
+
     public function reset_password($code = NULL)
     {
         if (!$code) {
@@ -577,7 +631,9 @@ class Auth extends MY_Controller
                 'view_right' =>  $this->input->post('view_right'),
                 'edit_right' => $this->input->post('edit_right'),
                 'allow_discount' => $this->input->post('allow_discount'),
+                'last_updated' => date('Y-m-d H:i:s'),
             );
+            $additional_data = array_merge($additional_data, $this->getGammaUserProfileDataFromPost());
             $active = $this->input->post('status');
         }
 
@@ -588,6 +644,8 @@ class Auth extends MY_Controller
             if (!is_dir($directoryPath)) {
                 mkdir($directoryPath, 0755, true);
             }
+            $this->load->library('gamma_path_service');
+            $this->gamma_path_service->ensureUserFolders($username);
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             admin_redirect("auth/users");
 
@@ -597,6 +655,8 @@ class Auth extends MY_Controller
             $this->data['groups'] = $this->ion_auth->groups()->result_array();
             $this->data['billers'] = $this->site->getAllCompanies('biller');
             $this->data['warehouses'] = $this->site->getAllWarehouses();
+            $this->data['gamma_google_places_api_key'] = $this->config->item('gamma_google_places_api_key', 'gamma');
+            $this->data['gamma_google_places_country'] = $this->config->item('gamma_google_places_country', 'gamma');
             $bc = array(array('link' => admin_url('home'), 'page' => lang('home')), array('link' => admin_url('auth/users'), 'page' => lang('users')), array('link' => '#', 'page' => lang('create_user')));
             $meta = array('page_title' => lang('users'), 'bc' => $bc);
             $this->page_construct('auth/create_user', $meta, $this->data);
@@ -635,7 +695,9 @@ class Auth extends MY_Controller
                         'company' => $this->input->post('company'),
                         'phone' => $this->input->post('phone'),
                         'gender' => $this->input->post('gender'),
+                        'last_updated' => date('Y-m-d H:i:s'),
                     );
+                    $data = array_merge($data, $this->getGammaUserProfileDataFromPost());
                 } elseif ($this->ion_auth->in_group('customer', $id) || $this->ion_auth->in_group('supplier', $id)) {
                     $data = array(
                         'first_name' => $this->input->post('first_name'),
@@ -643,7 +705,9 @@ class Auth extends MY_Controller
                         'company' => $this->input->post('company'),
                         'phone' => $this->input->post('phone'),
                         'gender' => $this->input->post('gender'),
+                        'last_updated' => date('Y-m-d H:i:s'),
                     );
+                    $data = array_merge($data, $this->getGammaUserProfileDataFromPost());
                 } else {
                     $data = array(
                         'first_name' => $this->input->post('first_name'),
@@ -661,7 +725,9 @@ class Auth extends MY_Controller
                         'view_right' =>  $this->input->post('view_right'),
                         'edit_right' => $this->input->post('edit_right'),
                         'allow_discount' => $this->input->post('allow_discount'),
+                        'last_updated' => date('Y-m-d H:i:s'),
                     );
+                    $data = array_merge($data, $this->getGammaUserProfileDataFromPost());
                 }
 
             } elseif ($this->Admin) {
@@ -673,7 +739,9 @@ class Auth extends MY_Controller
                     'gender' => $this->input->post('gender'),
                     'active' => $this->input->post('status'),
                     'award_points' => $this->input->post('award_points'),
+                    'last_updated' => date('Y-m-d H:i:s'),
                 );
+                $data = array_merge($data, $this->getGammaUserProfileDataFromPost());
             } else {
                 $data = array(
                     'first_name' => $this->input->post('first_name'),
@@ -681,7 +749,9 @@ class Auth extends MY_Controller
                     'company' => $this->input->post('company'),
                     'phone' => $this->input->post('phone'),
                     'gender' => $this->input->post('gender'),
+                    'last_updated' => date('Y-m-d H:i:s'),
                 );
+                $data = array_merge($data, $this->getGammaUserProfileDataFromPost());
             }
 
             if ($this->Owner) {

@@ -23,6 +23,7 @@ class Document extends MY_Controller
         $this->permission_details = $this->site->checkPermissions();
         $this->lang->admin_load('document', $this->Settings->user_language);
         $this->load->library('form_validation');
+        $this->load->library('gamma_path_service');
         $this->load->admin_model('document_model');
         $this->allowed_file_size = '20';
         $this->digital_file_types = 'jpg|jpeg|png|pdf|doc|docx';
@@ -85,10 +86,11 @@ class Document extends MY_Controller
         if ($this->Owner || $this->Admin) {
             $disabled = array();
             array_push($disabled, 'move','duplicate','cut');
+            $gamma_root = $this->gamma_path_service->ensureBasePath();
             $root_options = array(
                 'driver' => 'LocalFileSystem',
-                'path' => set_realpath('assets/document/'),
-                'URL' => base_url('assets/document/'),
+                'path' => rtrim($gamma_root, '\\/') . DIRECTORY_SEPARATOR,
+                'URL' => $this->gamma_path_service->getBaseUrl(),
                 'uploadMaxSize' => $this->allowed_file_size . 'M',
                 'accessControl' => 'access',
                 'disabled' => $disabled,
@@ -144,6 +146,7 @@ class Document extends MY_Controller
 
         } else {
             $user = $this->site->getUserById($this->session->userdata('user_id'));
+            $user_root = $this->gamma_path_service->ensureUserFolders($user->username);
             $disabled = array();
             $upload = array();
             if (!($get_permission['document-upload'])) array_push($upload, "all");
@@ -154,8 +157,8 @@ class Document extends MY_Controller
 
             $root_options = array(
                 'driver' => 'LocalFileSystem',
-                'path'          => FCPATH . 'assets/document/'.$user->username,
-                'URL' => base_url('assets/document/'.$user->username),
+                'path'          => rtrim($user_root, '\\/') . DIRECTORY_SEPARATOR,
+                'URL' => $this->gamma_path_service->getUserRootUrl($user->username),
                 'uploadMaxSize' => $this->allowed_file_size . 'M',
                 'accessControl' => 'access',
                 'uploadAllow' => array(
