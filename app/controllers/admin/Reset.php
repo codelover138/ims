@@ -32,7 +32,6 @@ class Reset extends CI_Controller
             $this->db->truncate('notifications');
             $this->db->truncate('order_ref');
             $this->db->truncate('payments');
-            $this->db->truncate('paypal');
             $this->db->truncate('permissions');
             $this->db->truncate('pos_register');
             $this->db->truncate('pos_settings');
@@ -48,7 +47,6 @@ class Reset extends CI_Controller
             $this->db->truncate('sale_items');
             $this->db->truncate('sessions');
             $this->db->truncate('settings');
-            $this->db->truncate('skrill');
             $this->db->truncate('suspended_bills');
             $this->db->truncate('suspended_items');
             $this->db->truncate('tax_rates');

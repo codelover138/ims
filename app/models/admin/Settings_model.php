@@ -399,42 +399,6 @@ class Settings_model extends CI_Model
         return FALSE;
     }
 
-    public function getPaypalSettings()
-    {
-        $q = $this->db->get('paypal');
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
-        return FALSE;
-    }
-
-    public function updatePaypal($data)
-    {
-        $this->db->where('id', '1');
-        if ($this->db->update('paypal', $data)) {
-            return true;
-        }
-        return FALSE;
-    }
-
-    public function getSkrillSettings()
-    {
-        $q = $this->db->get('skrill');
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
-        return FALSE;
-    }
-
-    public function updateSkrill($data)
-    {
-        $this->db->where('id', '1');
-        if ($this->db->update('skrill', $data)) {
-            return true;
-        }
-        return FALSE;
-    }
-
     public function checkGroupUsers($id)
     {
         $q = $this->db->get_where("users", array('group_id' => $id), 1);
