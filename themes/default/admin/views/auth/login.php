@@ -14,44 +14,57 @@
     <script src="<?= $assets ?>js/respond.min.js"></script>
     <![endif]-->
     <style>
-        .page-back { min-height: 100vh; background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 34%), linear-gradient(135deg, #1f6aa5 0%, #2877b8 45%, #4f95cf 100%); padding: 34px 16px 48px; }
-        .auth-shell { max-width: 580px; margin: 0 auto; }
-        .auth-logo { text-align: center; margin-bottom: 18px; }
-        .auth-logo img { max-width: 340px; width: auto; height: auto; border-radius: 16px; box-shadow: 0 16px 34px rgba(10, 37, 64, 0.22); background: #fff; padding: 8px; }
-        .auth-panel { background: #f7fbff; border-radius: 24px; box-shadow: 0 26px 54px rgba(10, 37, 64, 0.24); overflow: hidden; }
-        .auth-hero { background: linear-gradient(135deg, #0f3d66 0%, #1f6aa5 100%); color: #fff; padding: 28px 32px 22px; }
-        .auth-kicker { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.72); margin-bottom: 10px; }
-        .auth-hero h1 { margin: 0 0 8px; font-size: 30px; font-weight: 700; line-height: 1.15; }
-        .auth-hero p { margin: 0; max-width: 440px; color: rgba(255, 255, 255, 0.82); font-size: 15px; }
-        .auth-body { padding: 28px 32px 32px; }
-        .auth-alert { border: 0; border-radius: 16px; padding: 16px 18px; margin-bottom: 22px; box-shadow: none; }
+        .page-back { min-height: 100vh; background:
+            radial-gradient(circle at 15% 20%, rgba(255,255,255,0.14), transparent 30%),
+            radial-gradient(circle at 85% 15%, rgba(255,214,153,0.18), transparent 22%),
+            linear-gradient(135deg, #0f2740 0%, #143b5c 42%, #1d5f88 100%); padding: 38px 16px 54px; }
+        .auth-shell { max-width: 1080px; margin: 0 auto; }
+        .auth-logo { display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
+        .auth-logo img { max-width: 300px; width: auto; height: auto; border-radius: 18px; box-shadow: 0 18px 38px rgba(8, 24, 41, 0.32); background: #fff; padding: 8px; }
+        .auth-stage { display: grid; grid-template-columns: 0.9fr 1.1fr; background: rgba(244, 249, 253, 0.98); border-radius: 28px; overflow: hidden; box-shadow: 0 34px 70px rgba(8, 24, 41, 0.34); border: 1px solid rgba(255,255,255,0.18); }
+        .auth-showcase { position: relative; padding: 42px 40px; background:
+            linear-gradient(160deg, rgba(7, 27, 46, 0.92) 0%, rgba(16, 56, 84, 0.9) 58%, rgba(24, 92, 132, 0.84) 100%),
+            linear-gradient(135deg, #102b44 0%, #20597d 100%); color: #fff; }
+        .auth-showcase:after { content: ""; position: absolute; right: -70px; bottom: -70px; width: 220px; height: 220px; background: rgba(255,255,255,0.08); border-radius: 36px; transform: rotate(24deg); }
+        .auth-kicker { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 14px; }
+        .auth-showcase h1 { margin: 0 0 14px; font-size: 36px; line-height: 1.08; font-weight: 800; }
+        .auth-showcase p { margin: 0; max-width: 360px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.82); }
+        .auth-footnote { margin-top: 22px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.58); }
+        .auth-panel { padding: 34px 34px 30px; background: #f7fbfe; }
+        .auth-panel-head { margin-bottom: 22px; }
+        .auth-panel-head h2 { margin: 0 0 8px; color: #173550; font-size: 30px; font-weight: 800; }
+        .auth-panel-head p { margin: 0; color: #58718a; font-size: 15px; line-height: 1.6; }
+        .auth-alert { border: 0; border-radius: 16px; padding: 16px 18px; margin-bottom: 20px; box-shadow: none; }
         .auth-alert .close { opacity: .55; }
         .auth-alert ul { margin: 0; padding-left: 18px; }
         .auth-fields { display: grid; gap: 16px; }
-        .auth-field label, .auth-captcha label { display: block; margin-bottom: 8px; color: #2a3f57; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-        .auth-field .input-group, .auth-captcha .input-group { width: 100%; border: 1px solid #d7e6f4; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 10px 24px rgba(18, 44, 74, 0.06); }
-        .auth-field .input-group-addon, .auth-captcha .input-group-addon { min-width: 52px; background: #f3f8fd; color: #1f6aa5; border: 0; }
-        .auth-field .form-control, .auth-captcha .form-control { border: 0; height: 52px; box-shadow: none; font-size: 16px; padding: 12px 16px; }
+        .auth-field label, .auth-captcha label { display: block; margin-bottom: 8px; color: #264763; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+        .auth-field .input-group, .auth-captcha .input-group { width: 100%; border: 1px solid #d6e4f0; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 12px 28px rgba(19, 52, 80, 0.06); }
+        .auth-field .input-group-addon, .auth-captcha .input-group-addon { min-width: 54px; background: #edf5fb; color: #1e5e8a; border: 0; }
+        .auth-field .form-control, .auth-captcha .form-control { border: 0; height: 54px; box-shadow: none; font-size: 16px; padding: 12px 16px; color: #173550; }
+        .auth-field .form-control::placeholder, .auth-captcha .form-control::placeholder { color: #8aa0b5; }
         .auth-captcha-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
-        .auth-captcha-preview { border: 1px solid #d7e6f4; border-radius: 16px; min-height: 54px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(18, 44, 74, 0.06); }
-        .auth-captcha .input-group-addon a { color: #1f6aa5; }
-        .auth-row { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 24px; }
-        .auth-remember { display: flex; align-items: center; gap: 10px; color: #3c556e; }
-        .auth-remember label { margin: 0; font-weight: 600; }
-        .auth-row .btn, .auth-actions .btn, .auth-register-actions .btn { border-radius: 14px; padding: 12px 20px; font-size: 15px; font-weight: 700; border: 0; box-shadow: none; }
-        .btn-auth-primary { background: linear-gradient(135deg, #1f6aa5 0%, #2d8bd3 100%); color: #fff; }
-        .btn-auth-secondary { background: #eef5fb; color: #1f6aa5; }
-        .auth-links { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 20px; padding-top: 18px; border-top: 1px solid #deebf6; }
-        .auth-links a { font-weight: 700; color: #1f6aa5; }
-        .auth-links span { color: #5b6f82; font-size: 14px; }
-        .auth-note { margin: 0 0 18px; color: #5b6f82; font-size: 15px; line-height: 1.55; }
+        .auth-captcha-preview { border: 1px solid #d6e4f0; border-radius: 16px; min-height: 54px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 28px rgba(19, 52, 80, 0.06); }
+        .auth-captcha .input-group-addon a { color: #1e5e8a; }
+        .auth-row { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 26px; }
+        .auth-remember { display: flex; align-items: center; gap: 10px; color: #49637c; }
+        .auth-remember label { margin: 0; font-weight: 700; }
+        .auth-row .btn, .auth-actions .btn, .auth-register-actions .btn { border-radius: 14px; padding: 13px 22px; font-size: 15px; font-weight: 800; border: 0; box-shadow: none; }
+        .btn-auth-primary { background: linear-gradient(135deg, #15466c 0%, #2572a5 100%); color: #fff; }
+        .btn-auth-secondary { background: #e9f2f9; color: #1b5c88; }
+        .auth-links { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #dbe8f2; }
+        .auth-links a { font-weight: 800; color: #1b5c88; }
+        .auth-links span { color: #698198; font-size: 14px; }
+        .auth-note { margin: 0 0 18px; color: #5b738b; font-size: 15px; line-height: 1.65; }
         .auth-actions { display: flex; justify-content: space-between; gap: 14px; margin-top: 24px; }
-        .auth-register { margin-top: 22px; padding-top: 18px; border-top: 1px solid #deebf6; color: #5b6f82; font-size: 14px; }
-        .auth-register strong { display: block; margin-bottom: 6px; color: #23425f; font-size: 15px; }
-        .auth-register a { font-weight: 700; color: #1f6aa5; }
-        .registration-form-div.reg-content { background: #f7fbff; border-radius: 24px; box-shadow: 0 26px 54px rgba(10, 37, 64, 0.24); padding: 28px 24px 24px; }
+        .auth-register { margin-top: 22px; padding-top: 18px; border-top: 1px solid #dbe8f2; color: #5b738b; font-size: 14px; }
+        .auth-register strong { display: block; margin-bottom: 6px; color: #1f3c58; font-size: 15px; }
+        .auth-register a { font-weight: 800; color: #1b5c88; }
+        .registration-form-div.reg-content { background: #f7fbfe; border-radius: 28px; box-shadow: 0 34px 70px rgba(8, 24, 41, 0.34); padding: 28px 24px 24px; border: 1px solid rgba(255,255,255,0.16); }
         .auth-register-actions { display: flex; justify-content: space-between; gap: 14px; margin-top: 18px; }
-        @media (max-width: 640px) { .auth-hero, .auth-body { padding-left: 20px; padding-right: 20px; } .auth-hero h1 { font-size: 26px; } .auth-captcha-row, .auth-row, .auth-links, .auth-actions, .auth-register-actions { flex-direction: column; align-items: stretch; grid-template-columns: 1fr; } .auth-row .btn, .auth-actions .btn, .auth-register-actions .btn { width: 100%; } }
+        .auth-powered { margin-top: 16px; color: #86a0b5; font-size: 12px; text-align: center; letter-spacing: 0.04em; }
+        @media (max-width: 920px) { .auth-stage { grid-template-columns: 1fr; } .auth-showcase { padding-bottom: 30px; } .auth-showcase h1 { font-size: 32px; } }
+        @media (max-width: 640px) { .auth-panel, .auth-showcase { padding-left: 22px; padding-right: 22px; } .auth-showcase h1 { font-size: 28px; } .auth-captcha-row, .auth-row, .auth-links, .auth-actions, .auth-register-actions { flex-direction: column; align-items: stretch; grid-template-columns: 1fr; } .auth-row .btn, .auth-actions .btn, .auth-register-actions .btn { width: 100%; } .auth-links span { text-align: left; } }
     </style>
 </head>
 <body class="login-page">
@@ -68,13 +81,18 @@
             <?php if ($Settings->logo2) { echo '<img src="' . base_url('assets/uploads/logos/' . $Settings->logo2) . '" alt="' . $Settings->site_name . '" />'; } ?>
         </div>
         <div id="login">
-            <div class="auth-panel">
-                <div class="auth-hero">
+            <div class="auth-stage">
+                <div class="auth-showcase">
                     <span class="auth-kicker">Gamma Workspace</span>
-                    <h1>Welcome Back</h1>
-                    <p>Sign in to manage clients, forms, and document workflows from one secure workspace.</p>
+                    <h1>Secure staff access.</h1>
+                    <p>Sign in to continue to the Gamma admin workspace.</p>
+                    <div class="auth-footnote">Secure administrative access for <?= html_escape($Settings->site_name); ?></div>
                 </div>
-                <div class="auth-body">
+                <div class="auth-panel">
+                    <div class="auth-panel-head">
+                        <h2>Sign in</h2>
+                        <p>Use your staff account to continue to the Gamma admin workspace.</p>
+                    </div>
                     <?php if ($Settings->mmode) { ?><div class="alert alert-warning auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><?= lang('site_offline') ?></div><?php } ?>
                     <?php if ($error) { ?><div class="alert alert-danger auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><ul class="list-group"><?= $error; ?></ul></div><?php } ?>
                     <?php if ($message) { ?><div class="alert alert-success auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><ul class="list-group"><?= $message; ?></ul></div><?php } ?>
@@ -110,17 +128,22 @@
                     <?php if ($Settings->allow_reg) { ?>
                         <div class="auth-register"><strong><?= lang('dont_have_account') ?></strong><span><?= lang('no_worry') ?></span> <a href="#register" class="register_link"><?= lang('click_here') ?></a> <span><?= lang('to_register') ?></span></div>
                     <?php } ?>
+                    <div class="auth-powered">Designed for a professional internal workspace</div>
                 </div>
             </div>
         </div>
         <div id="forgot_password" style="display: none;">
-            <div class="auth-panel">
-                <div class="auth-hero">
+            <div class="auth-stage">
+                <div class="auth-showcase">
                     <span class="auth-kicker">Account Recovery</span>
-                    <h1>Forgot Your Password?</h1>
-                    <p>Enter the email address linked to your account and we will send you a secure reset link.</p>
+                    <h1>Reset your password.</h1>
+                    <p>Enter your account email and we will send you a reset link.</p>
                 </div>
-                <div class="auth-body">
+                <div class="auth-panel">
+                    <div class="auth-panel-head">
+                        <h2>Reset password</h2>
+                        <p>Recover your account using the email assigned to your profile.</p>
+                    </div>
                     <?php if ($error) { ?><div class="alert alert-danger auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><ul class="list-group"><?= $error; ?></ul></div><?php } ?>
                     <?php if ($message) { ?><div class="alert alert-success auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><ul class="list-group"><?= $message; ?></ul></div><?php } ?>
                     <?= admin_form_open("auth/forgot_password", 'class="login" data-toggle="validator"'); ?>
@@ -136,6 +159,7 @@
                         <button type="submit" class="btn btn-auth-primary"><?= lang('submit') ?> <i class="fa fa-envelope"></i></button>
                     </div>
                     <?= form_close(); ?>
+                    <div class="auth-powered">Password recovery is limited to authorized staff accounts</div>
                 </div>
             </div>
         </div>

@@ -275,7 +275,7 @@
                         $is_full_admin = $Owner || $Admin || ($this->session->userdata('group_id') == 1);
                         if ($is_full_admin) {
                             ?>
-                                        <li class="mm_auth mm_customers mm_suppliers mm_billers">
+                                        <li class="mm_auth mm_billers">
                                             <a class="dropmenu" href="#">
                                                 <i class="fa fa-users"></i>
                                                 <span class="text"> <?= lang('people'); ?> </span>
@@ -296,27 +296,6 @@
                                                     </a>
                                                 </li>
                                                 <?php } ?>
-                                            </ul>
-                                        </li>
-                                        <li class="mm_immigrants">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-globe"></i>
-                                                <span class="text"> <?= lang('immigrants'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <li id="immigrants_index">
-                                                    <a class="submenu" href="<?= admin_url('immigrants'); ?>">
-                                                        <i class="fa fa-list"></i><span class="text">
-                                                            <?= lang('list_immigrants'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <li id="immigrants_add">
-                                                    <a class="submenu" href="<?= admin_url('immigrants/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_immigrant'); ?></span>
-                                                    </a>
-                                                </li>
                                             </ul>
                                         </li>
                                         <li class="mm_notifications">
@@ -463,35 +442,7 @@
 
                                         <?php
                         } else { // not owner and not admin – menu by permissions
-                            $show_immigrants = !empty($GP['immigrants-index']) || !empty($GP['immigrants-add']);
                             ?>
-                                        <?php if ($show_immigrants) { ?>
-                                        <li class="mm_immigrants">
-                                            <a class="dropmenu" href="#">
-                                                <i class="fa fa-globe"></i>
-                                                <span class="text"> <?= lang('immigrants'); ?> </span>
-                                                <span class="chevron closed"></span>
-                                            </a>
-                                            <ul>
-                                                <?php if (!empty($GP['immigrants-index'])) { ?>
-                                                <li id="immigrants_index">
-                                                    <a class="submenu" href="<?= admin_url('immigrants'); ?>">
-                                                        <i class="fa fa-list"></i><span class="text">
-                                                            <?= lang('list_immigrants'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php }
-                                                if (!empty($GP['immigrants-add'])) { ?>
-                                                <li id="immigrants_add">
-                                                    <a class="submenu" href="<?= admin_url('immigrants/add'); ?>">
-                                                        <i class="fa fa-plus-circle"></i><span class="text">
-                                                            <?= lang('add_immigrant'); ?></span>
-                                                    </a>
-                                                </li>
-                                                <?php } ?>
-                                            </ul>
-                                        </li>
-                                        <?php } ?>
                                         <li class="mm_notifications">
                                             <a class="submenu" href="<?= admin_url('notifications'); ?>">
                                                 <i class="fa fa-info-circle"></i><span class="text">
@@ -575,7 +526,7 @@
                             foreach ($info as $n) {
                                 if (!$this->session->userdata('hidden' . $n->id)) {
                                     ?>
-                                        <div class="alert alert-info">
+                                        <div class="alert alert-info" data-notification-id="<?= $n->id; ?>">
                                             <a href="#" id="<?= $n->id ?>" class="close hideComment external"
                                                 data-dismiss="alert">&times;</a>
                                             <?= $n->comment; ?>

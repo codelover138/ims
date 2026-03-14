@@ -391,48 +391,6 @@ jQuery(document).ready(function(e) {
 $(document).ready(function() {
     cssStyle();
     $('select, .select').select2({ minimumResultsForSearch: 7 });
-    $('#customer, #rcustomer, .ssr-customer').select2({
-        minimumInputLength: 1,
-        ajax: {
-            url: site.base_url + 'customers/suggestions',
-            dataType: 'json',
-            quietMillis: 15,
-            data: function(term, page) {
-                return {
-                    term: term,
-                    limit: 10,
-                };
-            },
-            results: function(data, page) {
-                if (data.results != null) {
-                    return { results: data.results };
-                } else {
-                    return { results: [{ id: '', text: 'No Match Found' }] };
-                }
-            },
-        },
-    });
-    $('#supplier, #rsupplier, .rsupplier').select2({
-        minimumInputLength: 1,
-        ajax: {
-            url: site.base_url + 'suppliers/suggestions',
-            dataType: 'json',
-            quietMillis: 15,
-            data: function(term, page) {
-                return {
-                    term: term,
-                    limit: 10,
-                };
-            },
-            results: function(data, page) {
-                if (data.results != null) {
-                    return { results: data.results };
-                } else {
-                    return { results: [{ id: '', text: 'No Match Found' }] };
-                }
-            },
-        },
-    });
     $('.input-tip').tooltip({
         placement: 'top',
         html: true,
@@ -520,30 +478,6 @@ $(document).ready(function() {
             .trigger('click');
     });
 });
-
-function suppliers(ele) {
-    $(ele).select2({
-        minimumInputLength: 1,
-        ajax: {
-            url: site.base_url + 'suppliers/suggestions',
-            dataType: 'json',
-            quietMillis: 15,
-            data: function(term, page) {
-                return {
-                    term: term,
-                    limit: 10,
-                };
-            },
-            results: function(data, page) {
-                if (data.results != null) {
-                    return { results: data.results };
-                } else {
-                    return { results: [{ id: '', text: 'No Match Found' }] };
-                }
-            },
-        },
-    });
-}
 
 $(function() {
     $('.datetime').datetimepicker({
@@ -635,8 +569,47 @@ $(document).ready(function() {
             .stop(true, true)
             .slideUp('fast');
     });
+    function getHiddenNotifications() {
+        try {
+            var stored = localStorage.getItem('hiddenNotifications');
+            return stored ? JSON.parse(stored) : [];
+        } catch (err) {
+            return [];
+        }
+    }
+
+    function setHiddenNotifications(ids) {
+        try {
+            localStorage.setItem('hiddenNotifications', JSON.stringify(ids));
+        } catch (err) {}
+    }
+
+    function rememberHiddenNotification(id) {
+        var ids = getHiddenNotifications();
+        id = String(id);
+        if ($.inArray(id, ids) === -1) {
+            ids.push(id);
+            setHiddenNotifications(ids);
+        }
+    }
+
+    function applyHiddenNotifications() {
+        var ids = getHiddenNotifications();
+        $('[data-notification-id]').each(function() {
+            var $alert = $(this);
+            var id = String($alert.data('notification-id'));
+            if ($.inArray(id, ids) !== -1) {
+                $alert.remove();
+            }
+        });
+    }
+
+    applyHiddenNotifications();
+
     $('.hideComment').click(function() {
-        $.ajax({ url: site.base_url + 'welcome/hideNotification/' + $(this).attr('id') });
+        var id = $(this).attr('id');
+        rememberHiddenNotification(id);
+        $.ajax({ url: site.base_url + 'welcome/hideNotification/' + id });
     });
     $('.tip').tooltip();
     $('body').on('click', '#delete', function(e) {
@@ -1468,40 +1441,6 @@ function calculateDiscount(val, amt) {
 }
 
 $(document).ready(function() {
-    $('#view-customer').click(function() {
-        if ($('input[name=customer]').val()) {
-            $('#myModal').modal({ remote: site.base_url + 'customers/view/' + $('input[name=customer]').val() });
-            $('#myModal').modal('show');
-        }
-    });
-    $('#view-supplier').click(function() {
-        if ($('input[name=supplier]').val()) {
-            $('#myModal').modal({ remote: site.base_url + 'suppliers/view/' + $('input[name=supplier]').val() });
-            $('#myModal').modal('show');
-        }
-    });
-    $('body').on('click', '.customer_details_link td:not(:first-child, :last-child)', function() {
-        $('#myModal').modal({
-            remote:
-                site.base_url +
-                'customers/view/' +
-                $(this)
-                    .parent('.customer_details_link')
-                    .attr('id'),
-        });
-        $('#myModal').modal('show');
-    });
-    $('body').on('click', '.supplier_details_link td:not(:first-child, :last-child)', function() {
-        $('#myModal').modal({
-            remote:
-                site.base_url +
-                'suppliers/view/' +
-                $(this)
-                    .parent('.supplier_details_link')
-                    .attr('id'),
-        });
-        $('#myModal').modal('show');
-    });
     $('body').on('click', '.product_link td:not(:first-child, :nth-child(2), :last-child)', function() {
         $('#myModal').modal({
             remote:
@@ -1581,18 +1520,6 @@ $(document).ready(function() {
                 'sales/modal_view/' +
                 $(this)
                     .parent('.invoice_link')
-                    .attr('id'),
-        });
-        $('#myModal').modal('show');
-        //window.location.href = site.base_url + 'sales/view/' + $(this).parent('.invoice_link').attr('id');
-    });
-    $('body').on('click', '.communication_link td:not(:first-child, :last-child)', function() {
-        $('#myModal').modal({
-            remote:
-                site.base_url +
-                'communication/modal_view/' +
-                $(this)
-                    .parent('.communication_link')
                     .attr('id'),
         });
         $('#myModal').modal('show');
@@ -1699,28 +1626,6 @@ $(document).ready(function() {
                 'sales/view_delivery/' +
                 $(this)
                     .parent('.delivery_link')
-                    .attr('id'),
-        });
-        $('#myModal').modal('show');
-    });
-    $('body').on('click', '.customer_link td:not(:first-child)', function() {
-        $('#myModal').modal({
-            remote:
-                site.base_url +
-                'customers/edit/' +
-                $(this)
-                    .parent('.customer_link')
-                    .attr('id'),
-        });
-        $('#myModal').modal('show');
-    });
-    $('body').on('click', '.supplier_link td:not(:first-child)', function() {
-        $('#myModal').modal({
-            remote:
-                site.base_url +
-                'suppliers/edit/' +
-                $(this)
-                    .parent('.supplier_link')
                     .attr('id'),
         });
         $('#myModal').modal('show');

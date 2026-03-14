@@ -34,34 +34,12 @@ class system_settings extends MY_Controller
         $this->form_validation->set_rules('timezone', lang('timezone'), 'trim|required');
         $this->form_validation->set_rules('mmode', lang('maintenance_mode'), 'trim|required');
         //$this->form_validation->set_rules('logo', lang('logo'), 'trim');
-        $this->form_validation->set_rules('iwidth', lang('image_width'), 'trim|numeric|required');
-        $this->form_validation->set_rules('iheight', lang('image_height'), 'trim|numeric|required');
-        $this->form_validation->set_rules('twidth', lang('thumbnail_width'), 'trim|numeric|required');
-        $this->form_validation->set_rules('theight', lang('thumbnail_height'), 'trim|numeric|required');
-        $this->form_validation->set_rules('display_all_products', lang('display_all_products'), 'trim|numeric|required');
-        $this->form_validation->set_rules('watermark', lang('watermark'), 'trim|required');
         $this->form_validation->set_rules('currency', lang('default_currency'), 'trim|required');
         $this->form_validation->set_rules('email', lang('default_email'), 'trim|required');
         $this->form_validation->set_rules('language', lang('language'), 'trim|required');
         $this->form_validation->set_rules('warehouse', lang('default_warehouse'), 'trim|required');
-        $this->form_validation->set_rules('biller', lang('default_biller'), 'trim|required');
-        $this->form_validation->set_rules('tax_rate', lang('product_tax'), 'trim|required');
-        $this->form_validation->set_rules('tax_rate2', lang('invoice_tax'), 'trim|required');
-        $this->form_validation->set_rules('sales_prefix', lang('sales_prefix'), 'trim');
-        $this->form_validation->set_rules('quote_prefix', lang('quote_prefix'), 'trim');
-        $this->form_validation->set_rules('purchase_prefix', lang('purchase_prefix'), 'trim');
-        $this->form_validation->set_rules('transfer_prefix', lang('transfer_prefix'), 'trim');
-        $this->form_validation->set_rules('delivery_prefix', lang('delivery_prefix'), 'trim');
-        $this->form_validation->set_rules('payment_prefix', lang('payment_prefix'), 'trim');
-        $this->form_validation->set_rules('return_prefix', lang('return_prefix'), 'trim');
-        $this->form_validation->set_rules('expense_prefix', lang('expense_prefix'), 'trim');
-        $this->form_validation->set_rules('detect_barcode', lang('detect_barcode'), 'trim|required');
         $this->form_validation->set_rules('theme', lang('theme'), 'trim|required');
         $this->form_validation->set_rules('rows_per_page', lang('rows_per_page'), 'trim|required');
-        $this->form_validation->set_rules('accounting_method', lang('accounting_method'), 'trim|required');
-        $this->form_validation->set_rules('product_serial', lang('product_serial'), 'trim|required');
-        $this->form_validation->set_rules('product_discount', lang('product_discount'), 'trim|required');
-        $this->form_validation->set_rules('bc_fix', lang('bc_fix'), 'trim|numeric|required');
         $this->form_validation->set_rules('protocol', lang('email_protocol'), 'trim|required');
         if ($this->input->post('protocol') == 'smtp') {
             $this->form_validation->set_rules('smtp_host', lang('smtp_host'), 'required');
@@ -91,56 +69,31 @@ class system_settings extends MY_Controller
                 $lang = 'english';
             }
 
-            $tax1 = ($this->input->post('tax_rate') != 0) ? 1 : 0;
-            $tax2 = ($this->input->post('tax_rate2') != 0) ? 1 : 0;
-
             $data = array('site_name' => DEMO ? 'Stock Manager Advance' : $this->input->post('site_name'),
                 'rows_per_page' => $this->input->post('rows_per_page'),
                 'dateformat' => $this->input->post('dateformat'),
                 'timezone' => DEMO ? 'Asia/Kuala_Lumpur' : $this->input->post('timezone'),
                 'mmode' => trim($this->input->post('mmode')),
-                'iwidth' => $this->input->post('iwidth'),
-                'iheight' => $this->input->post('iheight'),
-                'twidth' => $this->input->post('twidth'),
-                'theight' => $this->input->post('theight'),
-                'watermark' => $this->input->post('watermark'),
+                'iwidth' => $this->Settings->iwidth,
+                'iheight' => $this->Settings->iheight,
+                'twidth' => $this->Settings->twidth,
+                'theight' => $this->Settings->theight,
+                'watermark' => $this->Settings->watermark,
                 // 'reg_ver' => $this->input->post('reg_ver'),
                 // 'allow_reg' => $this->input->post('allow_reg'),
                 // 'reg_notification' => $this->input->post('reg_notification'),
-                'accounting_method' => $this->input->post('accounting_method'),
+                'accounting_method' => $this->Settings->accounting_method,
                 'default_email' => DEMO ? 'noreply@tecdiary.com' : $this->input->post('email'),
                 'language' => $lang,
                 'default_warehouse' => $this->input->post('warehouse'),
-                'default_tax_rate' => $this->input->post('tax_rate'),
-                'default_tax_rate2' => $this->input->post('tax_rate2'),
-                'sales_prefix' => $this->input->post('sales_prefix'),
-                'quote_prefix' => $this->input->post('quote_prefix'),
-                'purchase_prefix' => $this->input->post('purchase_prefix'),
-                'transfer_prefix' => $this->input->post('transfer_prefix'),
-                'delivery_prefix' => $this->input->post('delivery_prefix'),
-                'payment_prefix' => $this->input->post('payment_prefix'),
-                'ppayment_prefix' => $this->input->post('ppayment_prefix'),
-                'qa_prefix' => $this->input->post('qa_prefix'),
-                'return_prefix' => $this->input->post('return_prefix'),
-                'returnp_prefix' => $this->input->post('returnp_prefix'),
-                'expense_prefix' => $this->input->post('expense_prefix'),
-                'auto_detect_barcode' => trim($this->input->post('detect_barcode')),
+                'payment_prefix' => $this->Settings->payment_prefix,
+                'ppayment_prefix' => $this->Settings->ppayment_prefix,
+                'qa_prefix' => $this->Settings->qa_prefix,
                 'theme' => trim($this->input->post('theme')),
-                'product_serial' => $this->input->post('product_serial'),
-                'customer_group' => $this->input->post('customer_group'),
-                'product_expiry' => $this->input->post('product_expiry'),
-                'product_discount' => $this->input->post('product_discount'),
+                'customer_group' => $this->Settings->customer_group,
                 'default_currency' => $this->input->post('currency'),
-                'bc_fix' => $this->input->post('bc_fix'),
-                'tax1' => $tax1,
-                'tax2' => $tax2,
-                'overselling' => $this->input->post('restrict_sale'),
-                'reference_format' => $this->input->post('reference_format'),
-                'racks' => $this->input->post('racks'),
-                'attributes' => $this->input->post('attributes'),
                 'restrict_calendar' => $this->input->post('restrict_calendar'),
                 'captcha' => $this->input->post('captcha'),
-                'item_addition' => $this->input->post('item_addition'),
                 'protocol' => DEMO ? 'mail' : $this->input->post('protocol'),
                 'mailpath' => $this->input->post('mailpath'),
                 'smtp_host' => $this->input->post('smtp_host'),
@@ -150,25 +103,17 @@ class system_settings extends MY_Controller
                 'decimals' => $this->input->post('decimals'),
                 'decimals_sep' => $this->input->post('decimals_sep'),
                 'thousands_sep' => $this->input->post('thousands_sep'),
-                'default_biller' => $this->input->post('biller'),
-                'invoice_view' => $this->input->post('invoice_view'),
+                'default_biller' => $this->Settings->default_biller,
                 'rtl' => $this->input->post('rtl'),
-                'each_spent' => $this->input->post('each_spent') ? $this->input->post('each_spent') : NULL,
-                'ca_point' => $this->input->post('ca_point') ? $this->input->post('ca_point') : NULL,
-                'each_sale' => $this->input->post('each_sale') ? $this->input->post('each_sale') : NULL,
-                'sa_point' => $this->input->post('sa_point') ? $this->input->post('sa_point') : NULL,
+                'each_spent' => $this->Settings->each_spent,
+                'ca_point' => $this->Settings->ca_point,
+                'each_sale' => $this->Settings->each_sale,
+                'sa_point' => $this->Settings->sa_point,
                 'sac' => $this->input->post('sac'),
                 'qty_decimals' => $this->input->post('qty_decimals'),
-                'display_all_products' => $this->input->post('display_all_products'),
                 'display_symbol' => $this->input->post('display_symbol'),
                 'symbol' => $this->input->post('symbol'),
-                'remove_expired' => $this->input->post('remove_expired'),
-                'barcode_separator' => $this->input->post('barcode_separator'),
-                'set_focus' => $this->input->post('set_focus'),
                 'disable_editing' => $this->input->post('disable_editing'),
-                'price_group' => $this->input->post('price_group'),
-                'barcode_img' => $this->input->post('barcode_renderer'),
-                'update_cost' => $this->input->post('update_cost'),
                 'apis' => $this->input->post('apis'),
                 'pdf_lib' => $this->input->post('pdf_lib'),
                 'state' => $this->input->post('state'),
@@ -191,13 +136,10 @@ class system_settings extends MY_Controller
         } else {
 
             $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
-            $this->data['billers'] = $this->site->getAllCompanies('biller');
             $this->data['settings'] = $this->settings_model->getSettings();
             $this->data['currencies'] = $this->settings_model->getAllCurrencies();
             $this->data['date_formats'] = $this->settings_model->getDateFormats();
             $this->data['tax_rates'] = $this->settings_model->getAllTaxRates();
-            $this->data['customer_groups'] = $this->settings_model->getAllCustomerGroups();
-            $this->data['price_groups'] = $this->settings_model->getAllPriceGroups();
             $this->data['warehouses'] = $this->settings_model->getAllWarehouses();
             $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('system_settings')));
             $meta = array('page_title' => lang('system_settings'), 'bc' => $bc);
@@ -719,13 +661,9 @@ class system_settings extends MY_Controller
 
         $this->form_validation->set_rules('group', lang("group"), 'is_natural_no_zero');
         if ($this->form_validation->run() == true) {
-            // Only immigrants and document permissions are shown; merge with current so others are preserved.
+            // Only document permissions are shown; merge with current so others are preserved.
             $current = $this->settings_model->getGroupPermissions($id);
             $data = $current ? (array) $current : array();
-            $data['immigrants-index'] = $this->input->post('immigrants-index');
-            $data['immigrants-add'] = $this->input->post('immigrants-add');
-            $data['immigrants-edit'] = $this->input->post('immigrants-edit');
-            $data['immigrants-delete'] = $this->input->post('immigrants-delete');
             $data['document-file_manager'] = $this->input->post('document-file_manager');
             $data['document-folder_create'] = $this->input->post('document-folder_create');
             $data['document-folder_download'] = $this->input->post('document-folder_download');
@@ -940,7 +878,7 @@ class system_settings extends MY_Controller
     function getCategories()
     {
 
-        $print_barcode = anchor('admin/products/print_barcodes/?category=$1', '<i class="fa fa-print"></i>', 'title="'.lang('print_barcodes').'" class="tip"');
+        $print_barcode = '';
 
         $this->load->library('datatables');
         $this->datatables
@@ -1808,6 +1746,8 @@ class system_settings extends MY_Controller
 
     function expense_categories()
     {
+        show_404();
+        return;
 
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('system_settings'), 'page' => lang('system_settings')), array('link' => '#', 'page' => lang('expense_categories')));
@@ -1817,6 +1757,8 @@ class system_settings extends MY_Controller
 
     function getExpenseCategories()
     {
+        show_404();
+        return;
 
         $this->load->library('datatables');
         $this->datatables
@@ -1829,6 +1771,8 @@ class system_settings extends MY_Controller
 
     function add_expense_category()
     {
+        show_404();
+        return;
 
         $this->form_validation->set_rules('code', lang("category_code"), 'trim|is_unique[categories.code]|required');
         $this->form_validation->set_rules('name', lang("name"), 'required|min_length[3]');
@@ -1857,6 +1801,8 @@ class system_settings extends MY_Controller
 
     function edit_expense_category($id = NULL)
     {
+        show_404();
+        return;
         $this->form_validation->set_rules('code', lang("category_code"), 'trim|required');
         $category = $this->settings_model->getExpenseCategoryByID($id);
         if ($this->input->post('code') != $category->code) {
@@ -1889,6 +1835,8 @@ class system_settings extends MY_Controller
 
     function delete_expense_category($id = NULL)
     {
+        show_404();
+        return;
 
         if ($this->settings_model->hasExpenseCategoryRecord($id)) {
             $this->sma->send_json(array('error' => 1, 'msg' => lang("category_has_expenses")));
@@ -2118,6 +2066,8 @@ class system_settings extends MY_Controller
 
     function import_expense_categories()
     {
+        show_404();
+        return;
 
         $this->load->helper('security');
         $this->form_validation->set_rules('userfile', lang("upload_file"), 'xss_clean');
@@ -2359,6 +2309,8 @@ class system_settings extends MY_Controller
 
     function price_groups()
     {
+        show_404();
+        return;
 
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
 
@@ -2382,6 +2334,8 @@ class system_settings extends MY_Controller
 
     function add_price_group()
     {
+        show_404();
+        return;
 
         $this->form_validation->set_rules('name', lang("group_name"), 'trim|is_unique[price_groups.name]|required|alpha_numeric_spaces');
 
@@ -2405,6 +2359,8 @@ class system_settings extends MY_Controller
 
     function edit_price_group($id = NULL)
     {
+        show_404();
+        return;
 
         $this->form_validation->set_rules('name', lang("group_name"), 'trim|required|alpha_numeric_spaces');
         $pg_details = $this->settings_model->getPriceGroupByID($id);
@@ -2434,6 +2390,8 @@ class system_settings extends MY_Controller
 
     function delete_price_group($id = NULL)
     {
+        show_404();
+        return;
         if ($this->settings_model->deletePriceGroup($id)) {
             $this->sma->send_json(array('error' => 0, 'msg' => lang("price_group_deleted")));
         }
@@ -2507,6 +2465,8 @@ class system_settings extends MY_Controller
 
     function group_product_prices($group_id = NULL)
     {
+        show_404();
+        return;
 
         if (!$group_id) {
             $this->session->set_flashdata('error', lang('no_price_group_selected'));
@@ -2559,6 +2519,8 @@ class system_settings extends MY_Controller
 
     function update_prices_csv($group_id = NULL)
     {
+        show_404();
+        return;
 
         $this->load->helper('security');
         $this->form_validation->set_rules('userfile', lang("upload_file"), 'xss_clean');
@@ -2647,6 +2609,8 @@ class system_settings extends MY_Controller
 
     function brands()
     {
+        show_404();
+        return;
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('system_settings'), 'page' => lang('system_settings')), array('link' => '#', 'page' => lang('brands')));
         $meta = array('page_title' => lang('brands'), 'bc' => $bc);
@@ -2655,6 +2619,8 @@ class system_settings extends MY_Controller
 
     function getBrands()
     {
+        show_404();
+        return;
 
         $this->load->library('datatables');
         $this->datatables
@@ -2667,6 +2633,8 @@ class system_settings extends MY_Controller
 
     function add_brand()
     {
+        show_404();
+        return;
 
         $this->form_validation->set_rules('name', lang("brand_name"), 'trim|required|is_unique[brands.name]|alpha_numeric_spaces');
         $this->form_validation->set_rules('slug', lang("slug"), 'trim|required|is_unique[brands.slug]|alpha_dash');
@@ -2733,6 +2701,8 @@ class system_settings extends MY_Controller
 
     function edit_brand($id = NULL)
     {
+        show_404();
+        return;
 
         $this->form_validation->set_rules('name', lang("brand_name"), 'trim|required|alpha_numeric_spaces');
         $brand_details = $this->site->getBrandByID($id);
@@ -2807,6 +2777,8 @@ class system_settings extends MY_Controller
 
     function delete_brand($id = NULL)
     {
+        show_404();
+        return;
 
         if ($this->settings_model->brandHasProducts($id)) {
             $this->sma->send_json(array('error' => 1, 'msg' => lang("brand_has_products")));
@@ -2819,6 +2791,8 @@ class system_settings extends MY_Controller
 
     function import_brands()
     {
+        show_404();
+        return;
 
         $this->load->helper('security');
         $this->form_validation->set_rules('userfile', lang("upload_file"), 'xss_clean');

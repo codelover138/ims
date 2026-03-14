@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title><?= $title ?></title>
     <script type="text/javascript">if (parent.frames.length !== 0) {
-            top.location = '<?=admin_url('pos')?>';
+            top.location = '<?= admin_url() ?>';
         }</script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="<?= $assets ?>styles/theme.css" rel="stylesheet">

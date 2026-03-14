@@ -32,24 +32,6 @@
                         </div>
                         <div class="form-group">
                             <div class="actions">
-                                <div class="col-xs-3"><a href="#" class="btn btn-primary btn-block"
-                                                         id="import_customers">Import Customers</a></div>
-                                <div class="performing" style="padding-top:7px;display:none;"><i
-                                        class="fa fa-refresh fa-spin"></i></div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="form-group">
-                            <div class="actions">
-                                <div class="col-xs-3"><a href="#" class="btn btn-primary btn-block"
-                                                         id="import_suppliers">Import Suppliers</a></div>
-                                <div class="performing" style="padding-top:7px;display:none;"><i
-                                        class="fa fa-refresh fa-spin"></i></div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="form-group">
-                            <div class="actions">
                                 <div class="col-xs-3"><a href="#" class="btn btn-warning btn-block"
                                                          id="delete_extra_tables">Delete extra tables</a></div>
                                 <div class="performing" style="padding-top:7px;display:none;"><i
@@ -227,46 +209,6 @@
             perf.show();
             $.ajax({
                 url: '<?=admin_url('sync/import_billers')?>',
-                type: 'GET',
-                success: function (msg) {
-                    perf.html(msg);
-                    btn.attr('disabled', false);
-                },
-                error: function () {
-                    perf.html('Request Failed!').show();
-                    btn.attr('disabled', false);
-                }
-            });
-        });
-
-        $('#import_customers').click(function (e) {
-            var btn = $(this);
-            e.preventDefault();
-            btn.attr('disabled', true);
-            var perf = btn.parent().parent('.actions').children('.performing');
-            perf.show();
-            $.ajax({
-                url: '<?=admin_url('sync/import_customers')?>',
-                type: 'GET',
-                success: function (msg) {
-                    perf.html(msg);
-                    btn.attr('disabled', false);
-                },
-                error: function () {
-                    perf.html('Request Failed!').show();
-                    btn.attr('disabled', false);
-                }
-            });
-        });
-
-        $('#import_suppliers').click(function (e) {
-            var btn = $(this);
-            e.preventDefault();
-            btn.attr('disabled', true);
-            var perf = btn.parent().parent('.actions').children('.performing');
-            perf.show();
-            $.ajax({
-                url: '<?=admin_url('sync/import_suppliers')?>',
                 type: 'GET',
                 success: function (msg) {
                     perf.html(msg);

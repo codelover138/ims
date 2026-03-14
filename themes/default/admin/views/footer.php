@@ -68,14 +68,6 @@ $s2_file_date = $this->parser->parse_string($s2_lang_file, $s2_data, true);
 <script type="text/javascript" src="<?= $assets ?>js/jquery.calculator.min.js"></script>
 <script type="text/javascript" src="<?= $assets ?>js/core.js"></script>
 <script type="text/javascript" src="<?= $assets ?>js/perfect-scrollbar.min.js"></script>
-<?= ($m == 'purchases' && ($v == 'add' || $v == 'edit' || $v == 'purchase_by_csv')) ? '<script type="text/javascript" src="' . $assets . 'js/purchases.js"></script>' : ''; ?>
-<?= ($m == 'transfers' && ($v == 'add' || $v == 'edit' ||  $v == 'transfer_by_pos' ||  $v == 'transfer_by_fattura')) ? '<script type="text/javascript" src="' . $assets . 'js/transfers.js"></script>' : ''; ?>
-<?= ($m == 'sales' && ($v == 'add' || $v == 'edit')) ? '<script type="text/javascript" src="' . $assets . 'js/sales.js"></script>' : ''; ?>
-<?= ($m == 'payments' && ($v == 'add' || $v == 'edit')) ? '<script type="text/javascript" src="' . $assets . 'js/sales.js"></script>' : ''; ?>
-<?php // Communication add/edit use plain text customer field - do not load sales.js ?>
-<?= ($m == 'returns' && ($v == 'add' || $v == 'edit')) ? '<script type="text/javascript" src="' . $assets . 'js/returns.js"></script>' : ''; ?>
-<?= ($m == 'quotes' && ($v == 'add' || $v == 'edit')) ? '<script type="text/javascript" src="' . $assets . 'js/quotes.js"></script>' : ''; ?>
-<?= ($m == 'products' && ($v == 'add_adjustment' || $v == 'edit_adjustment')) ? '<script type="text/javascript" src="' . $assets . 'js/adjustments.js"></script>' : ''; ?>
 
 <script type="text/javascript" charset="UTF-8">
 var oTable = '',

@@ -24,8 +24,6 @@ class Welcome extends MY_Controller
     {
 
         $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-        $created_by = (!$this->Owner && !$this->Admin) ? $this->session->userdata('user_id') : null;
-        $this->data['latest_immigrants'] = $this->db_model->getLatestImmigrants($created_by);
         $bc = array(array('link' => '#', 'page' => lang('dashboard')));
         $meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
         $this->page_construct('dashboard', $meta, $this->data);

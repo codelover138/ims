@@ -45,22 +45,6 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><?= lang("immigrants"); ?></td>
-                                    <td class="text-center">
-                                        <input type="checkbox" value="1" class="checkbox" name="immigrants-index" <?php echo (isset($p->{'immigrants-index'}) && $p->{'immigrants-index'}) ? "checked" : ''; ?>>
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="checkbox" value="1" class="checkbox" name="immigrants-add" <?php echo (isset($p->{'immigrants-add'}) && $p->{'immigrants-add'}) ? "checked" : ''; ?>>
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="checkbox" value="1" class="checkbox" name="immigrants-edit" <?php echo (isset($p->{'immigrants-edit'}) && $p->{'immigrants-edit'}) ? "checked" : ''; ?>>
-                                    </td>
-                                    <td class="text-center">
-                                        <input type="checkbox" value="1" class="checkbox" name="immigrants-delete" <?php echo (isset($p->{'immigrants-delete'}) && $p->{'immigrants-delete'}) ? "checked" : ''; ?>>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
                                     <td><?= lang("File_Manager"); ?></td>
                                     <td class="text-center">
                                         <input type="checkbox" value="1" id="document-file_manager" class="checkbox" name="document-file_manager" <?php echo (isset($p->{'document-file_manager'}) && $p->{'document-file_manager'}) ? "checked" : ''; ?>>

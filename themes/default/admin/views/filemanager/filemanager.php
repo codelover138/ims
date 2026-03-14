@@ -16,6 +16,19 @@
     }
 </style>
 <script type="text/javascript" charset="utf-8">
+        function disableElfinderDrag() {
+            var $root = $('#elfinder');
+            $root.find('.elfinder-cwd-file, .elfinder-navbar-dir').each(function () {
+                var $node = $(this);
+                if ($node.data('uiDraggable')) {
+                    $node.draggable('disable');
+                }
+                if ($node.data('uiDroppable')) {
+                    $node.droppable('disable');
+                }
+            });
+            $root.find('.ui-draggable, .ui-droppable').css('cursor', 'default');
+        }
 
         $().ready(function () {
             window.setTimeout(function () {
@@ -28,6 +41,8 @@
                     url: '<?= admin_url()?>document/elfinder_init',  // connector URL (REQUIRED)
                    // lang: _locale,
                     height: 700,
+                    enableAlways: true,
+                    dragUploadAllow: false,
                     uiOptions: {
                         toolbar: [
                             ['back', 'forward'],
@@ -42,9 +57,26 @@
                             ['fullscreen'],
                             ['view'],
                         ],
+                    },
+                    handlers: {
+                        init: function () {
+                            disableElfinderDrag();
+                        },
+                        open: function () {
+                            disableElfinderDrag();
+                        },
+                        reload: function () {
+                            disableElfinderDrag();
+                        }
                     }
 
                 }).elfinder('instance');
+
+                $('#elfinder').on('dragenter dragover drop dragstart', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                });
             }, 200);
         });
 </script>

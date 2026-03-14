@@ -36,26 +36,6 @@ class Sync extends MY_Controller
 
     }
 
-    public function import_customers()
-    {
-
-        if ($this->sync_model->importCustomers()) {
-            die('<i class="fa fa-check"></a> Success!');
-        }
-        die('<i class="fa fa-times"></a> Failed!');
-
-    }
-
-    public function import_suppliers()
-    {
-
-        if ($this->sync_model->importSuppliers()) {
-            die('<i class="fa fa-check"></a> Success!');
-        }
-        die('<i class="fa fa-times"></a> Failed!');
-
-    }
-
     public function user_groups()
     {
 

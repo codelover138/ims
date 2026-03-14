@@ -199,3 +199,361 @@ ERROR - 2026-03-13 00:46:11 --> Could not find the language line "primary_id"
 ERROR - 2026-03-13 00:46:11 --> Could not find the language line "surname"
 ERROR - 2026-03-13 00:46:11 --> Could not find the language line "Hold"
 ERROR - 2026-03-13 00:46:11 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "username"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "password"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "username"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "email"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "phone"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "company"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "gender"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "password"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "confirm_password"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "username"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "email"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "phone"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "company"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "gender"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "product_code"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "product_name"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "cname"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "barcode_symbology"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "product_unit"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "product_price"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "contact_person"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "company"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "email_address"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "address"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "city"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "phone"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 22:34:01 --> Could not find the language line "email"
+ERROR - 2026-03-13 22:34:27 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 22:34:27 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 22:34:27 --> Could not find the language line "surname"
+ERROR - 2026-03-13 22:34:27 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:34:27 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:34:35 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:34:35 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:35:48 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:35:48 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:35:54 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 22:35:54 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 22:35:54 --> Could not find the language line "surname"
+ERROR - 2026-03-13 22:35:54 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:35:54 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:35:59 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:35:59 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:37:06 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:37:06 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:39:56 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:39:56 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:40:41 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 22:40:41 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 22:40:41 --> Could not find the language line "surname"
+ERROR - 2026-03-13 22:40:41 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:40:41 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:40:48 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:40:48 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:50:21 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 22:50:21 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 22:50:21 --> Could not find the language line "surname"
+ERROR - 2026-03-13 22:50:21 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:50:21 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:50:34 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:50:34 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:57:07 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 22:57:07 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 22:57:07 --> Could not find the language line "surname"
+ERROR - 2026-03-13 22:57:07 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:57:07 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:57:46 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 22:57:46 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 22:57:46 --> Could not find the language line "surname"
+ERROR - 2026-03-13 22:57:46 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:57:46 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:57:52 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:57:52 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:58:08 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:58:08 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:58:46 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 22:58:46 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 22:58:46 --> Could not find the language line "surname"
+ERROR - 2026-03-13 22:58:46 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:58:46 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:58:53 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:58:53 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 22:59:06 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 22:59:06 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:02:41 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:02:41 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 23:02:41 --> Could not find the language line "surname"
+ERROR - 2026-03-13 23:02:41 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:02:41 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:02:46 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:02:46 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:03:06 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:03:06 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 23:03:06 --> Could not find the language line "surname"
+ERROR - 2026-03-13 23:03:06 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:03:06 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:03:11 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:03:11 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:03:37 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:03:37 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:04:02 --> Severity: Warning --> unlink(assets/uploads/avatars/): Is a directory D:\setup\xammp\htdocs\ims\app\controllers\admin\Auth.php 881
+ERROR - 2026-03-13 23:04:02 --> Severity: Warning --> unlink(assets/uploads/avatars/thumbs/): Is a directory D:\setup\xammp\htdocs\ims\app\controllers\admin\Auth.php 882
+ERROR - 2026-03-13 23:04:02 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:04:02 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:04:08 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:04:08 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 23:04:08 --> Could not find the language line "surname"
+ERROR - 2026-03-13 23:04:08 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:04:08 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:04:12 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:04:12 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:04:26 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:04:26 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:04:35 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:04:35 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:04:48 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:04:48 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:04:58 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:04:58 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 23:04:58 --> Could not find the language line "surname"
+ERROR - 2026-03-13 23:04:58 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:04:58 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:05:37 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:05:37 --> Could not find the language line "primary_id"
+ERROR - 2026-03-13 23:05:37 --> Could not find the language line "surname"
+ERROR - 2026-03-13 23:05:37 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:05:37 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:14:33 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:14:33 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:14:33 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:14:46 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 22
+ERROR - 2026-03-13 23:14:46 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 22
+ERROR - 2026-03-13 23:14:46 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:14:46 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "username"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "password"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "username"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "email"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "phone"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "company"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "gender"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "password"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "confirm_password"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "username"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "email"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "phone"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "company"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "gender"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "product_code"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "product_name"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "cname"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "barcode_symbology"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "product_unit"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "product_price"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "contact_person"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "company"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "email_address"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "address"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "city"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "phone"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "email"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:14:50 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:19:31 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 42
+ERROR - 2026-03-13 23:19:31 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 42
+ERROR - 2026-03-13 23:19:31 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:19:31 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:19:37 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 42
+ERROR - 2026-03-13 23:19:37 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 42
+ERROR - 2026-03-13 23:19:37 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:19:37 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:20:58 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 43
+ERROR - 2026-03-13 23:20:58 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 43
+ERROR - 2026-03-13 23:20:58 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:20:58 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:21:01 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 43
+ERROR - 2026-03-13 23:21:01 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 43
+ERROR - 2026-03-13 23:21:01 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:21:01 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:21:42 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:21:42 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:21:43 --> Severity: Warning --> foreach() argument must be of type array|object, bool given D:\setup\xammp\htdocs\ims\app\controllers\admin\Calendar.php 52
+ERROR - 2026-03-13 23:21:46 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:21:46 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:21:50 --> Severity: Warning --> Undefined variable $user D:\setup\xammp\htdocs\ims\themes\default\admin\views\notifications\add.php 39
+ERROR - 2026-03-13 23:21:50 --> Severity: Warning --> Attempt to read property "warehouse_id" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\notifications\add.php 39
+ERROR - 2026-03-13 23:22:04 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:22:04 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:22:04 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:22:49 --> Could not find the language line "File_Manager"
+ERROR - 2026-03-13 23:22:49 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:22:49 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:23:04 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:04 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:04 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:23:04 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:23:37 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:37 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:37 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:23:37 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:23:39 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:39 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:39 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:23:39 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:23:39 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:39 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:39 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:23:39 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:23:40 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:40 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:40 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:23:40 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:23:40 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:40 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 50
+ERROR - 2026-03-13 23:23:40 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:23:40 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:24:55 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:24:55 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:24:55 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:24:55 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:25:00 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:25:00 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:25:00 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:25:00 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:25:18 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:25:18 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:25:18 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:25:18 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:26:49 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:26:49 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:26:49 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:26:49 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:28:02 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:28:02 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:28:02 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:28:02 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:28:05 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:28:05 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:28:05 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:28:05 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "username"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "password"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "username"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "email"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "phone"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "company"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "gender"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "password"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "confirm_password"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "username"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "email"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "phone"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "company"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "gender"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "product_code"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "product_name"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "cname"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "barcode_symbology"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "product_unit"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "product_price"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "contact_person"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "company"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "email_address"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "address"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "city"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "phone"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "first_name"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "last_name"
+ERROR - 2026-03-13 23:28:42 --> Could not find the language line "email"
+ERROR - 2026-03-13 23:28:42 --> Severity: Warning --> Cannot modify header information - headers already sent by (output started at Standard input code:2) D:\setup\xammp\htdocs\ims\system\helpers\url_helper.php 564
+ERROR - 2026-03-13 23:30:43 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:30:43 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:30:43 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:30:43 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:30:45 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:30:45 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:30:45 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:30:45 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:31:08 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:08 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:08 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:31:08 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:31:09 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:09 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:09 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:31:09 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:31:10 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:10 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:10 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:31:10 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:31:12 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:12 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:12 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:31:12 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:31:13 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:13 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:13 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:31:13 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:31:15 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:15 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:31:15 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:31:15 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:33:32 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:33:32 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:33:32 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:33:32 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:35:30 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:35:30 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:35:30 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:35:30 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:35:33 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:35:33 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:35:33 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:35:33 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:35:34 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:35:34 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:35:34 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:35:34 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:37:38 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:37:38 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:37:38 --> Severity: Warning --> foreach() argument must be of type array|object, bool given D:\setup\xammp\htdocs\ims\app\controllers\admin\Calendar.php 52
+ERROR - 2026-03-13 23:37:41 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:37:41 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:37:41 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:37:41 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:37:44 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:37:44 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:37:44 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:37:44 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:37:47 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:37:47 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 48
+ERROR - 2026-03-13 23:37:47 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:37:47 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:39:05 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 58
+ERROR - 2026-03-13 23:39:05 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 58
+ERROR - 2026-03-13 23:39:05 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:39:05 --> Could not find the language line "Work_in_Progress"
+ERROR - 2026-03-13 23:39:08 --> Severity: Warning --> Undefined variable $languages D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 58
+ERROR - 2026-03-13 23:39:08 --> Severity: Warning --> Attempt to read property "code" on null D:\setup\xammp\htdocs\ims\themes\default\admin\views\filemanager\filemanager.php 58
+ERROR - 2026-03-13 23:39:08 --> Could not find the language line "Hold"
+ERROR - 2026-03-13 23:39:08 --> Could not find the language line "Work_in_Progress"

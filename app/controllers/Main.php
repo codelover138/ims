@@ -439,7 +439,7 @@ class Main extends MY_Shop_Controller
     }
 
     function login($m = NULL) {
-        if (!SHOP || $this->Settings->mmode) { redirect('admin/login'); }
+        if (!SHOP || $this->Settings->mmode) { redirect('admin/sign-in'); }
         if ($this->loggedIn) {
             $this->session->set_flashdata('error', $this->session->flashdata('error'));
             redirect('/');
