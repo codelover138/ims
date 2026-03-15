@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://localhost/ims/';
+$config['base_url'] = 'https://tmmcaf.com/ism/';
 
 /*
 |--------------------------------------------------------------------------
@@ -431,7 +431,7 @@ $config['csrf_token_name'] = 'token';
 $config['csrf_cookie_name'] = 'token_cookie';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array('welcome/image_upload', 'admin/document/elfinder_init');
+$config['csrf_exclude_uris'] = array('payments/paypalipn', 'payments/skrillipn', 'welcome/image_upload','admin/document/elfinder_init');
 
 /*
 |--------------------------------------------------------------------------
