@@ -96,6 +96,19 @@ class Auth_model extends CI_Model
         $this->trigger_events('model_constructor');
     }
 
+    protected function userSelectColumns(array $base_columns, array $optional_columns = array())
+    {
+        $columns = $base_columns;
+
+        foreach ($optional_columns as $column) {
+            if ($this->db->field_exists($column, $this->tables['users'])) {
+                $columns[] = $column;
+            }
+        }
+
+        return implode(', ', $columns);
+    }
+
     public function hash_password($password, $salt = false, $use_sha1_override = FALSE)
     {
         if (empty($password)) {
@@ -572,7 +585,10 @@ class Auth_model extends CI_Model
         $this->trigger_events('extra_where');
         $this->load->helper('email');
         $this->identity_column = valid_email($identity) ? 'email' : 'username';
-        $query = $this->db->select($this->identity_column . ', username, email, id, password, active, last_login, last_ip_address, avatar, gender, group_id, warehouse_id, biller_id, company_id, view_right, edit_right, allow_discount, show_cost, show_price')
+        $query = $this->db->select($this->userSelectColumns(
+                array($this->identity_column, 'username', 'email', 'id', 'password', 'active', 'last_login', 'last_ip_address', 'avatar', 'gender', 'group_id', 'warehouse_id', 'company_id', 'view_right', 'edit_right'),
+                array('biller_id', 'allow_discount', 'show_cost', 'show_price')
+            ))
             ->where($this->identity_column, $this->db->escape_str($identity))
             ->limit(1)
             ->get($this->tables['users']);
@@ -1131,11 +1147,11 @@ class Auth_model extends CI_Model
             'warehouse_id' => $user->warehouse_id,
             'view_right' => $user->view_right,
             'edit_right' => $user->edit_right,
-            'allow_discount' => $user->allow_discount,
-            'biller_id' => $user->biller_id,
+            'allow_discount' => property_exists($user, 'allow_discount') ? $user->allow_discount : null,
+            'biller_id' => property_exists($user, 'biller_id') ? $user->biller_id : null,
             'company_id' => $user->company_id,
-            'show_cost' => $user->show_cost,
-            'show_price' => $user->show_price,
+            'show_cost' => property_exists($user, 'show_cost') ? $user->show_cost : null,
+            'show_price' => property_exists($user, 'show_price') ? $user->show_price : null,
         );
 
         $this->session->set_userdata($session_data);
@@ -1200,7 +1216,10 @@ class Auth_model extends CI_Model
 
         //get the user
         $this->trigger_events('extra_where');
-        $query = $this->db->select($this->identity_column . ', id, username, email, last_login, last_ip_address, avatar, gender, group_id, warehouse_id, biller_id, company_id, view_right, allow_discount, edit_right, show_cost, show_price')
+        $query = $this->db->select($this->userSelectColumns(
+                array($this->identity_column, 'id', 'username', 'email', 'last_login', 'last_ip_address', 'avatar', 'gender', 'group_id', 'warehouse_id', 'company_id', 'view_right', 'edit_right'),
+                array('biller_id', 'allow_discount', 'show_cost', 'show_price')
+            ))
             ->where($this->identity_column, get_cookie('identity'))
             ->where('remember_code', get_cookie('remember_code'))
             ->limit(1)
