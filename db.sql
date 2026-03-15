@@ -335,9 +335,7 @@ CREATE TABLE IF NOT EXISTS `sma_users` (
   UNIQUE KEY `username` (`username`),
   KEY `group_id` (`group_id`,`warehouse_id`),
   KEY `group_id_2` (`group_id`,`company_id`),
-  KEY `FK_user_warehouses` (`warehouse_id`),
-  CONSTRAINT `FK_user_groups` FOREIGN KEY (`group_id`) REFERENCES `sma_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_user_warehouses` FOREIGN KEY (`warehouse_id`) REFERENCES `sma_warehouses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `FK_user_warehouses` (`warehouse_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
@@ -369,6 +367,10 @@ CREATE TABLE IF NOT EXISTS `sma_warehouses` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
+
+ALTER TABLE `sma_users`
+  ADD CONSTRAINT `FK_user_groups` FOREIGN KEY (`group_id`) REFERENCES `sma_groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_user_warehouses` FOREIGN KEY (`warehouse_id`) REFERENCES `sma_warehouses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

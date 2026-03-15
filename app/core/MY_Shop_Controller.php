@@ -144,7 +144,6 @@ class MY_Shop_Controller extends CI_Controller {
         $this->v = strtolower($this->router->fetch_method());
         $this->data['m']= $this->m;
         $this->data['v'] = $this->v;
-        $this->Settings->indian_gst = FALSE;
         if ($this->Settings->invoice_view > 0) {
             $this->Settings->indian_gst = $this->Settings->invoice_view == 2 ? TRUE : FALSE;
             $this->Settings->format_gst = TRUE;
