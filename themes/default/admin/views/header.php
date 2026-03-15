@@ -351,7 +351,7 @@
                                                 </li>
 
                                                 <li id="system_settings_warehouses">
-                                                    <a href="<?= admin_url('system_settings/warehouses') ?>">
+                                                    <a href="<?= admin_url('system_settings/service-points') ?>">
                                                         <i class="fa fa-building-o"></i><span class="text">
                                                             <?= lang('warehouses'); ?></span>
                                                     </a>

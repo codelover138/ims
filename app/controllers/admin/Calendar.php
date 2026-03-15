@@ -49,7 +49,7 @@ class Calendar extends MY_Controller
         $start = $this->fc->parseDateTime($start);
         $end = $this->fc->parseDateTime($end);
         $output_arrays = array();
-        foreach ($input_arrays as $array) {
+        foreach ((array) $input_arrays as $array) {
             $this->fc->load_event($array);
             if ($this->fc->isWithinDayRange($start, $end)) {
                 $output_arrays[] = $this->fc->toArray();

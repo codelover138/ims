@@ -21,12 +21,6 @@
                 <?= lang("login_logo", "login_logo") ?>
                 <input id="login_logo" type="file" data-browse-label="<?= lang('browse'); ?>" name="login_logo" data-show-upload="false" data-show-preview="false" class="form-control file">
             </div>
-            <div class="form-group">
-                <?= lang("biller_logo", "biller_logo") ?>
-                <input id="biller_logo" type="file" data-browse-label="<?= lang('browse'); ?>" name="biller_logo" data-show-upload="false"
-                       data-show-preview="false" class="form-control file">
-                <small class="help-block"><?= lang('biller_logo_tip'); ?></small>
-            </div>
         </div>
         <div class="modal-footer">
             <?php echo form_submit('upload_logo', lang('upload_logo'), 'class="btn btn-primary"'); ?>

@@ -18,6 +18,11 @@ class Billers extends MY_Controller
         $this->lang->admin_load('billers', $this->Settings->user_language);
         $this->load->library('form_validation');
         $this->load->admin_model('companies_model');
+
+        if (!$this->db->table_exists('companies')) {
+            $this->session->set_flashdata('warning', lang('feature_not_available'));
+            admin_redirect();
+        }
     }
 
     function index($action = NULL)
@@ -34,6 +39,10 @@ class Billers extends MY_Controller
     function getBillers()
     {
         $this->sma->checkPermissions('index');
+
+        if (!$this->db->table_exists('companies')) {
+            $this->sma->send_json(array('data' => array()));
+        }
 
         $this->load->library('datatables');
         $this->datatables

@@ -153,12 +153,6 @@ $ps = array('0' => lang("disable"), '1' => lang("enable"));
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label" for="disable_editing"><?= lang("disable_editing"); ?></label>
-                            <?= form_input('disable_editing', $Settings->disable_editing, 'class="form-control tip" id="disable_editing" required="required"'); ?>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
                             <label class="control-label" for="rows_per_page"><?= lang("rows_per_page"); ?></label>
                             <?php
                             $rppopts = array('10' => '10', '25' => '25', '50' => '50',  '100' => '100', '-1' => lang('all').' ('.lang('not_recommended').')');
@@ -240,7 +234,7 @@ $ps = array('0' => lang("disable"), '1' => lang("enable"));
                                 foreach ($warehouses as $warehouse) {
                                     $wh[$warehouse->id] = $warehouse->name . ' (' . $warehouse->code . ')';
                                 }
-                                echo form_dropdown('warehouse', $wh, $Settings->default_warehouse, 'class="form-control tip" id="warehouse" required="required" style="width:100%;"');
+                                echo form_dropdown('warehouse', $wh, ($Settings->default_warehouse ?? ''), 'class="form-control tip" id="warehouse" required="required" style="width:100%;"');
                                 ?>
                             </div>
                         </div>

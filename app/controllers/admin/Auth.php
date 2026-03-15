@@ -11,14 +11,174 @@ class Auth extends MY_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
         $this->load->admin_model('auth_model');
+        $this->load->admin_model('user_notes_model');
         $this->load->library('ion_auth');
+    }
+
+    protected function parseGammaDateInput($value)
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+
+        $formats = array(
+            $this->dateFormats['php_sdate'],
+            'Y-m-d',
+            'Y-m-d H:i:s',
+        );
+
+        foreach ($formats as $format) {
+            $date = DateTime::createFromFormat('!' . $format, $value);
+            $errors = DateTime::getLastErrors();
+            if ($errors === false) {
+                $errors = array('warning_count' => 0, 'error_count' => 0);
+            }
+            if ($date instanceof DateTime && $errors['warning_count'] == 0 && $errors['error_count'] == 0) {
+                return $date;
+            }
+        }
+
+        return null;
+    }
+
+    protected function formatGammaDateForInput($value)
+    {
+        if (empty($value) || $value === '0000-00-00' || $value === '0000-00-00 00:00:00') {
+            return '';
+        }
+
+        return $this->sma->hrsd($value);
+    }
+
+    protected function normalizeGammaDateForDatabase($value)
+    {
+        $date = $this->parseGammaDateInput($value);
+
+        return $date ? $date->format('Y-m-d 00:00:00') : null;
+    }
+
+    protected function parseGammaDateTimeInput($value)
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+
+        $formats = array(
+            array('format' => 'Y-m-d\TH:i', 'reset' => false),
+            array('format' => 'Y-m-d H:i:s', 'reset' => false),
+            array('format' => 'Y-m-d H:i', 'reset' => false),
+            array('format' => $this->dateFormats['php_sdate'], 'reset' => true),
+            array('format' => 'Y-m-d', 'reset' => true),
+        );
+
+        foreach ($formats as $format) {
+            $parser_format = ($format['reset'] ? '!' : '') . $format['format'];
+            $date = DateTime::createFromFormat($parser_format, $value);
+            $errors = DateTime::getLastErrors();
+            if ($errors === false) {
+                $errors = array('warning_count' => 0, 'error_count' => 0);
+            }
+            if ($date instanceof DateTime && $errors['warning_count'] == 0 && $errors['error_count'] == 0) {
+                return $date;
+            }
+        }
+
+        $timestamp = strtotime($value);
+        return $timestamp ? (new DateTime())->setTimestamp($timestamp) : null;
+    }
+
+    protected function normalizeGammaDateTimeForDatabase($value)
+    {
+        $date = $this->parseGammaDateTimeInput($value);
+
+        return $date ? $date->format('Y-m-d H:i:s') : null;
+    }
+
+    protected function buildUserNoteDataFromPost($user_id)
+    {
+        $narrative = trim((string) $this->input->post('note_narrative'));
+        $entry_date = $this->normalizeGammaDateTimeForDatabase($this->input->post('note_entry_date'));
+        $note_date = $this->normalizeGammaDateTimeForDatabase($this->input->post('note_note_date'));
+
+        if ($narrative === '' && !$entry_date && !$note_date) {
+            return null;
+        }
+
+        $now = date('Y-m-d H:i:s');
+
+        return array(
+            'user_id' => (int) $user_id,
+            'date_created' => $now,
+            'entry_date' => $entry_date ?: $now,
+            'note_date' => $note_date ?: $now,
+            'narrative' => $narrative,
+            'last_updated' => $now,
+        );
+    }
+
+    protected function createUserNoteIfProvided($user_id)
+    {
+        $note_data = $this->buildUserNoteDataFromPost($user_id);
+        if ($note_data) {
+            $this->user_notes_model->addNote($note_data);
+        }
+    }
+
+    protected function setGammaUserProfileValidationRules()
+    {
+        $this->form_validation->set_rules('email2', 'Secondary Email', 'trim|valid_email');
+        $this->form_validation->set_rules('phone', lang('phone'), 'trim|required|callback_valid_phone_number');
+        $this->form_validation->set_rules('mobile_phone', 'Mobile Phone', 'trim|callback_valid_optional_phone_number');
+        $this->form_validation->set_rules('business_phone', 'Business Phone', 'trim|callback_valid_optional_phone_number');
+        $this->form_validation->set_rules('birth_date', 'Birth Date', 'trim|callback_valid_profile_date');
+        $this->form_validation->set_rules('departure_date', 'Departure Date', 'trim|callback_valid_profile_date');
+    }
+
+    public function valid_phone_number($value)
+    {
+        $value = trim((string) $value);
+        $digits = preg_replace('/\D+/', '', $value);
+
+        if ($value === '' || !preg_match('/^\+?[0-9()\-\s.]+$/', $value) || strlen($digits) < 7 || strlen($digits) > 15) {
+            $this->form_validation->set_message('valid_phone_number', '{field} must contain a valid phone number.');
+            return false;
+        }
+
+        return true;
+    }
+
+    public function valid_optional_phone_number($value)
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return true;
+        }
+
+        return $this->valid_phone_number($value);
+    }
+
+    public function valid_profile_date($value)
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return true;
+        }
+
+        if (!$this->parseGammaDateInput($value)) {
+            $this->form_validation->set_message('valid_profile_date', '{field} must match the date format ' . $this->dateFormats['php_sdate'] . '.');
+            return false;
+        }
+
+        return true;
     }
 
     protected function getGammaUserProfileDataFromPost()
     {
         return array(
             'middle_name' => $this->input->post('middle_name'),
-            'birth_date' => $this->input->post('birth_date') ?: null,
+            'birth_date' => $this->normalizeGammaDateForDatabase($this->input->post('birth_date')),
             'business_name' => $this->input->post('business_name'),
             'unit_number' => $this->input->post('unit_number'),
             'street_number' => $this->input->post('street_number'),
@@ -33,7 +193,7 @@ class Auth extends MY_Controller
             'business_phone' => $this->input->post('business_phone'),
             'security_question' => $this->input->post('security_question'),
             'security_answer' => $this->input->post('security_answer'),
-            'departure_date' => $this->input->post('departure_date') ?: null,
+            'departure_date' => $this->normalizeGammaDateForDatabase($this->input->post('departure_date')),
             'departure_reason' => $this->input->post('departure_reason'),
         );
     }
@@ -74,8 +234,13 @@ class Auth extends MY_Controller
         }
 
         $this->load->library('datatables');
+        $select = $this->db->dbprefix('users') . ".id as id, first_name, last_name, email, company";
+        if ($this->db->field_exists('award_points', 'users')) {
+            $select .= ", award_points";
+        }
+        $select .= ", " . $this->db->dbprefix('groups') . ".name, active";
         $this->datatables
-            ->select($this->db->dbprefix('users').".id as id, first_name, last_name, email, company, award_points, " . $this->db->dbprefix('groups') . ".name, active")
+            ->select($select)
             ->from("users")
             ->join('groups', 'users.group_id=groups.id', 'left')
             ->group_by('users.id')
@@ -143,6 +308,10 @@ class Auth extends MY_Controller
         $this->data['groups'] = $groups;
         $this->data['billers'] = $this->site->getAllCompanies('biller');
         $this->data['warehouses'] = $this->site->getAllWarehouses();
+        $this->data['user_notes'] = $this->user_notes_model->getNotesByUserId($id);
+        $this->data['gamma_note_entry_date'] = set_value('note_entry_date');
+        $this->data['gamma_note_note_date'] = set_value('note_note_date');
+        $this->data['gamma_note_narrative'] = set_value('note_narrative');
 
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
         $this->data['password'] = array(
@@ -194,6 +363,55 @@ class Auth extends MY_Controller
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('auth/users'), 'page' => lang('users')), array('link' => '#', 'page' => lang('profile')));
         $meta = array('page_title' => lang('profile'), 'bc' => $bc);
         $this->page_construct('auth/profile', $meta, $this->data);
+    }
+
+    function delete_user_note($user_id = NULL, $note_id = NULL)
+    {
+        $user_id = (int) $user_id;
+        $note_id = (int) $note_id;
+
+        if (!$this->loggedIn || (!$this->Owner && !$this->Admin)) {
+            $this->session->set_flashdata('warning', lang("access_denied"));
+            redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : admin_url('welcome'));
+        }
+
+        if ($user_id < 1 || $note_id < 1) {
+            $this->session->set_flashdata('error', 'Invalid user note request.');
+            redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : admin_url('auth/users'));
+        }
+
+        $note = $this->user_notes_model->getNoteById($note_id);
+        if (!$note || (int) $note->user_id !== $user_id) {
+            $this->session->set_flashdata('error', 'User note not found.');
+            admin_redirect('auth/profile/' . $user_id);
+        }
+
+        if ($this->user_notes_model->deleteNote($note_id)) {
+            $this->session->set_flashdata('message', 'User note deleted successfully.');
+        } else {
+            $this->session->set_flashdata('error', 'Unable to delete the selected user note.');
+        }
+
+        redirect(admin_url('auth/profile/' . $user_id . '#notes'));
+    }
+
+    function add_user_note($user_id = NULL)
+    {
+        $user_id = (int) $user_id;
+
+        if (!$this->loggedIn || (!$this->Owner && !$this->Admin)) {
+            $this->session->set_flashdata('warning', lang("access_denied"));
+            redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : admin_url('welcome'));
+        }
+
+        if ($user_id < 1 || !$this->ion_auth->user($user_id)->row()) {
+            $this->session->set_flashdata('error', 'Invalid user note request.');
+            admin_redirect('auth/users');
+        }
+
+        $this->createUserNoteIfProvided($user_id);
+        $this->session->set_flashdata('message', 'User note saved successfully.');
+        redirect(admin_url('auth/profile/' . $user_id . '#notes'));
     }
 
     public function captcha_check($cap)
@@ -386,11 +604,11 @@ class Auth extends MY_Controller
 
         if ($this->form_validation->run() == false) {
             $this->session->set_flashdata('error', validation_errors());
-            admin_redirect('auth/profile/' . $user->id . '/#cpassword');
+            redirect(admin_url('auth/profile/' . $user->id . '#cpassword'));
         } else {
             if (DEMO) {
                 $this->session->set_flashdata('warning', lang('disabled_in_demo'));
-                redirect($_SERVER["HTTP_REFERER"]);
+                redirect(admin_url('auth/profile/' . $user->id . '#cpassword'));
             }
 
             $identity = $this->session->userdata($this->config->item('identity', 'ion_auth'));
@@ -402,7 +620,7 @@ class Auth extends MY_Controller
                 $this->logout();
             } else {
                 $this->session->set_flashdata('error', $this->ion_auth->errors());
-                admin_redirect('auth/profile/' . $user->id . '/#cpassword');
+                redirect(admin_url('auth/profile/' . $user->id . '#cpassword'));
             }
         }
     }
@@ -607,8 +825,9 @@ class Auth extends MY_Controller
         }
 
         $this->data['title'] = "Create User";
+        $this->setGammaUserProfileValidationRules();
         $this->form_validation->set_rules('username', lang("username"), 'trim|is_unique[users.username]');
-        $this->form_validation->set_rules('email', lang("email"), 'trim|is_unique[users.email]');
+        $this->form_validation->set_rules('email', lang("email"), 'required|trim|valid_email|is_unique[users.email]');
         $this->form_validation->set_rules('status', lang("status"), 'trim|required');
         $this->form_validation->set_rules('group', lang("group"), 'trim|required');
 
@@ -626,18 +845,21 @@ class Auth extends MY_Controller
                 'phone' => $this->input->post('phone'),
                 'gender' => $this->input->post('gender'),
                 'group_id' => $this->input->post('group') ? $this->input->post('group') : '3',
-                'biller_id' => $this->input->post('biller'),
                 'warehouse_id' => $this->input->post('warehouse'),
                 'view_right' =>  $this->input->post('view_right'),
                 'edit_right' => $this->input->post('edit_right'),
-                'allow_discount' => $this->input->post('allow_discount'),
                 'last_updated' => date('Y-m-d H:i:s'),
             );
             $additional_data = array_merge($additional_data, $this->getGammaUserProfileDataFromPost());
             $active = $this->input->post('status');
         }
 
-        if ($this->form_validation->run() == true && $this->ion_auth->register($username, $password, $email, $additional_data, $active, $notify)) {
+        $new_user_id = false;
+        if ($this->form_validation->run() == true) {
+            $new_user_id = $this->ion_auth->register($username, $password, $email, $additional_data, $active, $notify);
+        }
+
+        if ($this->form_validation->run() == true && $new_user_id) {
             $username = $this->input->post('username');
             $basePath = FCPATH . 'assets/document/';
             $directoryPath = $basePath . $username;
@@ -646,6 +868,7 @@ class Auth extends MY_Controller
             }
             $this->load->library('gamma_path_service');
             $this->gamma_path_service->ensureUserFolders($username);
+            $this->createUserNoteIfProvided($new_user_id);
             $this->session->set_flashdata('message', $this->ion_auth->messages());
             admin_redirect("auth/users");
 
@@ -657,6 +880,9 @@ class Auth extends MY_Controller
             $this->data['warehouses'] = $this->site->getAllWarehouses();
             $this->data['gamma_google_places_api_key'] = $this->config->item('gamma_google_places_api_key', 'gamma');
             $this->data['gamma_google_places_country'] = $this->config->item('gamma_google_places_country', 'gamma');
+            $this->data['gamma_note_entry_date'] = set_value('note_entry_date');
+            $this->data['gamma_note_note_date'] = set_value('note_note_date');
+            $this->data['gamma_note_narrative'] = set_value('note_narrative');
             $bc = array(array('link' => admin_url('home'), 'page' => lang('home')), array('link' => admin_url('auth/users'), 'page' => lang('users')), array('link' => '#', 'page' => lang('create_user')));
             $meta = array('page_title' => lang('users'), 'bc' => $bc);
             $this->page_construct('auth/create_user', $meta, $this->data);
@@ -678,11 +904,15 @@ class Auth extends MY_Controller
 
         $user = $this->ion_auth->user($id)->row();
 
+        $this->setGammaUserProfileValidationRules();
+
         if ($user->username != $this->input->post('username')) {
             $this->form_validation->set_rules('username', lang("username"), 'trim|is_unique[users.username]');
         }
         if ($user->email != $this->input->post('email')) {
-            $this->form_validation->set_rules('email', lang("email"), 'trim|is_unique[users.email]');
+            $this->form_validation->set_rules('email', lang("email"), 'trim|valid_email|is_unique[users.email]');
+        } elseif ($this->input->post('email') !== null && $this->input->post('email') !== '') {
+            $this->form_validation->set_rules('email', lang("email"), 'trim|valid_email');
         }
 
         if ($this->form_validation->run() === TRUE) {
@@ -719,14 +949,14 @@ class Auth extends MY_Controller
                         'gender' => $this->input->post('gender'),
                         'active' => $this->input->post('status'),
                         'group_id' => $this->input->post('group'),
-                        'biller_id' => $this->input->post('biller') ? $this->input->post('biller') : NULL,
                         'warehouse_id' => $this->input->post('warehouse') ? $this->input->post('warehouse') : NULL,
-                        'award_points' => $this->input->post('award_points'),
                         'view_right' =>  $this->input->post('view_right'),
                         'edit_right' => $this->input->post('edit_right'),
-                        'allow_discount' => $this->input->post('allow_discount'),
                         'last_updated' => date('Y-m-d H:i:s'),
                     );
+                    if ($this->db->field_exists('award_points', 'users')) {
+                        $data['award_points'] = $this->input->post('award_points');
+                    }
                     $data = array_merge($data, $this->getGammaUserProfileDataFromPost());
                 }
 
@@ -738,9 +968,11 @@ class Auth extends MY_Controller
                     'phone' => $this->input->post('phone'),
                     'gender' => $this->input->post('gender'),
                     'active' => $this->input->post('status'),
-                    'award_points' => $this->input->post('award_points'),
                     'last_updated' => date('Y-m-d H:i:s'),
                 );
+                if ($this->db->field_exists('award_points', 'users')) {
+                    $data['award_points'] = $this->input->post('award_points');
+                }
                 $data = array_merge($data, $this->getGammaUserProfileDataFromPost());
             } else {
                 $data = array(
@@ -770,6 +1002,7 @@ class Auth extends MY_Controller
 
         }
         if ($this->form_validation->run() === TRUE && $this->ion_auth->update($user->id, $data)) {
+            $this->createUserNoteIfProvided($user->id);
             $this->session->set_flashdata('message', lang('user_updated'));
             admin_redirect("auth/profile/" . $id);
         } else {
@@ -824,7 +1057,7 @@ class Auth extends MY_Controller
 
         if (!$this->ion_auth->logged_in() || !$this->Owner && $id != $this->session->userdata('user_id')) {
             $this->session->set_flashdata('warning', lang("access_denied"));
-            redirect($_SERVER["HTTP_REFERER"]);
+            redirect(admin_url('auth/profile/' . $id . '#avatar'));
         }
 
         //validate form input
@@ -851,7 +1084,7 @@ class Auth extends MY_Controller
 
                     $error = $this->upload->display_errors();
                     $this->session->set_flashdata('error', $error);
-                    redirect($_SERVER["HTTP_REFERER"]);
+                    redirect(admin_url('auth/profile/' . $id . '#avatar'));
                 }
 
                 $photo = $this->upload->file_name;
@@ -882,10 +1115,10 @@ class Auth extends MY_Controller
             unlink('assets/uploads/avatars/thumbs/' . $user->avatar);
             $this->session->set_userdata('avatar', $photo);
             $this->session->set_flashdata('message', lang("avatar_updated"));
-            admin_redirect("auth/profile/" . $id);
+            redirect(admin_url('auth/profile/' . $id . '#avatar'));
         } else {
             $this->session->set_flashdata('error', validation_errors());
-            admin_redirect("auth/profile/" . $id);
+            redirect(admin_url('auth/profile/' . $id . '#avatar'));
         }
     }
 

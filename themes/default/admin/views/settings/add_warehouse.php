@@ -7,7 +7,7 @@
             <h4 class="modal-title" id="myModalLabel"><?php echo lang('add_warehouse'); ?></h4>
         </div>
         <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form');
-        echo admin_form_open_multipart("system_settings/add_warehouse", $attrib); ?>
+        echo admin_form_open_multipart("system_settings/service-points/add", $attrib); ?>
         <div class="modal-body">
             <p><?= lang('enter_info'); ?></p>
 
@@ -18,16 +18,6 @@
             <div class="form-group">
                 <label class="control-label" for="name"><?php echo $this->lang->line("name"); ?></label>
                 <?php echo form_input('name', '', 'class="form-control" id="name" required="required"'); ?>
-            </div>
-            <div class="form-group">
-                <label class="control-label" for="price_group"><?php echo $this->lang->line("price_group"); ?></label>
-                <?php
-                $pgs[''] = lang('select').' '.lang('price_group');
-                foreach ($price_groups as $price_group) {
-                    $pgs[$price_group->id] = $price_group->name;
-                }
-                echo form_dropdown('price_group', $pgs, $Settings->price_group, 'class="form-control tip select" id="price_group" style="width:100%;"');
-                ?>
             </div>
             <div class="form-group">
                 <label class="control-label" for="phone"><?php echo $this->lang->line("phone"); ?></label>

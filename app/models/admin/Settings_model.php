@@ -2,6 +2,10 @@
 
 class Settings_model extends CI_Model
 {
+    protected function tableExists($table)
+    {
+        return $this->db->table_exists($table);
+    }
 
     public function __construct()
     {
@@ -56,43 +60,43 @@ class Settings_model extends CI_Model
         return false;
     }
 
-    public function addTaxRate($data)
-    {
-        if ($this->db->insert('tax_rates', $data)) {
-            return true;
-        }
-        return false;
-    }
+    // Removed: public function addTaxRate($data)
+    // {
+    //     if ($this->db->insert('tax_rates', $data)) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-    public function updateTaxRate($id, $data = array())
-    {
-        $this->db->where('id', $id);
-        if ($this->db->update('tax_rates', $data)) {
-            return true;
-        }
-        return false;
-    }
+    // Removed: public function updateTaxRate($id, $data = array())
+    // {
+    //     $this->db->where('id', $id);
+    //     if ($this->db->update('tax_rates', $data)) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-    public function getAllTaxRates()
-    {
-        $q = $this->db->get('tax_rates');
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return FALSE;
-    }
+    // Removed: public function getAllTaxRates()
+    // {
+    //     $q = $this->db->get('tax_rates');
+    //     if ($q->num_rows() > 0) {
+    //         foreach (($q->result()) as $row) {
+    //             $data[] = $row;
+    //         }
+    //         return $data;
+    //     }
+    //     return FALSE;
+    // }
 
-    public function getTaxRateByID($id)
-    {
-        $q = $this->db->get_where('tax_rates', array('id' => $id), 1);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
-        return FALSE;
-    }
+    // Removed: public function getTaxRateByID($id)
+    // {
+    //     $q = $this->db->get_where('tax_rates', array('id' => $id), 1);
+    //     if ($q->num_rows() > 0) {
+    //         return $q->row();
+    //     }
+    //     return FALSE;
+    // }
 
     public function addWarehouse($data)
     {
@@ -132,16 +136,19 @@ class Settings_model extends CI_Model
         return FALSE;
     }
 
-    public function deleteTaxRate($id)
-    {
-        if ($this->db->delete('tax_rates', array('id' => $id))) {
-            return true;
-        }
-        return FALSE;
-    }
+    // Removed: public function deleteTaxRate($id)
+    // {
+    //     if ($this->db->delete('tax_rates', array('id' => $id))) {
+    //         return true;
+    //     }
+    //     return FALSE;
+    // }
 
     public function deleteInvoiceType($id)
     {
+        if (!$this->tableExists('invoice_types')) {
+            return FALSE;
+        }
         if ($this->db->delete('invoice_types', array('id' => $id))) {
             return true;
         }
@@ -150,7 +157,10 @@ class Settings_model extends CI_Model
 
     public function deleteWarehouse($id)
     {
-        if ($this->db->delete('warehouses', array('id' => $id)) && $this->db->delete('warehouses_products', array('warehouse_id' => $id))) {
+        if ($this->db->delete('warehouses', array('id' => $id))) {
+            if ($this->tableExists('warehouses_products')) {
+                $this->db->delete('warehouses_products', array('warehouse_id' => $id));
+            }
             return true;
         }
         return FALSE;
@@ -158,6 +168,9 @@ class Settings_model extends CI_Model
 
     public function addCustomerGroup($data)
     {
+        if (!$this->tableExists('customer_groups')) {
+            return FALSE;
+        }
         if ($this->db->insert('customer_groups', $data)) {
             return true;
         }
@@ -166,6 +179,9 @@ class Settings_model extends CI_Model
 
     public function updateCustomerGroup($id, $data = array())
     {
+        if (!$this->tableExists('customer_groups')) {
+            return FALSE;
+        }
         $this->db->where('id', $id);
         if ($this->db->update('customer_groups', $data)) {
             return true;
@@ -175,6 +191,9 @@ class Settings_model extends CI_Model
 
     public function getAllCustomerGroups()
     {
+        if (!$this->tableExists('customer_groups')) {
+            return array();
+        }
         $q = $this->db->get('customer_groups');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -182,11 +201,14 @@ class Settings_model extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getCustomerGroupByID($id)
     {
+        if (!$this->tableExists('customer_groups')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('customer_groups', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -196,6 +218,9 @@ class Settings_model extends CI_Model
 
     public function deleteCustomerGroup($id)
     {
+        if (!$this->tableExists('customer_groups')) {
+            return FALSE;
+        }
         if ($this->db->delete('customer_groups', array('id' => $id))) {
             return true;
         }
@@ -244,10 +269,23 @@ class Settings_model extends CI_Model
 
     public function updatePermissions($id, $data = array())
     {
-        if ($this->db->update('permissions', $data, array('group_id' => $id)) && $this->db->update('users', array('show_price' => $data['products-price'], 'show_cost' => $data['products-cost']), array('group_id' => $id))) {
-            return true;
+        if (!$this->db->update('permissions', $data, array('group_id' => $id))) {
+            return false;
         }
-        return false;
+
+        $user_updates = array();
+        if (array_key_exists('products-price', $data) && $this->db->field_exists('show_price', 'users')) {
+            $user_updates['show_price'] = $data['products-price'];
+        }
+        if (array_key_exists('products-cost', $data) && $this->db->field_exists('show_cost', 'users')) {
+            $user_updates['show_cost'] = $data['products-cost'];
+        }
+
+        if (!empty($user_updates)) {
+            return (bool) $this->db->update('users', $user_updates, array('group_id' => $id));
+        }
+
+        return true;
     }
 
     public function addGroup($data)
@@ -558,6 +596,9 @@ class Settings_model extends CI_Model
 
     public function addPriceGroup($data)
     {
+        if (!$this->tableExists('price_groups')) {
+            return FALSE;
+        }
         if ($this->db->insert('price_groups', $data)) {
             return true;
         }
@@ -566,6 +607,9 @@ class Settings_model extends CI_Model
 
     public function updatePriceGroup($id, $data = array())
     {
+        if (!$this->tableExists('price_groups')) {
+            return FALSE;
+        }
         $this->db->where('id', $id);
         if ($this->db->update('price_groups', $data)) {
             return true;
@@ -575,6 +619,9 @@ class Settings_model extends CI_Model
 
     public function getAllPriceGroups()
     {
+        if (!$this->tableExists('price_groups')) {
+            return array();
+        }
         $q = $this->db->get('price_groups');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -582,11 +629,14 @@ class Settings_model extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getPriceGroupByID($id)
     {
+        if (!$this->tableExists('price_groups')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('price_groups', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -596,7 +646,13 @@ class Settings_model extends CI_Model
 
     public function deletePriceGroup($id)
     {
-        if ($this->db->delete('price_groups', array('id' => $id)) && $this->db->delete('product_prices', array('price_group_id' => $id))) {
+        if (!$this->tableExists('price_groups')) {
+            return FALSE;
+        }
+        if ($this->db->delete('price_groups', array('id' => $id))) {
+            if ($this->tableExists('product_prices')) {
+                $this->db->delete('product_prices', array('price_group_id' => $id));
+            }
             return true;
         }
         return FALSE;

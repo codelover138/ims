@@ -14,57 +14,142 @@
     <script src="<?= $assets ?>js/respond.min.js"></script>
     <![endif]-->
     <style>
-        .page-back { min-height: 100vh; background:
-            radial-gradient(circle at 15% 20%, rgba(255,255,255,0.14), transparent 30%),
-            radial-gradient(circle at 85% 15%, rgba(255,214,153,0.18), transparent 22%),
-            linear-gradient(135deg, #0f2740 0%, #143b5c 42%, #1d5f88 100%); padding: 38px 16px 54px; }
-        .auth-shell { max-width: 1080px; margin: 0 auto; }
-        .auth-logo { display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
-        .auth-logo img { max-width: 300px; width: auto; height: auto; border-radius: 18px; box-shadow: 0 18px 38px rgba(8, 24, 41, 0.32); background: #fff; padding: 8px; }
-        .auth-stage { display: grid; grid-template-columns: 0.9fr 1.1fr; background: rgba(244, 249, 253, 0.98); border-radius: 28px; overflow: hidden; box-shadow: 0 34px 70px rgba(8, 24, 41, 0.34); border: 1px solid rgba(255,255,255,0.18); }
-        .auth-showcase { position: relative; padding: 42px 40px; background:
-            linear-gradient(160deg, rgba(7, 27, 46, 0.92) 0%, rgba(16, 56, 84, 0.9) 58%, rgba(24, 92, 132, 0.84) 100%),
-            linear-gradient(135deg, #102b44 0%, #20597d 100%); color: #fff; }
-        .auth-showcase:after { content: ""; position: absolute; right: -70px; bottom: -70px; width: 220px; height: 220px; background: rgba(255,255,255,0.08); border-radius: 36px; transform: rotate(24deg); }
-        .auth-kicker { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 14px; }
-        .auth-showcase h1 { margin: 0 0 14px; font-size: 36px; line-height: 1.08; font-weight: 800; }
-        .auth-showcase p { margin: 0; max-width: 360px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.82); }
-        .auth-footnote { margin-top: 22px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.58); }
-        .auth-panel { padding: 34px 34px 30px; background: #f7fbfe; }
+        .page-back {
+            min-height: 100vh;
+            padding: 34px 16px 48px;
+            background:
+                radial-gradient(circle at top left, rgba(60, 141, 188, 0.16), transparent 26%),
+                radial-gradient(circle at 80% 18%, rgba(255, 255, 255, 0.12), transparent 18%),
+                linear-gradient(135deg, #1f2d3a 0%, #2e3f50 36%, #3c8dbc 100%);
+        }
+        .auth-shell { max-width: 1120px; margin: 0 auto; }
+        .auth-logo { display: flex; align-items: center; justify-content: center; margin-bottom: 24px; }
+        .auth-logo img { max-width: 280px; width: auto; height: auto; border-radius: 18px; box-shadow: 0 20px 40px rgba(16, 29, 40, 0.24); background: #fff; padding: 8px; }
+        .auth-stage {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            background: rgba(250, 252, 253, 0.98);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 38px 72px rgba(15, 27, 38, 0.28);
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+        .auth-showcase {
+            position: relative;
+            padding: 44px 42px 40px;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12), transparent 20%),
+                linear-gradient(160deg, rgba(31, 45, 58, 0.96) 0%, rgba(46, 63, 80, 0.94) 54%, rgba(60, 141, 188, 0.92) 100%);
+            color: #fff;
+        }
+        .auth-showcase:before {
+            content: "";
+            position: absolute;
+            inset: auto -64px -72px auto;
+            width: 230px;
+            height: 230px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 42px;
+            transform: rotate(18deg);
+        }
+        .auth-showcase:after {
+            content: "";
+            position: absolute;
+            inset: 28px auto auto 28px;
+            width: 74px;
+            height: 74px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 22px;
+        }
+        .auth-kicker { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.68); margin-bottom: 16px; }
+        .auth-showcase h1 { margin: 0 0 14px; font-size: 38px; line-height: 1.04; font-weight: 800; }
+        .auth-showcase p { margin: 0; max-width: 380px; font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.82); }
+        .auth-footnote { margin-top: 22px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.58); }
+        .auth-feature-list { display: grid; gap: 12px; margin-top: 28px; position: relative; z-index: 1; }
+        .auth-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(3px);
+        }
+        .auth-feature i {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .auth-feature strong {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 14px;
+            color: #fff;
+        }
+        .auth-feature span {
+            display: block;
+            color: rgba(255,255,255,0.72);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+        .auth-panel { padding: 36px 36px 30px; background: linear-gradient(180deg, #fbfdfe 0%, #f2f7fb 100%); }
         .auth-panel-head { margin-bottom: 22px; }
-        .auth-panel-head h2 { margin: 0 0 8px; color: #173550; font-size: 30px; font-weight: 800; }
-        .auth-panel-head p { margin: 0; color: #58718a; font-size: 15px; line-height: 1.6; }
+        .auth-panel-head h2 { margin: 0 0 8px; color: #1f2d3a; font-size: 30px; font-weight: 800; }
+        .auth-panel-head p { margin: 0; color: #66798b; font-size: 15px; line-height: 1.6; }
         .auth-alert { border: 0; border-radius: 16px; padding: 16px 18px; margin-bottom: 20px; box-shadow: none; }
         .auth-alert .close { opacity: .55; }
         .auth-alert ul { margin: 0; padding-left: 18px; }
         .auth-fields { display: grid; gap: 16px; }
-        .auth-field label, .auth-captcha label { display: block; margin-bottom: 8px; color: #264763; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-        .auth-field .input-group, .auth-captcha .input-group { width: 100%; border: 1px solid #d6e4f0; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 12px 28px rgba(19, 52, 80, 0.06); }
-        .auth-field .input-group-addon, .auth-captcha .input-group-addon { min-width: 54px; background: #edf5fb; color: #1e5e8a; border: 0; }
-        .auth-field .form-control, .auth-captcha .form-control { border: 0; height: 54px; box-shadow: none; font-size: 16px; padding: 12px 16px; color: #173550; }
+        .auth-field label, .auth-captcha label { display: block; margin-bottom: 8px; color: #3b4f61; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+        .auth-field .input-group, .auth-captcha .input-group {
+            width: 100%;
+            border: 1px solid #d8e3ec;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 14px 28px rgba(31, 45, 58, 0.05);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .auth-field .input-group:focus-within, .auth-captcha .input-group:focus-within {
+            border-color: #3c8dbc;
+            box-shadow: 0 0 0 4px rgba(60, 141, 188, 0.12);
+            transform: translateY(-1px);
+        }
+        .auth-field .input-group-addon, .auth-captcha .input-group-addon { min-width: 54px; background: #eef4f8; color: #3c8dbc; border: 0; }
+        .auth-field .form-control, .auth-captcha .form-control { border: 0; height: 54px; box-shadow: none; font-size: 16px; padding: 12px 16px; color: #1f2d3a; }
         .auth-field .form-control::placeholder, .auth-captcha .form-control::placeholder { color: #8aa0b5; }
         .auth-captcha-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
-        .auth-captcha-preview { border: 1px solid #d6e4f0; border-radius: 16px; min-height: 54px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 28px rgba(19, 52, 80, 0.06); }
-        .auth-captcha .input-group-addon a { color: #1e5e8a; }
+        .auth-captcha-preview { border: 1px solid #d8e3ec; border-radius: 16px; min-height: 54px; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 28px rgba(31, 45, 58, 0.05); }
+        .auth-captcha .input-group-addon a { color: #3c8dbc; }
         .auth-row { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 26px; }
-        .auth-remember { display: flex; align-items: center; gap: 10px; color: #49637c; }
+        .auth-remember { display: flex; align-items: center; gap: 10px; color: #5a6f82; }
         .auth-remember label { margin: 0; font-weight: 700; }
         .auth-row .btn, .auth-actions .btn, .auth-register-actions .btn { border-radius: 14px; padding: 13px 22px; font-size: 15px; font-weight: 800; border: 0; box-shadow: none; }
-        .btn-auth-primary { background: linear-gradient(135deg, #15466c 0%, #2572a5 100%); color: #fff; }
-        .btn-auth-secondary { background: #e9f2f9; color: #1b5c88; }
-        .auth-links { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #dbe8f2; }
-        .auth-links a { font-weight: 800; color: #1b5c88; }
+        .btn-auth-primary { background: linear-gradient(135deg, #3c8dbc 0%, #5fa7d3 100%); color: #fff; box-shadow: 0 16px 28px rgba(60, 141, 188, 0.22); }
+        .btn-auth-primary:hover, .btn-auth-primary:focus { color: #fff; background: linear-gradient(135deg, #337aa8 0%, #5298c2 100%); }
+        .btn-auth-secondary { background: #eaf2f8; color: #3c8dbc; }
+        .btn-auth-secondary:hover, .btn-auth-secondary:focus { background: #ddeaf4; color: #337aa8; }
+        .auth-links { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 22px; padding-top: 18px; border-top: 1px solid #dbe6ee; }
+        .auth-links a { font-weight: 800; color: #3c8dbc; }
         .auth-links span { color: #698198; font-size: 14px; }
         .auth-note { margin: 0 0 18px; color: #5b738b; font-size: 15px; line-height: 1.65; }
         .auth-actions { display: flex; justify-content: space-between; gap: 14px; margin-top: 24px; }
-        .auth-register { margin-top: 22px; padding-top: 18px; border-top: 1px solid #dbe8f2; color: #5b738b; font-size: 14px; }
+        .auth-register { margin-top: 22px; padding-top: 18px; border-top: 1px solid #dbe6ee; color: #5b738b; font-size: 14px; }
         .auth-register strong { display: block; margin-bottom: 6px; color: #1f3c58; font-size: 15px; }
-        .auth-register a { font-weight: 800; color: #1b5c88; }
-        .registration-form-div.reg-content { background: #f7fbfe; border-radius: 28px; box-shadow: 0 34px 70px rgba(8, 24, 41, 0.34); padding: 28px 24px 24px; border: 1px solid rgba(255,255,255,0.16); }
+        .auth-register a { font-weight: 800; color: #3c8dbc; }
+        .registration-form-div.reg-content { background: #f7fbfe; border-radius: 28px; box-shadow: 0 34px 70px rgba(15, 27, 38, 0.24); padding: 28px 24px 24px; border: 1px solid rgba(255,255,255,0.16); }
         .auth-register-actions { display: flex; justify-content: space-between; gap: 14px; margin-top: 18px; }
         .auth-powered { margin-top: 16px; color: #86a0b5; font-size: 12px; text-align: center; letter-spacing: 0.04em; }
         @media (max-width: 920px) { .auth-stage { grid-template-columns: 1fr; } .auth-showcase { padding-bottom: 30px; } .auth-showcase h1 { font-size: 32px; } }
-        @media (max-width: 640px) { .auth-panel, .auth-showcase { padding-left: 22px; padding-right: 22px; } .auth-showcase h1 { font-size: 28px; } .auth-captcha-row, .auth-row, .auth-links, .auth-actions, .auth-register-actions { flex-direction: column; align-items: stretch; grid-template-columns: 1fr; } .auth-row .btn, .auth-actions .btn, .auth-register-actions .btn { width: 100%; } .auth-links span { text-align: left; } }
+        @media (max-width: 640px) { .auth-panel, .auth-showcase { padding-left: 22px; padding-right: 22px; } .auth-showcase h1 { font-size: 28px; } .auth-captcha-row, .auth-row, .auth-links, .auth-actions, .auth-register-actions { flex-direction: column; align-items: stretch; grid-template-columns: 1fr; } .auth-row .btn, .auth-actions .btn, .auth-register-actions .btn { width: 100%; } .auth-links span { text-align: left; } .auth-feature-list { gap: 10px; } }
     </style>
 </head>
 <body class="login-page">
@@ -83,15 +168,38 @@
         <div id="login">
             <div class="auth-stage">
                 <div class="auth-showcase">
-                    <span class="auth-kicker">Gamma Workspace</span>
+                    <span class="auth-kicker"><?= html_escape($Settings->site_name); ?></span>
                     <h1>Secure staff access.</h1>
-                    <p>Sign in to continue to the Gamma admin workspace.</p>
+                    <p>Sign in to continue to the <?= html_escape($Settings->site_name); ?> admin workspace.</p>
+                    <div class="auth-feature-list">
+                        <div class="auth-feature">
+                            <i class="fa fa-shield"></i>
+                            <div>
+                                <strong>Protected access</strong>
+                                <span>Administrative entry point for authorized staff and owners.</span>
+                            </div>
+                        </div>
+                        <div class="auth-feature">
+                            <i class="fa fa-line-chart"></i>
+                            <div>
+                                <strong>Operational workspace</strong>
+                                <span>Inventory, sales, reporting, and system tools in one place.</span>
+                            </div>
+                        </div>
+                        <div class="auth-feature">
+                            <i class="fa fa-clock-o"></i>
+                            <div>
+                                <strong>Fast sign-in flow</strong>
+                                <span>Clean access page designed for daily internal use.</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="auth-footnote">Secure administrative access for <?= html_escape($Settings->site_name); ?></div>
                 </div>
                 <div class="auth-panel">
                     <div class="auth-panel-head">
                         <h2>Sign in</h2>
-                        <p>Use your staff account to continue to the Gamma admin workspace.</p>
+                        <p>Use your staff account to continue to the <?= html_escape($Settings->site_name); ?> admin workspace.</p>
                     </div>
                     <?php if ($Settings->mmode) { ?><div class="alert alert-warning auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><?= lang('site_offline') ?></div><?php } ?>
                     <?php if ($error) { ?><div class="alert alert-danger auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><ul class="list-group"><?= $error; ?></ul></div><?php } ?>
@@ -138,6 +246,15 @@
                     <span class="auth-kicker">Account Recovery</span>
                     <h1>Reset your password.</h1>
                     <p>Enter your account email and we will send you a reset link.</p>
+                    <div class="auth-feature-list">
+                        <div class="auth-feature">
+                            <i class="fa fa-envelope-o"></i>
+                            <div>
+                                <strong>Email-based recovery</strong>
+                                <span>Password reset links are sent only to registered staff accounts.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="auth-panel">
                     <div class="auth-panel-head">

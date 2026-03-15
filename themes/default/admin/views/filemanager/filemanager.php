@@ -32,7 +32,7 @@
 
         $().ready(function () {
             window.setTimeout(function () {
-                var locale = "<?= $languages->code;?>";
+                var locale = "<?= isset($Settings->language) ? substr($Settings->language, 0, 2) : 'en'; ?>";
                 var _locale = locale;
                 if (locale == 'pt') {
                     _locale = 'pt_BR';

@@ -208,7 +208,7 @@
             <div class="reset-hero">
                 <span class="reset-kicker">Secure Access</span>
                 <h1>Reset Your Password</h1>
-                <p>Choose a new password for <?= html_escape($identity_label); ?> and return to your Gamma workspace.</p>
+                <p>Choose a new password for <?= html_escape($identity_label); ?> and return to <?= html_escape($Settings->site_name); ?>.</p>
             </div>
             <div class="reset-body">
                 <?php if ($Settings->mmode) { ?>

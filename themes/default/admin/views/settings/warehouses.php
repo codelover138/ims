@@ -10,7 +10,7 @@
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
             'bProcessing': true, 'bServerSide': true,
-            'sAjaxSource': '<?= admin_url('system_settings/getWarehouses') ?>',
+            'sAjaxSource': '<?= admin_url('system_settings/service-points/get') ?>',
             'fnServerData': function (sSource, aoData, fnCallback) {
                 aoData.push({
                     "name": "<?= $this->security->get_csrf_token_name() ?>",
@@ -18,11 +18,11 @@
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, { "bSortable": false, "mRender": img_hl }, null, null, null, null, null, null, {"bSortable": false}]
+            "aoColumns": [{"bSortable": false, "mRender": checkbox}, { "bSortable": false, "mRender": img_hl }, null, null, null, null, null, {"bSortable": false}]
         });
     });
 </script>
-<?= admin_form_open('system_settings/warehouse_actions', 'id="action-form"') ?>
+<?= admin_form_open('system_settings/service-points/actions', 'id="action-form"') ?>
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-building-o"></i><?= $page_title ?></h2>
@@ -35,7 +35,7 @@
                     </a>
                     <ul class="dropdown-menu pull-right tasks-menus" role="menu" aria-labelledby="dLabel">
                         <li>
-                            <a href="<?php echo admin_url('system_settings/add_warehouse'); ?>" data-toggle="modal" data-target="#myModal">
+                            <a href="<?php echo admin_url('system_settings/service-points/add'); ?>" data-toggle="modal" data-target="#myModal">
                                 <i class="fa fa-plus"></i> <?= lang('add_warehouse') ?>
                             </a>
                             </li>
@@ -71,7 +71,6 @@
                             <th style="min-width:40px; width: 40px; text-align: center;"><?= lang("map"); ?></th>
                             <th class="col-xs-1"><?= lang("code"); ?></th>
                             <th class="col-xs-2"><?= lang("name"); ?></th>
-                            <th class="col-xs-2"><?= lang("price_group"); ?></th>
                             <th class="col-xs-2"><?= lang("phone"); ?></th>
                             <th class="col-xs-2"><?= lang("email"); ?></th>
                             <th class="col-xs-3"><?= lang("address"); ?></th>
@@ -80,7 +79,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="9" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
+                            <td colspan="8" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
                         </tr>
 
                         </tbody>
@@ -121,4 +120,3 @@
 
     });
 </script>
-

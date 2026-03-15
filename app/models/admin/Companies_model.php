@@ -2,6 +2,10 @@
 
 class Companies_model extends CI_Model
 {
+    protected function tableExists($table)
+    {
+        return $this->db->table_exists($table);
+    }
 
     public function __construct()
     {
@@ -10,6 +14,9 @@ class Companies_model extends CI_Model
 
     public function getAllBillerCompanies()
     {
+        if (!$this->tableExists('companies')) {
+            return array();
+        }
         $q = $this->db->get_where('companies', array('group_name' => 'biller'));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -17,11 +24,14 @@ class Companies_model extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getAllCustomerCompanies()
     {
+        if (!$this->tableExists('companies')) {
+            return array();
+        }
         $q = $this->db->get_where('companies', array('group_name' => 'customer'));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -29,11 +39,14 @@ class Companies_model extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getAllSupplierCompanies()
     {
+        if (!$this->tableExists('companies')) {
+            return array();
+        }
         $q = $this->db->get_where('companies', array('group_name' => 'supplier'));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -41,11 +54,14 @@ class Companies_model extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getAllCustomerGroups()
     {
+        if (!$this->tableExists('customer_groups')) {
+            return array();
+        }
         $q = $this->db->get('customer_groups');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -53,7 +69,7 @@ class Companies_model extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getCompanyUsers($company_id)
@@ -70,6 +86,9 @@ class Companies_model extends CI_Model
 
     public function getCompanyByID($id)
     {
+        if (!$this->tableExists('companies')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('companies', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -79,6 +98,9 @@ class Companies_model extends CI_Model
 
     public function getCompanyByEmail($email)
     {
+        if (!$this->tableExists('companies')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('companies', array('email' => $email), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -88,6 +110,9 @@ class Companies_model extends CI_Model
 
     public function addCompany($data = array())
     {
+        if (!$this->tableExists('companies')) {
+            return false;
+        }
         if ($this->db->insert('companies', $data)) {
             $cid = $this->db->insert_id();
             return $cid;
@@ -97,6 +122,9 @@ class Companies_model extends CI_Model
 
     public function updateCompany($id, $data = array())
     {
+        if (!$this->tableExists('companies')) {
+            return false;
+        }
         $this->db->where('id', $id);
         if ($this->db->update('companies', $data)) {
             return true;
@@ -106,6 +134,9 @@ class Companies_model extends CI_Model
 
     public function addCompanies($data = array())
     {
+        if (!$this->tableExists('companies')) {
+            return false;
+        }
         if ($this->db->insert_batch('companies', $data)) {
             return true;
         }
@@ -114,6 +145,9 @@ class Companies_model extends CI_Model
 
     public function deleteCustomer($id)
     {
+        if (!$this->tableExists('companies')) {
+            return false;
+        }
         if ($this->getCustomerSales($id)) {
             return false;
         }
@@ -125,6 +159,9 @@ class Companies_model extends CI_Model
 
     public function deleteSupplier($id)
     {
+        if (!$this->tableExists('companies')) {
+            return false;
+        }
         if ($this->getSupplierPurchases($id)) {
             return false;
         }
@@ -136,6 +173,9 @@ class Companies_model extends CI_Model
 
     public function deleteBiller($id)
     {
+        if (!$this->tableExists('companies')) {
+            return false;
+        }
         if ($this->getBillerSales($id)) {
             return false;
         }
@@ -147,6 +187,9 @@ class Companies_model extends CI_Model
 
     public function getBillerSuggestions($term, $limit = 10)
     {
+        if (!$this->tableExists('companies')) {
+            return array();
+        }
         $this->db->select("id, company as text");
         $this->db->where(" (id LIKE '%" . $term . "%' OR name LIKE '%" . $term . "%' OR company LIKE '%" . $term . "%') ");
         $q = $this->db->get_where('companies', array('group_name' => 'biller'), $limit);
@@ -161,6 +204,9 @@ class Companies_model extends CI_Model
 
     public function getCustomerSuggestions($term, $limit = 10)
     {
+        if (!$this->tableExists('companies')) {
+            return array();
+        }
         $user = $this->getUser();
         $warehouse_id = $user->warehouse_id;
         if((!$this->Owner && !$this->Admin) && $warehouse_id)
@@ -194,6 +240,9 @@ class Companies_model extends CI_Model
 
     public function getSupplierSuggestions($term, $limit = 10)
     {
+        if (!$this->tableExists('companies')) {
+            return array();
+        }
         $this->db->select("id, (CASE WHEN company = '-' THEN name ELSE CONCAT(company, ' (', name, ')') END) as text", FALSE);
         $this->db->where(" (id LIKE '%" . $term . "%' OR name LIKE '%" . $term . "%' OR company LIKE '%" . $term . "%' OR email LIKE '%" . $term . "%' OR phone LIKE '%" . $term . "%') ");
         $q = $this->db->get_where('companies', array('group_name' => 'supplier'), $limit);
@@ -208,18 +257,27 @@ class Companies_model extends CI_Model
 
     public function getCustomerSales($id)
     {
+        if (!$this->tableExists('sales')) {
+            return 0;
+        }
         $this->db->where('customer_id', $id)->from('sales');
         return $this->db->count_all_results();
     }
 
     public function getBillerSales($id)
     {
+        if (!$this->tableExists('sales')) {
+            return 0;
+        }
         $this->db->where('biller_id', $id)->from('sales');
         return $this->db->count_all_results();
     }
 
     public function getSupplierPurchases($id)
     {
+        if (!$this->tableExists('purchases')) {
+            return 0;
+        }
         $this->db->where('supplier_id', $id)->from('purchases');
         return $this->db->count_all_results();
     }
@@ -267,6 +325,9 @@ class Companies_model extends CI_Model
 
     public function getAllPriceGroups()
     {
+        if (!$this->tableExists('price_groups')) {
+            return array();
+        }
         $q = $this->db->get('price_groups');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -274,7 +335,7 @@ class Companies_model extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getCompanyAddresses($company_id)

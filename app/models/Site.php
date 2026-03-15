@@ -2,39 +2,32 @@
 
 class Site extends CI_Model
 {
+    protected function tableExists($table) {
+        return $this->db->table_exists($table);
+    }
 
     public function __construct() {
         parent::__construct();
     }
 
     public function get_total_qty_alerts() {
-        $this->db->where('quantity < alert_quantity', NULL, FALSE)->where('track_quantity', 1);
-        return $this->db->count_all_results('products');
+        // Removed: products table dropped
+        return 0;
     }
 
     public function get_expiring_qty_alerts() {
-        $date = date('Y-m-d', strtotime('+3 months'));
-        $this->db->select('SUM(quantity_balance) as alert_num')
-        ->where('expiry !=', NULL)->where('expiry !=', '0000-00-00')
-        ->where('expiry <', $date);
-        $q = $this->db->get('purchase_items');
-        if ($q->num_rows() > 0) {
-            $res = $q->row();
-            return (INT) $res->alert_num;
-        }
-        return FALSE;
+        // Removed: purchase_items table dropped
+        return 0;
     }
 
     public function get_shop_sale_alerts() {
-        $this->db->join('deliveries', 'deliveries.sale_id=sales.id', 'left')
-        ->where('sales.shop', 1)->where('sales.sale_status', 'completed')->where('sales.payment_status', 'paid')
-        ->group_start()->where('deliveries.status !=', 'delivered')->or_where('deliveries.status IS NULL', NULL)->group_end();
-        return $this->db->count_all_results('sales');
+        // Removed: sales table dropped
+        return 0;
     }
 
     public function get_shop_payment_alerts() {
-        $this->db->where('shop', 1)->where('attachment !=', NULL)->where('payment_status !=', 'paid');
-        return $this->db->count_all_results('sales');
+        // Removed: sales table dropped
+        return 0;
     }
 
     public function get_setting() {
@@ -46,24 +39,8 @@ class Site extends CI_Model
     }
     
     public function getholdSalesInfo( $warehouse_id =null) {
-        $warehouse_id='';
-        if ((!$this->Owner || !$this->Admin) && !$warehouse_id) {
-            $user = $this->getUser();
-            $warehouse_id = $user->warehouse_id;
-        }
-        if($warehouse_id)
-       {
-        $this->db->where("warehouse_id", $warehouse_id);
-
-       }
-        $this->db->where("sale_status", 'Hold');
-        $q = $this->db->get("sales");
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
+        // Removed: sales table dropped
+        return array();
     }
 
     public function getDateFormat($id) {
@@ -75,6 +52,9 @@ class Site extends CI_Model
     }
 
     public function getAllCompanies($group_name) {
+        if (!$this->tableExists('companies')) {
+            return array();
+        }
         $q = $this->db->get_where('companies', array('group_name' => $group_name));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -82,10 +62,13 @@ class Site extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getCompanyByID($id) {
+        if (!$this->tableExists('companies')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('companies', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -94,6 +77,9 @@ class Site extends CI_Model
     }
 
     public function getCustomerGroupByID($id) {
+        if (!$this->tableExists('customer_groups')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('customer_groups', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -115,6 +101,9 @@ class Site extends CI_Model
     }
 
     public function getCustomerById($id = NULL) {
+        if (!$this->tableExists('companies')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('companies', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -123,10 +112,7 @@ class Site extends CI_Model
     }
 
     public function getInvoiceProductByProductCodeAndId($id = NULL,$code=null) {
-        $q = $this->db->get_where('sale_items', array('sale_id' => $id,'product_code'=>$code), 1);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
+        // Removed: sale_items table dropped
         return FALSE;
     }
 
@@ -153,10 +139,7 @@ class Site extends CI_Model
     }
 
     public function getProductByID($id) {
-        $q = $this->db->get_where('products', array('id' => $id), 1);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
+        // Removed: products table dropped
         return FALSE;
     }
 
@@ -179,6 +162,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
+    // Removed tax rates methods
+    /*
     public function getAllTaxRates() {
         $q = $this->db->get('tax_rates');
         if ($q->num_rows() > 0) {
@@ -197,6 +182,7 @@ class Site extends CI_Model
         }
         return FALSE;
     }
+    */
 
     public function getAllWarehouses() {
         $q = $this->db->get('warehouses');
@@ -218,6 +204,9 @@ class Site extends CI_Model
     }
 
     public function getAllCategories() {
+        if (!$this->tableExists('categories')) {
+            return array();
+        }
         $this->db->where('parent_id', NULL)->or_where('parent_id', 0)->order_by('name');
         $q = $this->db->get("categories");
         if ($q->num_rows() > 0) {
@@ -226,10 +215,13 @@ class Site extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getSubCategories($parent_id) {
+        if (!$this->tableExists('categories')) {
+            return array();
+        }
         $this->db->where('parent_id', $parent_id)->order_by('name');
         $q = $this->db->get("categories");
         if ($q->num_rows() > 0) {
@@ -238,10 +230,13 @@ class Site extends CI_Model
             }
             return $data;
         }
-        return FALSE;
+        return array();
     }
 
     public function getCategoryByID($id) {
+        if (!$this->tableExists('categories')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('categories', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -250,6 +245,9 @@ class Site extends CI_Model
     }
 
     public function getGiftCardByID($id) {
+        if (!$this->tableExists('gift_cards')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('gift_cards', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -258,6 +256,9 @@ class Site extends CI_Model
     }
 
     public function getGiftCardByNO($no) {
+        if (!$this->tableExists('gift_cards')) {
+            return FALSE;
+        }
         $q = $this->db->get_where('gift_cards', array('card_no' => $no), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -266,24 +267,23 @@ class Site extends CI_Model
     }
 
     public function updateInvoiceStatus() {
-        $date = date('Y-m-d');
-        $q = $this->db->get_where('invoices', array('status' => 'unpaid'));
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                if ($row->due_date < $date) {
-                    $this->db->update('invoices', array('status' => 'due'), array('id' => $row->id));
-                }
-            }
-            $this->db->update('settings', array('update' => $date), array('setting_id' => '1'));
-            return true;
-        }
+        // Removed: invoices table dropped
+        return true;
     }
 
     public function modal_js() {
-        return '<script type="text/javascript">' . file_get_contents($this->data['assets'] . 'js/modal.js') . '</script>';
+        $modal_js = FCPATH . 'themes/default/admin/assets/js/modal.js';
+        if (!is_file($modal_js)) {
+            return '';
+        }
+
+        return '<script type="text/javascript">' . file_get_contents($modal_js) . '</script>';
     }
 
     public function getReference($field) {
+        if (!$this->tableExists('order_ref')) {
+            return $this->getRandomReference();
+        }
         $q = $this->db->get_where('order_ref', array('ref_id' => '1'), 1);
         if ($q->num_rows() > 0) {
             $ref = $q->row();
@@ -351,23 +351,19 @@ class Site extends CI_Model
             $result .= mt_rand(0, 9);
         }
 
-        if ($this->getSaleByReference($result)) {
-            $this->getRandomReference();
-        }
-
+        // Removed: sales table dropped, no need to check
         return $result;
     }
 
     public function getSaleByReference($ref) {
-        $this->db->like('reference_no', $ref, 'both');
-        $q = $this->db->get('sales', 1);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
+        // Removed: sales table dropped
         return FALSE;
     }
 
     public function updateReference($field) {
+        if (!$this->tableExists('order_ref')) {
+            return TRUE;
+        }
         $q = $this->db->get_where('order_ref', array('ref_id' => '1'), 1);
         if ($q->num_rows() > 0) {
             $ref = $q->row();
@@ -448,130 +444,37 @@ class Site extends CI_Model
     }
 
     public function getWarehouseProductsVariants($option_id, $warehouse_id = NULL) {
-        if ($warehouse_id) {
-            $this->db->where('warehouse_id', $warehouse_id);
-        }
-        $q = $this->db->get_where('warehouses_products_variants', array('option_id' => $option_id));
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
+        // Removed: warehouses_products_variants table dropped
         return FALSE;
     }
 
     public function getPurchasedItem($clause) {
-        $orderby = empty($this->Settings->accounting_method) ? 'asc' : 'desc';
-        $this->db->order_by('date', $orderby);
-        $this->db->order_by('purchase_id', $orderby);
-        if (!isset($clause['option_id']) || empty($clause['option_id'])) {
-            $this->db->group_start()->where('option_id', NULL)->or_where('option_id', 0)->group_end();
-        }
-        $q = $this->db->get_where('purchase_items', $clause);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
+        // Removed: purchase_items table dropped
         return FALSE;
     }
 
     public function setPurchaseItem($clause, $qty) {
-        if ($product = $this->getProductByID($clause['product_id'])) {
-            if ($pi = $this->getPurchasedItem($clause)) {
-                $quantity_balance = $pi->quantity_balance+$qty;
-                return $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance), array('id' => $pi->id));
-            } else {
-                $unit = $this->getUnitByID($product->unit);
-                $clause['product_unit_id'] = $product->unit;
-                $clause['product_unit_code'] = $unit->code;
-                $clause['product_code'] = $product->code;
-                $clause['product_name'] = $product->name;
-                $clause['purchase_id'] = $clause['transfer_id'] = $clause['item_tax'] = NULL;
-                $clause['net_unit_cost'] = $clause['real_unit_cost'] = $clause['unit_cost'] = $product->cost;
-                $clause['quantity_balance'] = $clause['quantity'] = $clause['unit_quantity'] = $clause['quantity_received'] = $qty;
-                $clause['subtotal'] = ($product->cost * $qty);
-                if (isset($product->tax_rate) && $product->tax_rate != 0) {
-                    $tax_details = $this->site->getTaxRateByID($product->tax_rate);
-                    $ctax = $this->calculateTax($product, $tax_details, $product->cost);
-                    $item_tax = $clause['item_tax'] = $ctax['amount'];
-                    $tax = $clause['tax'] = $ctax['tax'];
-                    $clause['tax_rate_id'] = $tax_details->id;
-                    if ($product->tax_method != 1) {
-                        $clause['net_unit_cost'] = $product->cost - $item_tax;
-                        $clause['unit_cost'] = $product->cost;
-                    } else {
-                        $clause['net_unit_cost'] = $product->cost;
-                        $clause['unit_cost'] = $product->cost + $item_tax;
-                    }
-                    $pr_item_tax = $this->sma->formatDecimal($item_tax * $clause['unit_quantity'], 4);
-                    if ($this->Settings->indian_gst && $gst_data = $this->gst->calculteIndianGST($pr_item_tax, ($this->Settings->state == $supplier_details->state), $tax_details)) {
-                        $clause['gst'] = $gst_data['gst'];
-                        $clause['cgst'] = $gst_data['cgst'];
-                        $clause['sgst'] = $gst_data['sgst'];
-                        $clause['igst'] = $gst_data['igst'];
-                    }
-                    $clause['subtotal'] = (($clause['net_unit_cost'] * $clause['unit_quantity']) + $pr_item_tax);
-                }
-                $clause['status'] = 'received';
-                $clause['date'] = date('Y-m-d');
-                $clause['option_id'] = !empty($clause['option_id']) && is_numeric($clause['option_id']) ? $clause['option_id'] : NULL;
-                return $this->db->insert('purchase_items', $clause);
-            }
-        }
+        // Removed: purchase_items and products tables dropped
         return FALSE;
     }
 
     public function syncVariantQty($variant_id, $warehouse_id, $product_id = NULL) {
-        $balance_qty = $this->getBalanceVariantQuantity($variant_id);
-        $wh_balance_qty = $this->getBalanceVariantQuantity($variant_id, $warehouse_id);
-        if ($this->db->update('product_variants', array('quantity' => $balance_qty), array('id' => $variant_id))) {
-            if ($this->getWarehouseProductsVariants($variant_id, $warehouse_id)) {
-                $this->db->update('warehouses_products_variants', array('quantity' => $wh_balance_qty), array('option_id' => $variant_id, 'warehouse_id' => $warehouse_id));
-            } else {
-                if($wh_balance_qty) {
-                    $this->db->insert('warehouses_products_variants', array('quantity' => $wh_balance_qty, 'option_id' => $variant_id, 'warehouse_id' => $warehouse_id, 'product_id' => $product_id));
-                }
-            }
-            return TRUE;
-        }
+        // Removed: product_variants and warehouses_products_variants tables dropped
         return FALSE;
     }
 
     public function getWarehouseProducts($product_id, $warehouse_id = NULL) {
-        if ($warehouse_id) {
-            $this->db->where('warehouse_id', $warehouse_id);
-        }
-        $q = $this->db->get_where('warehouses_products', array('product_id' => $product_id));
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
+        // Removed: warehouses_products table dropped
         return FALSE;
     }
 
     public function syncProductQty($product_id, $warehouse_id) {
-        $balance_qty = $this->getBalanceQuantity($product_id);
-        $wh_balance_qty = $this->getBalanceQuantity($product_id, $warehouse_id);
-        if ($this->db->update('products', array('quantity' => $balance_qty), array('id' => $product_id))) {
-            if ($this->getWarehouseProducts($product_id, $warehouse_id)) {
-                $this->db->update('warehouses_products', array('quantity' => $wh_balance_qty), array('product_id' => $product_id, 'warehouse_id' => $warehouse_id));
-            } else {
-                if( ! $wh_balance_qty) { $wh_balance_qty = 0; }
-                $product = $this->site->getProductByID($product_id);
-                $this->db->insert('warehouses_products', array('quantity' => $wh_balance_qty, 'product_id' => $product_id, 'warehouse_id' => $warehouse_id, 'avg_cost' => $product->cost));
-            }
-            return TRUE;
-        }
+        // Removed: products and warehouses_products tables dropped
         return FALSE;
     }
 
     public function getSaleByID($id) {
-        $q = $this->db->get_where('sales', array('id' => $id), 1);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
+        // Removed: sales table dropped
         return FALSE;
     }
 

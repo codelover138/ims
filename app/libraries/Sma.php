@@ -338,7 +338,7 @@ class Sma
             $total_points = $scope ? $company->award_points - $points : $company->award_points + $points;
             $this->db->update('companies', array('award_points' => $total_points), array('id' => $customer));
         }
-        if ($user && !empty($this->Settings->each_sale) && !$this->Customer && $total >= $this->Settings->each_sale) {
+        if ($user && $this->db->field_exists('award_points', 'users') && !empty($this->Settings->each_sale) && !$this->Customer && $total >= $this->Settings->each_sale) {
             $staff = $this->site->getUser($user);
             $points = floor(($total / $this->Settings->each_sale) * $this->Settings->sa_point);
             $total_points = $scope ? $staff->award_points - $points : $staff->award_points + $points;

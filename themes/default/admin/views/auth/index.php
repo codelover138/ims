@@ -1,6 +1,7 @@
 <script>
     $(document).ready(function () {
         'use strict';
+        <?php $has_award_points = $this->db->field_exists('award_points', 'users'); ?>
         oTable = $('#UsrTable').dataTable({
             "aaSorting": [[2, "asc"], [3, "asc"]],
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
@@ -17,16 +18,20 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, null, null, null, null, null, null, {"mRender": user_status}, {"bSortable": false}]
+            }, null, null, null, null, <?php if ($has_award_points) { ?>null, <?php } ?>null, {"mRender": user_status}, {"bSortable": false}]
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('first_name');?>]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('last_name');?>]", filter_type: "text", data: []},
             {column_number: 3, filter_default_label: "[<?=lang('email_address');?>]", filter_type: "text", data: []},
             {column_number: 4, filter_default_label: "[<?=lang('company');?>]", filter_type: "text", data: []},
+            <?php if ($has_award_points) { ?>
             {column_number: 5, filter_default_label: "[<?=lang('award_points');?>]", filter_type: "text", data: []},
             {column_number: 6, filter_default_label: "[<?=lang('group');?>]", filter_type: "text", data: []},
+            <?php } else { ?>
+            {column_number: 5, filter_default_label: "[<?=lang('group');?>]", filter_type: "text", data: []},
+            <?php } ?>
             {
-                column_number: 7, select_type: 'select2',
+                column_number: <?= $has_award_points ? 7 : 6 ?>, select_type: 'select2',
                 select_type_options: {
                     placeholder: '<?=lang('status');?>',
                     width: '100%',
@@ -39,12 +44,12 @@
         ], "footer");
     });
 </script>
-<style>.table td:nth-child(6) {
+<style>.table td:nth-child(<?= $has_award_points ? 6 : 7 ?>) {
         text-align: right;
         width: 10%;
     }
 
-    .table td:nth-child(8) {
+    .table td:nth-child(<?= $has_award_points ? 8 : 7 ?>) {
         text-align: center;
     }</style>
 <?php if ($Owner) {
@@ -85,7 +90,9 @@
                             <th class="col-xs-2"><?php echo lang('last_name'); ?></th>
                             <th class="col-xs-2"><?php echo lang('email_address'); ?></th>
                             <th class="col-xs-2"><?php echo lang('company'); ?></th>
+                            <?php if ($has_award_points) { ?>
                             <th class="col-xs-1"><?php echo lang('award_points'); ?></th>
+                            <?php } ?>
                             <th class="col-xs-1"><?php echo lang('group'); ?></th>
                             <th style="width:100px;"><?php echo lang('status'); ?></th>
                             <th style="width:80px;"><?php echo lang('actions'); ?></th>
@@ -93,7 +100,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="8" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
+                            <td colspan="<?= $has_award_points ? 8 : 7 ?>" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
                         </tr>
                         </tbody>
                         <tfoot class="dtFilter">
@@ -105,7 +112,9 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <?php if ($has_award_points) { ?>
                             <th></th>
+                            <?php } ?>
                             <th></th>
                             <th style="width:100px;"></th>
                             <th style="width:85px;"><?= lang("actions"); ?></th>

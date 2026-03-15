@@ -2,6 +2,40 @@
 
 class system_settings extends MY_Controller
 {
+    protected function tableExists($table)
+    {
+        return $this->db->table_exists($table);
+    }
+
+    protected function settingFieldExists($field)
+    {
+        return $this->db->field_exists($field, 'settings');
+    }
+
+    protected function getSettingValue($field, $default = null)
+    {
+        return (isset($this->Settings) && is_object($this->Settings) && property_exists($this->Settings, $field))
+            ? $this->Settings->{$field}
+            : $default;
+    }
+
+    protected function filterSettingsData(array $data)
+    {
+        $filtered = array();
+        foreach ($data as $field => $value) {
+            if ($this->settingFieldExists($field)) {
+                $filtered[$field] = $value;
+            }
+        }
+
+        return $filtered;
+    }
+
+    protected function unavailableFeature($message = NULL)
+    {
+        $this->session->set_flashdata('warning', $message ?: lang('feature_not_available'));
+        admin_redirect('system_settings');
+    }
 
     function __construct()
     {
@@ -74,23 +108,23 @@ class system_settings extends MY_Controller
                 'dateformat' => $this->input->post('dateformat'),
                 'timezone' => DEMO ? 'Asia/Kuala_Lumpur' : $this->input->post('timezone'),
                 'mmode' => trim($this->input->post('mmode')),
-                'iwidth' => $this->Settings->iwidth,
-                'iheight' => $this->Settings->iheight,
-                'twidth' => $this->Settings->twidth,
-                'theight' => $this->Settings->theight,
-                'watermark' => $this->Settings->watermark,
+                'iwidth' => $this->getSettingValue('iwidth'),
+                'iheight' => $this->getSettingValue('iheight'),
+                'twidth' => $this->getSettingValue('twidth'),
+                'theight' => $this->getSettingValue('theight'),
+                'watermark' => $this->getSettingValue('watermark'),
                 // 'reg_ver' => $this->input->post('reg_ver'),
                 // 'allow_reg' => $this->input->post('allow_reg'),
                 // 'reg_notification' => $this->input->post('reg_notification'),
-                'accounting_method' => $this->Settings->accounting_method,
+                'accounting_method' => $this->getSettingValue('accounting_method'),
                 'default_email' => DEMO ? 'noreply@tecdiary.com' : $this->input->post('email'),
                 'language' => $lang,
                 'default_warehouse' => $this->input->post('warehouse'),
-                'payment_prefix' => $this->Settings->payment_prefix,
-                'ppayment_prefix' => $this->Settings->ppayment_prefix,
-                'qa_prefix' => $this->Settings->qa_prefix,
+                'payment_prefix' => $this->getSettingValue('payment_prefix'),
+                'ppayment_prefix' => $this->getSettingValue('ppayment_prefix'),
+                'qa_prefix' => $this->getSettingValue('qa_prefix'),
                 'theme' => trim($this->input->post('theme')),
-                'customer_group' => $this->Settings->customer_group,
+                'customer_group' => $this->getSettingValue('customer_group'),
                 'default_currency' => $this->input->post('currency'),
                 'restrict_calendar' => $this->input->post('restrict_calendar'),
                 'captcha' => $this->input->post('captcha'),
@@ -103,23 +137,25 @@ class system_settings extends MY_Controller
                 'decimals' => $this->input->post('decimals'),
                 'decimals_sep' => $this->input->post('decimals_sep'),
                 'thousands_sep' => $this->input->post('thousands_sep'),
-                'default_biller' => $this->Settings->default_biller,
+                'default_biller' => $this->getSettingValue('default_biller'),
                 'rtl' => $this->input->post('rtl'),
-                'each_spent' => $this->Settings->each_spent,
-                'ca_point' => $this->Settings->ca_point,
-                'each_sale' => $this->Settings->each_sale,
-                'sa_point' => $this->Settings->sa_point,
+                'each_spent' => $this->getSettingValue('each_spent'),
+                'ca_point' => $this->getSettingValue('ca_point'),
+                'each_sale' => $this->getSettingValue('each_sale'),
+                'sa_point' => $this->getSettingValue('sa_point'),
                 'sac' => $this->input->post('sac'),
                 'qty_decimals' => $this->input->post('qty_decimals'),
                 'display_symbol' => $this->input->post('display_symbol'),
                 'symbol' => $this->input->post('symbol'),
-                'disable_editing' => $this->input->post('disable_editing'),
                 'apis' => $this->input->post('apis'),
                 'pdf_lib' => $this->input->post('pdf_lib'),
                 'state' => $this->input->post('state'),
             );
+            $data = $this->filterSettingsData($data);
             if ($this->input->post('smtp_pass')) {
-                $data['smtp_pass'] = $this->input->post('smtp_pass');
+                if ($this->settingFieldExists('smtp_pass')) {
+                    $data['smtp_pass'] = $this->input->post('smtp_pass');
+                }
             }
         }
 
@@ -139,7 +175,7 @@ class system_settings extends MY_Controller
             $this->data['settings'] = $this->settings_model->getSettings();
             $this->data['currencies'] = $this->settings_model->getAllCurrencies();
             $this->data['date_formats'] = $this->settings_model->getDateFormats();
-            $this->data['tax_rates'] = $this->settings_model->getAllTaxRates();
+            // $this->data['tax_rates'] = $this->settings_model->getAllTaxRates(); // Removed
             $this->data['warehouses'] = $this->settings_model->getAllWarehouses();
             $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('system_settings')));
             $meta = array('page_title' => lang('system_settings'), 'bc' => $bc);
@@ -156,7 +192,6 @@ class system_settings extends MY_Controller
         $this->load->helper('security');
         $this->form_validation->set_rules('site_logo', lang("site_logo"), 'xss_clean');
         $this->form_validation->set_rules('login_logo', lang("login_logo"), 'xss_clean');
-        $this->form_validation->set_rules('biller_logo', lang("biller_logo"), 'xss_clean');
         if ($this->form_validation->run() == true) {
 
             if ($_FILES['site_logo']['size'] > 0) {
@@ -197,25 +232,6 @@ class system_settings extends MY_Controller
                 }
                 $login_logo = $this->upload->file_name;
                 $this->db->update('settings', array('logo2' => $login_logo), array('setting_id' => 1));
-            }
-
-            if ($_FILES['biller_logo']['size'] > 0) {
-                $this->load->library('upload');
-                $config['upload_path'] = $this->upload_path . 'logos/';
-                $config['allowed_types'] = $this->image_types;
-                $config['max_size'] = $this->allowed_file_size;
-                $config['max_width'] = 300;
-                $config['max_height'] = 80;
-                $config['overwrite'] = FALSE;
-                $config['max_filename'] = 25;
-                //$config['encrypt_name'] = TRUE;
-                $this->upload->initialize($config);
-                if (!$this->upload->do_upload('biller_logo')) {
-                    $error = $this->upload->display_errors();
-                    $this->session->set_flashdata('error', $error);
-                    redirect($_SERVER["HTTP_REFERER"]);
-                }
-                $photo = $this->upload->file_name;
             }
 
             $this->session->set_flashdata('message', lang('logo_uploaded'));
@@ -483,11 +499,6 @@ class system_settings extends MY_Controller
         } else {
 
             $this->data['credentials'] = file_get_contents('./themes/' . $this->theme . 'email_templates/credentials.html');
-            $this->data['sale'] = file_get_contents('./themes/' . $this->theme . 'email_templates/sale.html');
-            $this->data['quote'] = file_get_contents('./themes/' . $this->theme . 'email_templates/quote.html');
-            $this->data['purchase'] = file_get_contents('./themes/' . $this->theme . 'email_templates/purchase.html');
-            $this->data['transfer'] = file_get_contents('./themes/' . $this->theme . 'email_templates/transfer.html');
-            $this->data['payment'] = file_get_contents('./themes/' . $this->theme . 'email_templates/payment.html');
             $this->data['forgot_password'] = file_get_contents('./themes/' . $this->theme . 'email_templates/forgot_password.html');
             $this->data['activate_email'] = file_get_contents('./themes/' . $this->theme . 'email_templates/activate_email.html');
             $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('system_settings'), 'page' => lang('system_settings')), array('link' => '#', 'page' => lang('email_templates')));
@@ -1073,6 +1084,9 @@ class system_settings extends MY_Controller
 
     function tax_rates()
     {
+        if (!$this->tableExists('tax_rates')) {
+            $this->unavailableFeature(lang('tax_rates') . ' ' . lang('not_available'));
+        }
 
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
 
@@ -1083,6 +1097,9 @@ class system_settings extends MY_Controller
 
     function getTaxRates()
     {
+        if (!$this->tableExists('tax_rates')) {
+            $this->sma->send_json(array('data' => array()));
+        }
 
         $this->load->library('datatables');
         $this->datatables
@@ -1096,6 +1113,9 @@ class system_settings extends MY_Controller
 
     function add_tax_rate()
     {
+        if (!$this->tableExists('tax_rates')) {
+            $this->unavailableFeature(lang('tax_rates') . ' ' . lang('not_available'));
+        }
 
         $this->form_validation->set_rules('name', lang("name"), 'trim|is_unique[tax_rates.name]|required');
         $this->form_validation->set_rules('type', lang("type"), 'required');
@@ -1125,6 +1145,9 @@ class system_settings extends MY_Controller
 
     function edit_tax_rate($id = NULL)
     {
+        if (!$this->tableExists('tax_rates')) {
+            $this->unavailableFeature(lang('tax_rates') . ' ' . lang('not_available'));
+        }
 
         $this->form_validation->set_rules('name', lang("name"), 'trim|required');
         $tax_details = $this->settings_model->getTaxRateByID($id);
@@ -1162,6 +1185,9 @@ class system_settings extends MY_Controller
 
     function delete_tax_rate($id = NULL)
     {
+        if (!$this->tableExists('tax_rates')) {
+            $this->sma->send_json(array('error' => 1, 'msg' => lang('not_available')));
+        }
         if ($this->settings_model->deleteTaxRate($id)) {
             $this->sma->send_json(array('error' => 0, 'msg' => lang("tax_rate_deleted")));
         }
@@ -1169,6 +1195,9 @@ class system_settings extends MY_Controller
 
     function tax_actions()
     {
+        if (!$this->tableExists('tax_rates')) {
+            $this->unavailableFeature(lang('tax_rates') . ' ' . lang('not_available'));
+        }
 
         $this->form_validation->set_rules('form_action', lang("form_action"), 'required');
 
@@ -1222,6 +1251,9 @@ class system_settings extends MY_Controller
 
     function customer_groups()
     {
+        if (!$this->tableExists('customer_groups')) {
+            $this->unavailableFeature(lang('customer_groups') . ' ' . lang('not_available'));
+        }
 
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
 
@@ -1232,6 +1264,9 @@ class system_settings extends MY_Controller
 
     function getCustomerGroups()
     {
+        if (!$this->tableExists('customer_groups')) {
+            $this->sma->send_json(array('data' => array()));
+        }
 
         $this->load->library('datatables');
         $this->datatables
@@ -1245,6 +1280,9 @@ class system_settings extends MY_Controller
 
     function add_customer_group()
     {
+        if (!$this->tableExists('customer_groups')) {
+            $this->unavailableFeature(lang('customer_groups') . ' ' . lang('not_available'));
+        }
 
         $this->form_validation->set_rules('name', lang("group_name"), 'trim|is_unique[customer_groups.name]|required');
         $this->form_validation->set_rules('percent', lang("group_percentage"), 'required|numeric');
@@ -1271,6 +1309,9 @@ class system_settings extends MY_Controller
 
     function edit_customer_group($id = NULL)
     {
+        if (!$this->tableExists('customer_groups')) {
+            $this->unavailableFeature(lang('customer_groups') . ' ' . lang('not_available'));
+        }
 
         $this->form_validation->set_rules('name', lang("group_name"), 'trim|required');
         $pg_details = $this->settings_model->getCustomerGroupByID($id);
@@ -1305,6 +1346,9 @@ class system_settings extends MY_Controller
 
     function delete_customer_group($id = NULL)
     {
+        if (!$this->tableExists('customer_groups')) {
+            $this->sma->send_json(array('error' => 1, 'msg' => lang('not_available')));
+        }
         if ($this->settings_model->deleteCustomerGroup($id)) {
             $this->sma->send_json(array('error' => 0, 'msg' => lang("customer_group_deleted")));
         }
@@ -1312,6 +1356,9 @@ class system_settings extends MY_Controller
 
     function customer_group_actions()
     {
+        if (!$this->tableExists('customer_groups')) {
+            $this->unavailableFeature(lang('customer_groups') . ' ' . lang('not_available'));
+        }
 
         $this->form_validation->set_rules('form_action', lang("form_action"), 'required');
 
@@ -1372,10 +1419,9 @@ class system_settings extends MY_Controller
 
         $this->load->library('datatables');
         $this->datatables
-            ->select("{$this->db->dbprefix('warehouses')}.id as id, map, code, {$this->db->dbprefix('warehouses')}.name as name, {$this->db->dbprefix('price_groups')}.name as price_group, phone, email, address")
-            ->from("warehouses")
-            ->join('price_groups', 'price_groups.id=warehouses.price_group_id', 'left')
-            ->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('system_settings/edit_warehouse/$1') . "' class='tip' title='" . lang("edit_warehouse") . "' data-toggle='modal' data-target='#myModal'><i class=\"fa fa-edit\"></i></a> <a href='#' class='tip po' title='<b>" . lang("delete_warehouse") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('system_settings/delete_warehouse/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i></a></div>", "id");
+            ->select("id, map, code, name, phone, email, address", FALSE)
+            ->from("warehouses");
+        $this->datatables->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('system_settings/service-points/edit/$1') . "' class='tip' title='" . lang("edit_warehouse") . "' data-toggle='modal' data-target='#myModal'><i class=\"fa fa-edit\"></i></a> <a href='#' class='tip po' title='<b>" . lang("delete_warehouse") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('system_settings/service-points/delete/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i></a></div>", "id");
 
         echo $this->datatables->generate();
     }
@@ -1406,7 +1452,7 @@ class system_settings extends MY_Controller
                 if (!$this->upload->do_upload()) {
                     $error = $this->upload->display_errors();
                     $this->session->set_flashdata('message', $error);
-                    admin_redirect("system_settings/warehouses");
+                    admin_redirect("system_settings/service-points");
                 }
 
                 $map = $this->upload->file_name;
@@ -1434,20 +1480,18 @@ class system_settings extends MY_Controller
                 'phone' => $this->input->post('phone'),
                 'email' => $this->input->post('email'),
                 'address' => $this->input->post('address'),
-                'price_group_id' => $this->input->post('price_group'),
                 'map' => $map,
             );
         } elseif ($this->input->post('add_warehouse')) {
             $this->session->set_flashdata('error', validation_errors());
-            admin_redirect("system_settings/warehouses");
+            admin_redirect("system_settings/service-points");
         }
 
         if ($this->form_validation->run() == true && $this->settings_model->addWarehouse($data)) {
             $this->session->set_flashdata('message', lang("warehouse_added"));
-            admin_redirect("system_settings/warehouses");
+            admin_redirect("system_settings/service-points");
         } else {
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-            $this->data['price_groups'] = $this->settings_model->getAllPriceGroups();
             $this->data['modal_js'] = $this->site->modal_js();
             $this->load->view($this->theme . 'settings/add_warehouse', $this->data);
         }
@@ -1470,7 +1514,6 @@ class system_settings extends MY_Controller
                 'phone' => $this->input->post('phone'),
                 'email' => $this->input->post('email'),
                 'address' => $this->input->post('address'),
-                'price_group_id' => $this->input->post('price_group'),
             );
 
             if ($_FILES['userfile']['size'] > 0) {
@@ -1490,7 +1533,7 @@ class system_settings extends MY_Controller
                 if (!$this->upload->do_upload()) {
                     $error = $this->upload->display_errors();
                     $this->session->set_flashdata('message', $error);
-                    admin_redirect("system_settings/warehouses");
+                    admin_redirect("system_settings/service-points");
                 }
 
                 $data['map'] = $this->upload->file_name;
@@ -1513,17 +1556,16 @@ class system_settings extends MY_Controller
             }
         } elseif ($this->input->post('edit_warehouse')) {
             $this->session->set_flashdata('error', validation_errors());
-            admin_redirect("system_settings/warehouses");
+            admin_redirect("system_settings/service-points");
         }
 
         if ($this->form_validation->run() == true && $this->settings_model->updateWarehouse($id, $data)) { //check to see if we are updateing the customer
             $this->session->set_flashdata('message', lang("warehouse_updated"));
-            admin_redirect("system_settings/warehouses");
+            admin_redirect("system_settings/service-points");
         } else {
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
 
             $this->data['warehouse'] = $this->settings_model->getWarehouseByID($id);
-            $this->data['price_groups'] = $this->settings_model->getAllPriceGroups();
             $this->data['id'] = $id;
             $this->data['modal_js'] = $this->site->modal_js();
             $this->load->view($this->theme . 'settings/edit_warehouse', $this->data);

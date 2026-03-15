@@ -49,15 +49,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <input type="radio" class="checkbox" name="scope" value="1" id="customer"><label for="customer"
-                    class="padding05"><?= lang('for_customers_only') ?></label>
-                <input type="radio" class="checkbox" name="scope" value="2" id="staff"><label for="staff"
-                    class="padding05"><?= lang('for_staff_only') ?></label>
-                <input type="radio" class="checkbox" name="scope" value="3" id="both" checked="checked"><label
-                    for="both" class="padding05"><?= lang('for_both') ?></label>
-            </div>
-
         </div>
         <div class="modal-footer">
             <?php echo form_submit('add_notification', lang('add_notification'), 'class="btn btn-primary"'); ?>

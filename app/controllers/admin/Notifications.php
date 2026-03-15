@@ -57,7 +57,7 @@ class Notifications extends MY_Controller
                 'comment' => $this->input->post('comment'),
                 'from_date' => $this->input->post('from_date') ? $this->sma->fld($this->input->post('from_date')) : NULL,
                 'till_date' => $this->input->post('to_date') ? $this->sma->fld($this->input->post('to_date')) : NULL,
-                'scope' => $this->input->post('scope'),
+                'scope' => 3,
                  'warehouse_id' => $this->input->post('warehouse'),
             );
         } elseif ($this->input->post('submit')) {
@@ -103,7 +103,7 @@ class Notifications extends MY_Controller
                 'comment' => $this->input->post('comment'),
                 'from_date' => $this->input->post('from_date') ? $this->sma->fld($this->input->post('from_date')) : NULL,
                 'till_date' => $this->input->post('to_date') ? $this->sma->fld($this->input->post('to_date')) : NULL,
-                'scope' => $this->input->post('scope'),
+                'scope' => 3,
                  'warehouse_id' => $this->input->post('warehouse'),
             );
         } elseif ($this->input->post('submit')) {
