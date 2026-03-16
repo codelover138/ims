@@ -291,9 +291,9 @@
                                 <div class="gamma-sidebar-intro">
                                     <div class="gamma-sidebar-pill"><i class="fa fa-check-circle"></i> Final review</div>
                                     <h4>Finish the account setup professionally</h4>
-                                    <p>Choose the role, assignment, and notification behavior before creating the user.</p>
+                                    <p>Choose the role and assignment details before creating the user.</p>
                                 </div>
-                                <p class="text-muted gamma-panel-copy">Configure permissions, assignments, and notification settings before creating the account.</p>
+                                <p class="text-muted gamma-panel-copy">Configure permissions and assignments before creating the account.</p>
 
                                 <div class="form-group gamma-form-group">
                                     <label for="status"><i class="fa fa-toggle-on"></i> <?= lang('status'); ?></label>
@@ -322,14 +322,6 @@
                                     </div>
 
                                 </div>
-
-                                <div class="well well-sm gamma-check-well" style="margin-top: 20px;">
-                                    <label class="checkbox" for="notify" style="margin: 0;">
-                                        <input type="checkbox" name="notify" value="1" id="notify" checked="checked"/>
-                                        <?= lang('notify_user_by_email') ?>
-                                    </label>
-                                </div>
-
                                 <p style="margin: 0;">
                                     <?php echo form_submit('add_user', lang('add_user'), 'class="btn btn-primary btn-block btn-lg gamma-submit-btn"'); ?>
                                 </p>

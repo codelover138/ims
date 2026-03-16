@@ -149,6 +149,42 @@ class Auth extends MY_Controller
         return true;
     }
 
+    protected function createCaptchaPayload($width = 150, $height = 34, $img_url = null)
+    {
+        $this->load->helper('captcha');
+
+        $vals = array(
+            'img_path' => FCPATH . 'assets/captcha/',
+            'img_url' => $img_url ?: base_url('assets/captcha/'),
+            'img_width' => $width,
+            'img_height' => $height,
+            'word_length' => 5,
+            'colors' => array(
+                'background' => array(255, 255, 255),
+                'border' => array(204, 204, 204),
+                'text' => array(102, 102, 102),
+                'grid' => array(204, 204, 204),
+            ),
+        );
+
+        $cap = create_captcha($vals);
+        if ($cap === false || !isset($cap['time'], $cap['word'], $cap['image'])) {
+            log_message('error', 'Captcha generation failed. Check that ' . FCPATH . 'assets/captcha/ exists, is writable by the web server user, and PHP GD is enabled.');
+            return false;
+        }
+
+        $capdata = array(
+            'captcha_time' => $cap['time'],
+            'ip_address' => $this->input->ip_address(),
+            'word' => $cap['word']
+        );
+
+        $query = $this->db->insert_string('captcha', $capdata);
+        $this->db->query($query);
+
+        return $cap;
+    }
+
     public function valid_optional_phone_number($value)
     {
         $value = trim((string) $value);
@@ -196,6 +232,33 @@ class Auth extends MY_Controller
             'departure_date' => $this->normalizeGammaDateForDatabase($this->input->post('departure_date')),
             'departure_reason' => $this->input->post('departure_reason'),
         );
+    }
+
+    protected function normalizeWarehouseIdFromPost($value)
+    {
+        $value = trim((string) $value);
+        if ($value === '') {
+            return null;
+        }
+
+        if (!ctype_digit($value)) {
+            return false;
+        }
+
+        $warehouse = $this->site->getWarehouseByID((int) $value);
+
+        return $warehouse ? (int) $warehouse->id : false;
+    }
+
+    public function valid_warehouse($value)
+    {
+        $warehouse_id = $this->normalizeWarehouseIdFromPost($value);
+        if ($warehouse_id === false) {
+            $this->form_validation->set_message('valid_warehouse', 'The selected warehouse is invalid.');
+            return false;
+        }
+
+        return true;
     }
 
     function index()
@@ -299,21 +362,67 @@ class Auth extends MY_Controller
             admin_redirect('auth');
         }
 
-        $this->data['title'] = lang('profile');
-
         $user = $this->ion_auth->user($id)->row();
-        $groups = $this->ion_auth->groups()->result_array();
+        $this->renderProfilePage($id, $user);
+    }
+
+    protected function hydrateProfileUserFromPost($user)
+    {
+        $field_map = array(
+            'first_name' => 'first_name',
+            'last_name' => 'last_name',
+            'middle_name' => 'middle_name',
+            'company' => 'company',
+            'phone' => 'phone',
+            'gender' => 'gender',
+            'username' => 'username',
+            'email' => 'email',
+            'business_name' => 'business_name',
+            'email2' => 'email2',
+            'mobile_phone' => 'mobile_phone',
+            'business_phone' => 'business_phone',
+            'unit_number' => 'unit_number',
+            'street_number' => 'street_number',
+            'street_name' => 'street_name',
+            'street_type' => 'street_type',
+            'suburb' => 'suburb',
+            'state' => 'state',
+            'country' => 'country',
+            'postcode' => 'postcode',
+            'security_question' => 'security_question',
+            'security_answer' => 'security_answer',
+            'departure_reason' => 'departure_reason',
+            'status' => 'active',
+            'group' => 'group_id',
+            'warehouse' => 'warehouse_id',
+            'view_right' => 'view_right',
+            'edit_right' => 'edit_right',
+            'award_points' => 'award_points',
+        );
+
+        foreach ($field_map as $post_key => $property) {
+            $value = $this->input->post($post_key, false);
+            if ($value !== null) {
+                $user->{$property} = $value;
+            }
+        }
+
+        return $user;
+    }
+
+    protected function renderProfilePage($id, $user, $error_message = null)
+    {
+        $this->data['title'] = lang('profile');
         $this->data['csrf'] = $this->_get_csrf_nonce();
         $this->data['user'] = $user;
-        $this->data['groups'] = $groups;
+        $this->data['groups'] = $this->ion_auth->groups()->result_array();
         $this->data['billers'] = $this->site->getAllCompanies('biller');
         $this->data['warehouses'] = $this->site->getAllWarehouses();
         $this->data['user_notes'] = $this->user_notes_model->getNotesByUserId($id);
         $this->data['gamma_note_entry_date'] = set_value('note_entry_date');
         $this->data['gamma_note_note_date'] = set_value('note_note_date');
         $this->data['gamma_note_narrative'] = set_value('note_narrative');
-
-        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        $this->data['error'] = $error_message !== null ? $error_message : ((validation_errors()) ? validation_errors() : $this->session->flashdata('error'));
         $this->data['password'] = array(
             'name' => 'password',
             'id' => 'password',
@@ -357,7 +466,6 @@ class Auth extends MY_Controller
         );
         $this->data['gamma_google_places_api_key'] = $this->config->item('gamma_google_places_api_key', 'gamma');
         $this->data['gamma_google_places_country'] = $this->config->item('gamma_google_places_country', 'gamma');
-
         $this->data['id'] = $id;
 
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('auth/users'), 'page' => lang('users')), array('link' => '#', 'page' => lang('profile')));
@@ -503,32 +611,19 @@ class Auth extends MY_Controller
             $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
             $this->data['message'] = $this->session->flashdata('message');
             if ($this->Settings->captcha) {
-                $this->load->helper('captcha');
-                $vals = array(
-                    'img_path' => './assets/captcha/',
-                    'img_url' => base_url('assets/captcha/'),
-                    'img_width' => 150,
-                    'img_height' => 34,
-                    'word_length' => 5,
-                    'colors' => array('background' => array(255, 255, 255), 'border' => array(204, 204, 204), 'text' => array(102, 102, 102), 'grid' => array(204, 204, 204))
-                );
-                $cap = create_captcha($vals);
-                $capdata = array(
-                    'captcha_time' => $cap['time'],
-                    'ip_address' => $this->input->ip_address(),
-                    'word' => $cap['word']
-                );
-
-                $query = $this->db->insert_string('captcha', $capdata);
-                $this->db->query($query);
-                $this->data['image'] = $cap['image'];
-                $this->data['captcha'] = array('name' => 'captcha',
-                    'id' => 'captcha',
-                    'type' => 'text',
-                    'class' => 'form-control',
-                    'required' => 'required',
-                    'placeholder' => lang('type_captcha')
-                );
+                $cap = $this->createCaptchaPayload(150, 34);
+                if ($cap) {
+                    $this->data['image'] = $cap['image'];
+                    $this->data['captcha'] = array('name' => 'captcha',
+                        'id' => 'captcha',
+                        'type' => 'text',
+                        'class' => 'form-control',
+                        'required' => 'required',
+                        'placeholder' => lang('type_captcha')
+                    );
+                } else {
+                    $this->data['error'] = trim($this->data['error'] . ' CAPTCHA is unavailable on this server right now.');
+                }
             }
 
             $this->data['identity'] = array('name' => 'identity',
@@ -560,26 +655,8 @@ class Auth extends MY_Controller
 
     function reload_captcha()
     {
-        $this->load->helper('captcha');
-        $vals = array(
-            'img_path' => './assets/captcha/',
-            'img_url' => base_url('assets/captcha/'),
-            'img_width' => 150,
-            'img_height' => 34,
-            'word_length' => 5,
-            'colors' => array('background' => array(255, 255, 255), 'border' => array(204, 204, 204), 'text' => array(102, 102, 102), 'grid' => array(204, 204, 204))
-        );
-        $cap = create_captcha($vals);
-        $capdata = array(
-            'captcha_time' => $cap['time'],
-            'ip_address' => $this->input->ip_address(),
-            'word' => $cap['word']
-        );
-        $query = $this->db->insert_string('captcha', $capdata);
-        $this->db->query($query);
-        //$this->data['image'] = $cap['image'];
-
-        echo $cap['image'];
+        $cap = $this->createCaptchaPayload(150, 34);
+        echo $cap ? $cap['image'] : '';
     }
 
     function logout($m = NULL)
@@ -830,13 +907,16 @@ class Auth extends MY_Controller
         $this->form_validation->set_rules('email', lang("email"), 'required|trim|valid_email|is_unique[users.email]');
         $this->form_validation->set_rules('status', lang("status"), 'trim|required');
         $this->form_validation->set_rules('group', lang("group"), 'trim|required');
+        $this->form_validation->set_rules('warehouse', lang('warehouse'), 'trim|callback_valid_warehouse');
+        $this->form_validation->set_rules('password', lang('password'), 'required|min_length[8]|max_length[25]|matches[confirm_password]');
+        $this->form_validation->set_rules('confirm_password', lang('confirm_password'), 'required');
 
-        if ($this->form_validation->run() == true) {
+        $is_valid = ($this->form_validation->run() == true);
+        if ($is_valid) {
 
             $username = strtolower($this->input->post('username'));
             $email = strtolower($this->input->post('email'));
             $password = $this->input->post('password');
-            $notify = $this->input->post('notify');
 
             $additional_data = array(
                 'first_name' => $this->input->post('first_name'),
@@ -845,7 +925,7 @@ class Auth extends MY_Controller
                 'phone' => $this->input->post('phone'),
                 'gender' => $this->input->post('gender'),
                 'group_id' => $this->input->post('group') ? $this->input->post('group') : '3',
-                'warehouse_id' => $this->input->post('warehouse'),
+                'warehouse_id' => $this->normalizeWarehouseIdFromPost($this->input->post('warehouse')),
                 'view_right' =>  $this->input->post('view_right'),
                 'edit_right' => $this->input->post('edit_right'),
                 'last_updated' => date('Y-m-d H:i:s'),
@@ -855,11 +935,11 @@ class Auth extends MY_Controller
         }
 
         $new_user_id = false;
-        if ($this->form_validation->run() == true) {
-            $new_user_id = $this->ion_auth->register($username, $password, $email, $additional_data, $active, $notify);
+        if ($is_valid) {
+            $new_user_id = $this->ion_auth->register($username, $password, $email, $additional_data, $active, false);
         }
 
-        if ($this->form_validation->run() == true && $new_user_id) {
+        if ($is_valid && $new_user_id) {
             $username = $this->input->post('username');
             $basePath = FCPATH . 'assets/document/';
             $directoryPath = $basePath . $username;
@@ -905,6 +985,7 @@ class Auth extends MY_Controller
         $user = $this->ion_auth->user($id)->row();
 
         $this->setGammaUserProfileValidationRules();
+        $this->form_validation->set_rules('warehouse', lang('warehouse'), 'trim|callback_valid_warehouse');
 
         if ($user->username != $this->input->post('username')) {
             $this->form_validation->set_rules('username', lang("username"), 'trim|is_unique[users.username]');
@@ -914,8 +995,13 @@ class Auth extends MY_Controller
         } elseif ($this->input->post('email') !== null && $this->input->post('email') !== '') {
             $this->form_validation->set_rules('email', lang("email"), 'trim|valid_email');
         }
+        if ($this->Owner && $this->input->post('password')) {
+            $this->form_validation->set_rules('password', lang('edit_user_validation_password_label'), 'required|min_length[8]|max_length[25]|matches[password_confirm]');
+            $this->form_validation->set_rules('password_confirm', lang('edit_user_validation_password_confirm_label'), 'required');
+        }
 
-        if ($this->form_validation->run() === TRUE) {
+        $is_valid = ($this->form_validation->run() === TRUE);
+        if ($is_valid) {
 
             if ($this->Owner) {
                 if ($id == $this->session->userdata('user_id')) {
@@ -949,7 +1035,7 @@ class Auth extends MY_Controller
                         'gender' => $this->input->post('gender'),
                         'active' => $this->input->post('status'),
                         'group_id' => $this->input->post('group'),
-                        'warehouse_id' => $this->input->post('warehouse') ? $this->input->post('warehouse') : NULL,
+                        'warehouse_id' => $this->normalizeWarehouseIdFromPost($this->input->post('warehouse')),
                         'view_right' =>  $this->input->post('view_right'),
                         'edit_right' => $this->input->post('edit_right'),
                         'last_updated' => date('Y-m-d H:i:s'),
@@ -992,22 +1078,20 @@ class Auth extends MY_Controller
                         $this->session->set_flashdata('warning', lang('disabled_in_demo'));
                         redirect($_SERVER["HTTP_REFERER"]);
                     }
-                    $this->form_validation->set_rules('password', lang('edit_user_validation_password_label'), 'required|min_length[8]|max_length[25]|matches[password_confirm]');
-                    $this->form_validation->set_rules('password_confirm', lang('edit_user_validation_password_confirm_label'), 'required');
-
                     $data['password'] = $this->input->post('password');
                 }
             }
             //$this->sma->print_arrays($data);
 
         }
-        if ($this->form_validation->run() === TRUE && $this->ion_auth->update($user->id, $data)) {
+        if ($is_valid && $this->ion_auth->update($user->id, $data)) {
             $this->createUserNoteIfProvided($user->id);
             $this->session->set_flashdata('message', lang('user_updated'));
             admin_redirect("auth/profile/" . $id);
         } else {
-            $this->session->set_flashdata('error', validation_errors());
-            redirect($_SERVER["HTTP_REFERER"]);
+            $user = $this->hydrateProfileUserFromPost($user);
+            $error_message = validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('error'));
+            $this->renderProfilePage($id, $user, $error_message);
         }
     }
 
@@ -1162,29 +1246,18 @@ class Auth extends MY_Controller
             $this->data['error'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('error')));
             $this->data['groups'] = $this->ion_auth->groups()->result_array();
 
-            $this->load->helper('captcha');
-            $vals = array(
-                'img_path' => './assets/captcha/',
-                'img_url' => admin_url() . 'assets/captcha/',
-                'img_width' => 150,
-                'img_height' => 34,
-            );
-            $cap = create_captcha($vals);
-            $capdata = array(
-                'captcha_time' => $cap['time'],
-                'ip_address' => $this->input->ip_address(),
-                'word' => $cap['word']
-            );
-
-            $query = $this->db->insert_string('captcha', $capdata);
-            $this->db->query($query);
-            $this->data['image'] = $cap['image'];
-            $this->data['captcha'] = array('name' => 'captcha',
-                'id' => 'captcha',
-                'type' => 'text',
-                'class' => 'form-control',
-                'placeholder' => lang('type_captcha')
-            );
+            $cap = $this->createCaptchaPayload(150, 34, admin_url() . 'assets/captcha/');
+            if ($cap) {
+                $this->data['image'] = $cap['image'];
+                $this->data['captcha'] = array('name' => 'captcha',
+                    'id' => 'captcha',
+                    'type' => 'text',
+                    'class' => 'form-control',
+                    'placeholder' => lang('type_captcha')
+                );
+            } else {
+                $this->data['error'] = trim($this->data['error'] . ' CAPTCHA is unavailable on this server right now.');
+            }
 
             $this->data['first_name'] = array(
                 'name' => 'first_name',

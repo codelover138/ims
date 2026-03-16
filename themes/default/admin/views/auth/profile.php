@@ -174,12 +174,12 @@ $can_delete_user_notes = !empty($Owner) || !empty($Admin);
                                                                 <div class="col-md-12">
                                                                     <div class="form-group gamma-form-group">
                                                                         <label for="password"><i class="fa fa-lock"></i> <?php echo lang('password'); ?></label>
-                                                                        <?php echo form_input($password); ?>
+                                                                        <?php echo form_password('password', '', 'class="form-control" id="password" autocomplete="new-password"'); ?>
                                                                     </div>
 
                                                                     <div class="form-group gamma-form-group">
                                                                         <label for="password_confirm"><i class="fa fa-lock"></i> <?php echo lang('confirm_password'); ?></label>
-                                                                        <?php echo form_input($password_confirm); ?>
+                                                                        <?php echo form_password('password_confirm', '', 'class="form-control" id="password_confirm" autocomplete="new-password"'); ?>
                                                                     </div>
                                                                 </div>
                                                             </div>

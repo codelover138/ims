@@ -2,6 +2,42 @@
 
 class MY_Shop_Controller extends CI_Controller {
 
+    protected function createCaptchaPayload($width = 210, $height = 34)
+    {
+        $this->load->helper('captcha');
+
+        $vals = array(
+            'img_path' => FCPATH . 'assets/captcha/',
+            'img_url' => base_url('assets/captcha/'),
+            'img_width' => $width,
+            'img_height' => $height,
+            'word_length' => 5,
+            'colors' => array(
+                'background' => array(255, 255, 255),
+                'border' => array(204, 204, 204),
+                'text' => array(102, 102, 102),
+                'grid' => array(204, 204, 204),
+            )
+        );
+
+        $cap = create_captcha($vals);
+        if ($cap === false || !isset($cap['time'], $cap['word'], $cap['image'])) {
+            log_message('error', 'Captcha generation failed. Check that ' . FCPATH . 'assets/captcha/ exists, is writable by the web server user, and PHP GD is enabled.');
+            return false;
+        }
+
+        $capdata = array(
+            'captcha_time' => $cap['time'],
+            'ip_address' => $this->input->ip_address(),
+            'word' => $cap['word']
+        );
+
+        $query = $this->db->insert_string('captcha', $capdata);
+        $this->db->query($query);
+
+        return $cap;
+    }
+
     function __construct()
     {
         parent::__construct();
@@ -215,32 +251,19 @@ class MY_Shop_Controller extends CI_Controller {
             }
 
             if (!$this->loggedIn && $this->Settings->captcha) {
-                $this->load->helper('captcha');
-                $vals = array(
-                    'img_path' => './assets/captcha/',
-                    'img_url' => base_url('assets/captcha/'),
-                    'img_width' => 210,
-                    'img_height' => 34,
-                    'word_length' => 5,
-                    'colors' => array('background' => array(255, 255, 255), 'border' => array(204, 204, 204), 'text' => array(102, 102, 102), 'grid' => array(204, 204, 204))
-                    );
-                $cap = create_captcha($vals);
-                $capdata = array(
-                    'captcha_time' => $cap['time'],
-                    'ip_address' => $this->input->ip_address(),
-                    'word' => $cap['word']
-                    );
-
-                $query = $this->db->insert_string('captcha', $capdata);
-                $this->db->query($query);
-                $data['image'] = $cap['image'];
-                $data['captcha'] = array('name' => 'captcha',
-                    'id' => 'captcha',
-                    'type' => 'text',
-                    'class' => 'form-control',
-                    'required' => 'required',
-                    'placeholder' => lang('type_captcha')
-                    );
+                $cap = $this->createCaptchaPayload(210, 34);
+                if ($cap) {
+                    $data['image'] = $cap['image'];
+                    $data['captcha'] = array('name' => 'captcha',
+                        'id' => 'captcha',
+                        'type' => 'text',
+                        'class' => 'form-control',
+                        'required' => 'required',
+                        'placeholder' => lang('type_captcha')
+                        );
+                } else {
+                    $data['warning'] = trim(((isset($data['warning']) ? $data['warning'] : '')) . ' CAPTCHA is unavailable on this server right now.');
+                }
             }
 
             $data['ip_address'] = $this->input->ip_address();
