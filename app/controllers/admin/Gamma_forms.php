@@ -205,6 +205,95 @@ class Gamma_forms extends MY_Controller
         }
     }
 
+    public function build_form()
+    {
+        $this->checkFormPermission('gamma-forms-import-form');
+
+        if ($this->input->method() === 'post') {
+            try {
+                $form_title = $this->input->post('form_title', true);
+                if (!$form_title) {
+                    throw new RuntimeException('Form title is required.');
+                }
+
+                $fields = $this->input->post('fields', true);
+                if (empty($fields) || !is_array($fields)) {
+                    throw new RuntimeException('At least one form field is required.');
+                }
+
+                $user = $this->site->getUser();
+                if (!$user) {
+                    throw new RuntimeException('Unable to resolve user.');
+                }
+
+                // Auto-generate safe slug
+                $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $form_title)));
+                $unique_id = time(); // ensure uniqueness
+                
+                $form_data = [
+                    'user_id' => $user->id,
+                    'form_title' => $form_title,
+                    'description' => $this->input->post('description', true),
+                    'button_label' => 'Submit',
+                    'input_form_location' => 'gamma_forms/inputs/' . $slug . '_' . $unique_id . '.php',
+                    'precedent_clause_location' => 'gamma_forms/precedents/' . $slug . '_' . $unique_id . '.php',
+                    'document_creation_location' => 'gamma_forms/generators/' . $slug . '_' . $unique_id . '.php',
+                    'output_filename_base' => $slug,
+                    'output_file_location' => 'documents/' . $slug . '_' . $unique_id . '/'
+                ];
+
+                // Create the form
+                $form_id = $this->gamma_form_model->createForm($form_data);
+                $form = $this->gamma_form_model->getFormById($form_id);
+
+                // Create support files
+                $this->createSupportFiles($form);
+
+                // Insert fields
+                $order = 1;
+                foreach ($fields as $field) {
+                    if (empty($field['input_label'])) continue;
+                    
+                    $input_data = [
+                        'form_id' => $form_id,
+                        'input_name' => strtolower(trim(preg_replace('/[^A-Za-z0-9_]+/', '_', $field['input_name'] ?? $field['input_label']))),
+                        'input_label' => $field['input_label'],
+                        'input_type' => $field['input_type'],
+                        'allowed_input' => !empty($field['allowed_input']) ? $field['allowed_input'] : null,
+                        'default_value' => !empty($field['default_value']) ? $field['default_value'] : null,
+                        'table_number' => 0,
+                        'table_row' => $order++,
+                        'table_column' => 1
+                    ];
+                    $this->gamma_form_model->createFormInput($input_data);
+                }
+
+                // Generate input form PHP
+                $inputs = $this->gamma_form_model->getInputsForForm($form_id);
+                $html = $this->gamma_input_form_builder->build($form, $inputs, admin_url('gamma/submit_form/' . $form->form_id));
+                $absolute_path = $this->gamma_path_service->resolvePath($form->input_form_location, $user->username);
+                $this->gamma_path_service->ensureParentDirectory($absolute_path);
+                file_put_contents($absolute_path, $html);
+
+                $this->session->set_flashdata('message', 'Form built and generated successfully!');
+                admin_redirect('gamma_forms');
+
+            } catch (Exception $e) {
+                $this->session->set_flashdata('error', $e->getMessage());
+                admin_redirect('gamma_forms/build_form');
+            }
+        } else {
+            $this->data['error'] = $this->session->flashdata('error');
+        }
+
+        $bc = array(
+            array('link' => admin_url('gamma_forms'), 'page' => 'Gamma Forms'),
+            array('link' => '#', 'page' => 'Build Form'),
+        );
+        $meta = array('page_title' => 'Build Gamma Form', 'bc' => $bc);
+        $this->page_construct('gamma/build_form', $meta, $this->data);
+    }
+
     public function import_forms_csv()
     {
         $this->checkFormPermission('gamma-forms-import-form');

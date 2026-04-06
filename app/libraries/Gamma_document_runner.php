@@ -118,8 +118,25 @@ class Gamma_document_runner
 
         $paragraphs = '';
         foreach ($lines as $line) {
-            $text = $this->xml($line === '' ? ' ' : $line);
-            $paragraphs .= '<w:p><w:r><w:t xml:space="preserve">' . $text . '</w:t></w:r></w:p>';
+            if (is_array($line)) {
+                if ($line['type'] === 'title') {
+                    $text = $this->xml($line['text']);
+                    $paragraphs .= '<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="240"/></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="48"/><w:szCs w:val="48"/><w:color w:val="1F3864"/></w:rPr><w:t xml:space="preserve">' . $text . '</w:t></w:r></w:p>';
+                } elseif ($line['type'] === 'heading') {
+                    $text = $this->xml($line['text']);
+                    $paragraphs .= '<w:p><w:pPr><w:spacing w:before="360" w:after="120"/><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="D9D9D9"/></w:pBdr></w:pPr><w:r><w:rPr><w:b/><w:sz w:val="32"/><w:szCs w:val="32"/><w:color w:val="2F5496"/></w:rPr><w:t xml:space="preserve">' . $text . '</w:t></w:r></w:p>';
+                } elseif ($line['type'] === 'meta') {
+                    $text = $this->xml($line['text']);
+                    $paragraphs .= '<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:i/><w:sz w:val="20"/><w:szCs w:val="20"/><w:color w:val="7F7F7F"/></w:rPr><w:t xml:space="preserve">' . $text . '</w:t></w:r></w:p>';
+                } elseif ($line['type'] === 'key_value') {
+                    $key = $this->xml($line['key'] . ': ');
+                    $val = $this->xml(trim((string)$line['value']) === '' ? ' ' : $line['value']);
+                    $paragraphs .= '<w:p><w:pPr><w:spacing w:after="100"/></w:pPr><w:r><w:rPr><w:b/><w:color w:val="404040"/></w:rPr><w:t xml:space="preserve">' . $key . '</w:t></w:r><w:r><w:t xml:space="preserve">' . $val . '</w:t></w:r></w:p>';
+                }
+            } else {
+                $text = $this->xml($line === '' ? ' ' : $line);
+                $paragraphs .= '<w:p><w:r><w:t xml:space="preserve">' . $text . '</w:t></w:r></w:p>';
+            }
         }
 
         $document = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
@@ -168,25 +185,24 @@ class Gamma_document_runner
 
         if (!is_file($absolute_output_path)) {
             $lines = array(
-                $form->form_title,
-                'Generated: ' . $gamma_generated_at,
-                'Output File ID: ' . $output_file_id,
+                ['type' => 'title', 'text' => $form->form_title],
+                ['type' => 'meta', 'text' => 'Generated: ' . $gamma_generated_at],
+                ['type' => 'meta', 'text' => 'Output File ID: ' . $output_file_id],
                 '',
             );
 
             $resolved_clause_text = $this->applyTemplateValues($gamma_precedent_clause_text, $gamma_flat_input_values);
             if (trim($resolved_clause_text) !== '') {
-                $lines[] = 'Precedent Clauses';
+                $lines[] = ['type' => 'heading', 'text' => 'Document Base & Clauses'];
                 $lines[] = '';
                 foreach (preg_split('/\r\n|\r|\n/', $resolved_clause_text) as $clause_line) {
                     $lines[] = $clause_line;
                 }
-                $lines[] = '';
             }
 
-            $lines[] = 'Submitted Values';
+            $lines[] = ['type' => 'heading', 'text' => 'Submitted Form Data'];
             foreach ($gamma_flat_input_values as $key => $value) {
-                $lines[] = $key . ': ' . $value;
+                $lines[] = ['type' => 'key_value', 'key' => $key, 'value' => $value];
             }
             $this->createMinimalDocx($absolute_output_path, $lines);
         }

@@ -358,3 +358,19 @@ ERROR - 2026-04-06 23:01:58 --> Could not find the language line "Folder_Create"
 ERROR - 2026-04-06 23:01:58 --> Could not find the language line "Folder_Download"
 ERROR - 2026-04-06 23:01:58 --> Could not find the language line "Upload"
 ERROR - 2026-04-06 23:01:58 --> Could not find the language line "File_Delete"
+ERROR - 2026-04-06 23:52:25 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\app\controllers\admin\System_settings.php 53
+ERROR - 2026-04-06 23:52:25 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:52:25 --> Could not find the language line "Folder_Create"
+ERROR - 2026-04-06 23:52:25 --> Could not find the language line "Folder_Download"
+ERROR - 2026-04-06 23:52:25 --> Could not find the language line "Upload"
+ERROR - 2026-04-06 23:52:25 --> Could not find the language line "File_Delete"
+ERROR - 2026-04-06 23:52:33 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:52:38 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:52:38 --> Could not find the language line "form_title"
+ERROR - 2026-04-06 23:54:33 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:54:37 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:54:44 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:54:59 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:55:02 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:55:08 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217
+ERROR - 2026-04-06 23:55:16 --> Severity: Warning --> Undefined property: stdClass::$user_language D:\setup\xammp\htdocs\ims\themes\default\admin\views\header.php 217

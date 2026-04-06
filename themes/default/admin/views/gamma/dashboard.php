@@ -60,7 +60,7 @@ $can_download = isset($can_download) ? $can_download : (!empty($Owner) || !empty
                                         <?php if ($can_submit) { ?>
                                             <td>
                                                 <a href="<?= admin_url('gamma/open_form/' . $form->form_id); ?>" class="btn btn-primary btn-sm">
-                                                    <?= htmlspecialchars($form->button_label ?: 'Open Form', ENT_QUOTES, 'UTF-8'); ?>
+                                                    Open Form
                                                 </a>
                                             </td>
                                         <?php } ?>

@@ -15,6 +15,7 @@ $can_delete        = ($gfp === null || !empty($gfp['gamma-forms-delete']));
             <div class="box-content">
                 <div class="btn-group" style="margin-bottom: 15px;">
                     <?php if ($can_import_form) { ?>
+                        <a href="<?= admin_url('gamma_forms/build_form'); ?>" class="btn btn-success"><i class="fa fa-plus"></i> Build Custom Form</a>
                         <a href="<?= admin_url('gamma_forms/import_forms_csv'); ?>" class="btn btn-primary">Import Forms CSV</a>
                     <?php } ?>
                     <?php if ($can_import_inputs) { ?>
