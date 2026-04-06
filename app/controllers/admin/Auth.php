@@ -126,6 +126,44 @@ class Auth extends MY_Controller
         }
     }
 
+    protected function findUserForUsernameReminder($email)
+    {
+        $email = strtolower(trim((string) $email));
+        if ($email === '') {
+            return null;
+        }
+
+        $this->db->from('users');
+        $this->db->group_start()->where('LOWER(email) =', $email);
+        if ($this->db->field_exists('email2', 'users')) {
+            $this->db->or_where('LOWER(email2) =', $email);
+        }
+        $this->db->group_end();
+
+        $query = $this->db->limit(1)->get();
+
+        return $query->num_rows() ? $query->row() : null;
+    }
+
+    protected function sendUsernameReminderEmail($user)
+    {
+        $this->load->library('tec_mail');
+
+        $recipient_name = trim(((string) ($user->first_name ?? '')) . ' ' . ((string) ($user->last_name ?? '')));
+        if ($recipient_name === '') {
+            $recipient_name = $user->username;
+        }
+
+        $subject = $this->Settings->site_name . ' username reminder';
+        $login_url = admin_url('login');
+        $body = '<p>Hello ' . html_escape($recipient_name) . ',</p>'
+            . '<p>Your username for ' . html_escape($this->Settings->site_name) . ' is:</p>'
+            . '<p><strong>' . html_escape($user->username) . '</strong></p>'
+            . '<p>You can sign in here: <a href="' . html_escape($login_url) . '">Admin Login</a></p>';
+
+        $this->tec_mail->send_mail($user->email, $subject, $body);
+    }
+
     protected function setGammaUserProfileValidationRules()
     {
         $this->form_validation->set_rules('email2', 'Secondary Email', 'trim|valid_email');
@@ -729,6 +767,37 @@ class Auth extends MY_Controller
                 admin_redirect("login#forgot_password");
             }
         }
+    }
+
+    public function forgot_username()
+    {
+        if (strtolower($this->input->method()) !== 'post') {
+            admin_redirect('login#forgot_username');
+        }
+
+        $this->form_validation->set_rules('recovery_email', lang('email_address'), 'required|valid_email');
+
+        if ($this->form_validation->run() == false) {
+            $error = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->session->set_flashdata('error', $error);
+            admin_redirect('login#forgot_username');
+        }
+
+        $user = $this->findUserForUsernameReminder($this->input->post('recovery_email'));
+        if (!$user || empty($user->email) || empty($user->username)) {
+            $this->session->set_flashdata('error', 'We could not find an account for that email address.');
+            admin_redirect('login#forgot_username');
+        }
+
+        try {
+            $this->sendUsernameReminderEmail($user);
+            $this->session->set_flashdata('message', 'Your username has been sent to your email address.');
+        } catch (Exception $e) {
+            log_message('error', 'Username reminder email failed: ' . $e->getMessage());
+            $this->session->set_flashdata('error', 'We could not send the username reminder email right now.');
+        }
+
+        admin_redirect('login#forgot_username');
     }
 
     public function send_reset_password($id = NULL)

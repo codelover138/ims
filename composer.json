@@ -15,7 +15,8 @@
 		"laminas/laminas-barcode": "^2.8",
 		"phpoffice/phpspreadsheet": "^1.18",
 		"tecdiary/sms": "^1.0.2",
-		"studio-42/elfinder": "^2.1"
+		"studio-42/elfinder": "^2.1",
+		"phpoffice/phpword": "^1.0"
 	},
 	"license": "Commercial License",
 	"authors": [

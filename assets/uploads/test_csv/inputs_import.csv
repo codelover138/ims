@@ -1,0 +1,14 @@
+InputName,InputLabel,InputType,DataType,DefaultValue,AllowedInput,MaxSize,InputFormDivisions,LineCommand,TableNumber,TableDisplayed,TableRow,TableColumn
+first_name,First Name,Textbox,text,,,100,Heading1=Willmaker|Subheading1=Personal Information,row1,,,,
+last_name,Last Name,Textbox,text,,,100,Heading1=Willmaker|Subheading1=Personal Information,row1,,,,
+gender,Gender,Dropbox,,Male,Male|Female,,Heading1=Willmaker|Subheading1=Personal Information,,,,,
+dob,Date of Birth,Textbox,date,,,, Heading1=Willmaker|Subheading1=Personal Information,,,,,
+address,Street Address,Textbox,text,,,255,Heading1=Willmaker|Subheading1=Address,,,,,
+suburb,Suburb,Textbox,text,,,100,Heading1=Willmaker|Subheading1=Address,row2,,,,
+state,State,Dropbox,,NSW,"NSW|VIC|QLD|WA|SA|TAS|ACT|NT",,Heading1=Willmaker|Subheading1=Address,row2,,,,
+postcode,Postcode,Textbox,text,,,4,Heading1=Willmaker|Subheading1=Address,row2,,,,
+executor_first_name,First Name,Textbox,text,,,100,Heading1=Executor|Subheading1=Personal Information,row3,,,,
+executor_last_name,Last Name,Textbox,text,,,100,Heading1=Executor|Subheading1=Personal Information,row3,,,,
+executor_relationship,Relationship to Willmaker,Textbox,text,,,100,Heading1=Executor|Subheading1=Personal Information,,,,,
+specific_gift_item,Item,Textbox,text,,,255,Heading1=Specific Gifts,,,1,2,1
+specific_gift_recipient,Recipient,Textbox,text,,,255,Heading1=Specific Gifts,,,1,2,2

@@ -67,6 +67,64 @@ class Gamma_path_service
         return $this->getUserRootAbsolutePath($username) . DIRECTORY_SEPARATOR . $this->getFormFolderName($form_id, $form_title);
     }
 
+    public function normalizeRelativePath($path)
+    {
+        $path = trim(str_replace('\\', '/', (string) $path));
+        return ltrim($path, '/');
+    }
+
+    public function resolvePath($path, $username = null)
+    {
+        $path = trim((string) $path);
+        if ($path === '') {
+            return '';
+        }
+
+        $normalized = str_replace('\\', '/', $path);
+        if (preg_match('/^[A-Za-z]:[\\\\\\/]/', $path) || strpos($normalized, '//') === 0) {
+            return $path;
+        }
+
+        $relative_path = $this->normalizeRelativePath($normalized);
+        $base_relative = $this->normalizeRelativePath($this->getBaseRelativePath());
+        if ($relative_path === $base_relative || strpos($relative_path, $base_relative . '/') === 0) {
+            return rtrim(FCPATH, '\\/') . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relative_path);
+        }
+
+        if (strpos($normalized, '/') === 0) {
+            if (stripos($relative_path, 'gamma/') === 0 || strtolower($relative_path) === 'gamma') {
+                return rtrim(FCPATH, '\\/') . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relative_path);
+            }
+
+            return rtrim(FCPATH, '\\/') . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relative_path);
+        }
+
+        if ($username) {
+            return rtrim($this->getUserRootAbsolutePath($username), '\\/') . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relative_path);
+        }
+
+        return rtrim(FCPATH, '\\/') . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relative_path);
+    }
+
+    public function ensureParentDirectory($path)
+    {
+        $parent = dirname($path);
+        if ($parent && $parent !== '.' && !is_dir($parent)) {
+            mkdir($parent, 0755, true);
+        }
+
+        return $parent;
+    }
+
+    public function writeFile($path, $contents = '')
+    {
+        $absolute_path = $this->resolvePath($path);
+        $this->ensureParentDirectory($absolute_path);
+        file_put_contents($absolute_path, $contents);
+
+        return $absolute_path;
+    }
+
     public function ensureBasePath()
     {
         return $this->ensureDirectory($this->getBaseAbsolutePath());

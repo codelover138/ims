@@ -606,6 +606,15 @@ class system_settings extends MY_Controller
             $data['document-folder_download'] = $this->input->post('document-folder_download');
             $data['document-upload'] = $this->input->post('document-upload');
             $data['document-file_delete'] = $this->input->post('document-file_delete');
+            $data['gamma-workspace']           = $this->input->post('gamma-workspace');
+            $data['gamma-submit']              = $this->input->post('gamma-submit');
+            $data['gamma-delete']              = $this->input->post('gamma-delete');
+            $data['gamma-download']            = $this->input->post('gamma-download');
+            $data['gamma-forms']               = $this->input->post('gamma-forms');
+            $data['gamma-forms-import-form']   = $this->input->post('gamma-forms-import-form');
+            $data['gamma-forms-import-inputs'] = $this->input->post('gamma-forms-import-inputs');
+            $data['gamma-forms-delete']        = $this->input->post('gamma-forms-delete');
+            $data['gamma-forms-generate']      = $this->input->post('gamma-forms-generate');
         }
 
 

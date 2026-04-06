@@ -221,4 +221,44 @@ class Document extends MY_Controller
         $this->load->library('elfinder_lib', $opts);
     }
 
+    public function gamma_elfinder_init()
+    {
+        if (!$this->loggedIn) {
+            show_404();
+        }
+
+        $user = $this->site->getUserById($this->session->userdata('user_id'));
+        $user_root = $this->gamma_path_service->ensureUserFolders($user->username);
+
+        $disabled = array('move', 'duplicate', 'cut');
+        $root_options = array(
+            'driver'        => 'LocalFileSystem',
+            'path'          => rtrim($user_root, '\\/') . DIRECTORY_SEPARATOR,
+            'URL'           => $this->gamma_path_service->getUserRootUrl($user->username),
+            'uploadMaxSize' => $this->allowed_file_size . 'M',
+            'accessControl' => 'access',
+            'disabled'      => $disabled,
+            'uploadAllow'   => array(
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'text/plain',
+                'image/jpeg',
+                'image/png',
+                'application/octet-stream',
+            ),
+            'uploadOrder' => array('allow', 'deny'),
+            'attributes' => array(
+                array('pattern' => '/.tmb/', 'hidden' => true),
+                array('pattern' => '/.quarantine/', 'hidden' => true),
+                array('read' => true, 'write' => true),
+            ),
+        );
+
+        $opts = array('roots' => array($root_options));
+        $this->load->library('elfinder_lib', $opts);
+    }
+
 }

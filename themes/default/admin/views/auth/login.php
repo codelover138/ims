@@ -230,7 +230,7 @@
                     </div>
                     <div class="auth-links">
                         <a href="#forgot_password" class="forgot_password_link"><i class="fa fa-life-ring"></i> <?= lang('forgot_password') ?></a>
-                        <span>Use your account email to request a secure reset link.</span>
+                        <a href="#forgot_username" class="forgot_password_link"><i class="fa fa-user-circle-o"></i> Forgot username</a>
                     </div>
                     <?= form_close(); ?>
                     <?php if ($Settings->allow_reg) { ?>
@@ -276,7 +276,54 @@
                         <button type="submit" class="btn btn-auth-primary"><?= lang('submit') ?> <i class="fa fa-envelope"></i></button>
                     </div>
                     <?= form_close(); ?>
+                    <div class="auth-links" style="margin-top:18px;">
+                        <a href="#forgot_username" class="forgot_password_link"><i class="fa fa-user-circle-o"></i> Forgot username</a>
+                        <span>We can email your username to the address on file.</span>
+                    </div>
                     <div class="auth-powered">Password recovery is limited to authorized staff accounts</div>
+                </div>
+            </div>
+        </div>
+        <div id="forgot_username" style="display: none;">
+            <div class="auth-stage">
+                <div class="auth-showcase">
+                    <span class="auth-kicker">Account Recovery</span>
+                    <h1>Recover your username.</h1>
+                    <p>Enter your account email and we will send your username to the registered address.</p>
+                    <div class="auth-feature-list">
+                        <div class="auth-feature">
+                            <i class="fa fa-user-circle-o"></i>
+                            <div>
+                                <strong>Username reminder</strong>
+                                <span>Useful when you remember your email but not the account username.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="auth-panel">
+                    <div class="auth-panel-head">
+                        <h2>Recover username</h2>
+                        <p>Use the email address attached to your staff account.</p>
+                    </div>
+                    <?php if ($error) { ?><div class="alert alert-danger auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><ul class="list-group"><?= $error; ?></ul></div><?php } ?>
+                    <?php if ($message) { ?><div class="alert alert-success auth-alert"><button data-dismiss="alert" class="close" type="button">&times;</button><ul class="list-group"><?= $message; ?></ul></div><?php } ?>
+                    <?= admin_form_open("auth/forgot_username", 'class="login" data-toggle="validator"'); ?>
+                    <p class="auth-note">We will email your username to the matching account.</p>
+                    <div class="auth-fields">
+                        <div class="auth-field form-group">
+                            <label for="recovery_email">Email Address</label>
+                            <div class="input-group"><span class="input-group-addon"><i class="fa fa-envelope"></i></span><input type="email" id="recovery_email" name="recovery_email" class="form-control" placeholder="<?= lang('email_address') ?>" required="required"/></div>
+                        </div>
+                    </div>
+                    <div class="auth-actions">
+                        <a class="btn btn-auth-secondary login_link" href="#login"><i class="fa fa-chevron-left"></i> <?= lang('back') ?></a>
+                        <button type="submit" class="btn btn-auth-primary">Send Username <i class="fa fa-paper-plane"></i></button>
+                    </div>
+                    <?= form_close(); ?>
+                    <div class="auth-links" style="margin-top:18px;">
+                        <a href="#forgot_password" class="forgot_password_link"><i class="fa fa-life-ring"></i> <?= lang('forgot_password') ?></a>
+                        <span>Password reset is still available if you already know your username.</span>
+                    </div>
                 </div>
             </div>
         </div>

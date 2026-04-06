@@ -67,6 +67,7 @@
             <?= form_close(); ?>
             <div class="forgot-extra">
                 <a href="<?= admin_url('auth/login') ?>">Return to sign in</a>
+                <a href="<?= admin_url('login#forgot_username') ?>">Forgot username</a>
                 <a href="register"><?= lang('register') ?></a>
             </div>
         </div>

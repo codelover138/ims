@@ -1,0 +1,200 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Gamma_document_runner
+{
+    protected $ci;
+
+    public function __construct()
+    {
+        $this->ci =& get_instance();
+        $this->ci->load->library('gamma_path_service');
+    }
+
+    protected function xml($value)
+    {
+        return htmlspecialchars((string) $value, ENT_XML1 | ENT_COMPAT, 'UTF-8');
+    }
+
+    protected function stringify($value)
+    {
+        if (is_array($value)) {
+            return json_encode($value);
+        }
+
+        if ($value === null) {
+            return '';
+        }
+
+        return (string) $value;
+    }
+
+    protected function flattenInputValues(array $values, $prefix = '')
+    {
+        $flattened = array();
+
+        foreach ($values as $key => $value) {
+            $path = $prefix === '' ? (string) $key : $prefix . '.' . $key;
+            if (is_array($value)) {
+                $flattened += $this->flattenInputValues($value, $path);
+                continue;
+            }
+
+            $flattened[$path] = $this->stringify($value);
+        }
+
+        return $flattened;
+    }
+
+    protected function loadPrecedentClauseText($form, $username)
+    {
+        $path = trim((string) $form->precedent_clause_location);
+        if ($path === '') {
+            return '';
+        }
+
+        $absolute_path = $this->ci->gamma_path_service->resolvePath($path, $username);
+        if (!is_file($absolute_path)) {
+            return '';
+        }
+
+        return (string) file_get_contents($absolute_path);
+    }
+
+    protected function applyTemplateValues($text, array $flat_values)
+    {
+        if ($text === '') {
+            return '';
+        }
+
+        $replacements = array();
+        foreach ($flat_values as $key => $value) {
+            $replacements['{{' . $key . '}}'] = $value;
+            $replacements['[[' . $key . ']]'] = $value;
+        }
+
+        return strtr($text, $replacements);
+    }
+
+    protected function relativeToWebPath($absolute_path)
+    {
+        $absolute_path = str_replace('\\', '/', $absolute_path);
+        $base_path = str_replace('\\', '/', rtrim(FCPATH, '\\/')) . '/';
+
+        if (strpos($absolute_path, $base_path) === 0) {
+            return ltrim(substr($absolute_path, strlen($base_path)), '/');
+        }
+
+        return $absolute_path;
+    }
+
+    protected function createMinimalDocx($absolute_path, array $lines)
+    {
+        $zip = new ZipArchive();
+        $this->ci->gamma_path_service->ensureParentDirectory($absolute_path);
+
+        if ($zip->open($absolute_path, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            throw new RuntimeException('Unable to create output document.');
+        }
+
+        $content_types = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            . '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+            . '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+            . '<Default Extension="xml" ContentType="application/xml"/>'
+            . '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
+            . '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>'
+            . '<Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>'
+            . '</Types>';
+
+        $rels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            . '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            . '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'
+            . '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>'
+            . '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>'
+            . '</Relationships>';
+
+        $doc_rels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>';
+        $app = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Gamma</Application></Properties>';
+        $core = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>Gamma Output</dc:title></cp:coreProperties>';
+
+        $paragraphs = '';
+        foreach ($lines as $line) {
+            $text = $this->xml($line === '' ? ' ' : $line);
+            $paragraphs .= '<w:p><w:r><w:t xml:space="preserve">' . $text . '</w:t></w:r></w:p>';
+        }
+
+        $document = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            . '<w:document xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" mc:Ignorable="w14 wp14">'
+            . '<w:body>' . $paragraphs . '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>';
+
+        $zip->addFromString('[Content_Types].xml', $content_types);
+        $zip->addFromString('_rels/.rels', $rels);
+        $zip->addFromString('word/document.xml', $document);
+        $zip->addFromString('word/_rels/document.xml.rels', $doc_rels);
+        $zip->addFromString('docProps/app.xml', $app);
+        $zip->addFromString('docProps/core.xml', $core);
+        $zip->close();
+    }
+
+    public function run($form, $username, $output_file_id, array $input_values)
+    {
+        $base_name = trim((string) ($form->output_filename_base ?: $form->form_title ?: 'Output'));
+        $filename = date('YmdHi') . ' ' . preg_replace('/[\\\\\\/:\*\?"<>\|]+/', ' ', $base_name) . '.docx';
+
+        // Always save into the logged-in user's own 4 OutputFiles folder,
+        // regardless of what path is stored in the form row.
+        $output_folder = '4 OutputFiles';
+        $absolute_folder = $this->ci->gamma_path_service->getUserRootAbsolutePath($username)
+            . DIRECTORY_SEPARATOR . $output_folder;
+        if (!is_dir($absolute_folder)) {
+            mkdir($absolute_folder, 0755, true);
+        }
+
+        $absolute_output_path = rtrim($absolute_folder, '\\/') . DIRECTORY_SEPARATOR . $filename;
+        $gamma_generated_at = date('Y-m-d H:i:s');
+        $gamma_flat_input_values = $this->flattenInputValues($input_values);
+        $gamma_precedent_clause_path = trim((string) $form->precedent_clause_location);
+        $gamma_precedent_clause_text = $this->loadPrecedentClauseText($form, $username);
+        $document_creation = trim((string) $form->document_creation_location);
+        if ($document_creation !== '') {
+            $creation_file = $this->ci->gamma_path_service->resolvePath($document_creation, $username);
+            if (is_file($creation_file)) {
+                $gamma_form = $form;
+                $gamma_output_file_id = $output_file_id;
+                $gamma_output_file_path = $absolute_output_path;
+                $gamma_input_values = $input_values;
+                include $creation_file;
+            }
+        }
+
+        if (!is_file($absolute_output_path)) {
+            $lines = array(
+                $form->form_title,
+                'Generated: ' . $gamma_generated_at,
+                'Output File ID: ' . $output_file_id,
+                '',
+            );
+
+            $resolved_clause_text = $this->applyTemplateValues($gamma_precedent_clause_text, $gamma_flat_input_values);
+            if (trim($resolved_clause_text) !== '') {
+                $lines[] = 'Precedent Clauses';
+                $lines[] = '';
+                foreach (preg_split('/\r\n|\r|\n/', $resolved_clause_text) as $clause_line) {
+                    $lines[] = $clause_line;
+                }
+                $lines[] = '';
+            }
+
+            $lines[] = 'Submitted Values';
+            foreach ($gamma_flat_input_values as $key => $value) {
+                $lines[] = $key . ': ' . $value;
+            }
+            $this->createMinimalDocx($absolute_output_path, $lines);
+        }
+
+        return array(
+            'absolute_path' => $absolute_output_path,
+            'relative_path' => $this->relativeToWebPath($absolute_output_path),
+            'filename' => $filename,
+        );
+    }
+}

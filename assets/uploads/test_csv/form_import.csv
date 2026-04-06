@@ -1,0 +1,10 @@
+Field,Value
+UserID,1
+FormTitle,Test Will
+Description,A test will document form
+ButtonLabel,Generate Document
+InputFormLocation,1 UserInterfaceFiles/test_will_form.html
+PrecedentClauseLocation,2 PrecedentClauses/test_will_clauses.html
+DocumentCreationLocation,3 DocumentGeneration/test_will_create.php
+OutputFilenameBase,TestWill
+OutputFileLocation,4 OutputFiles

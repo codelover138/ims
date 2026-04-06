@@ -1,0 +1,9 @@
+UserID,47
+FormTitle,Employee Form
+Description,Employee Form
+ButtonLabel,Create Test Form
+InputFormLocation,\Gamma\Users\TestUser\1 InputFile\IF_TestForm001.php
+PrecedentClauseLocation,\Gamma\Users\TestUser\2 PrecedentClauses\PC_TestForm001.php
+OutputGenerationLocation,\Gamma\Users\TestUser\3 OutputGeneration\OG_TestForm001.php
+OutputFilenameBase,TestForm001
+OutputFileLocation,\Gamma\Users\TestUser\4 OutputFiles\

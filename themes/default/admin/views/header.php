@@ -320,6 +320,41 @@
                                                 </li>
                                             </ul>
                                         </li>
+                                        <li class="mm_gamma mm_gamma_forms">
+                                            <a class="dropmenu" href="#">
+                                                <i class="fa fa-folder-open"></i>
+                                                <span class="text"> Gamma </span>
+                                                <span class="chevron closed"></span>
+                                            </a>
+                                            <ul>
+                                                <li id="gamma_index">
+                                                    <a class="submenu" href="<?= admin_url('gamma'); ?>">
+                                                        <i class="fa fa-home"></i><span class="text">
+                                                            Gamma Workspace</span>
+                                                    </a>
+                                                </li>
+                                                <li id="gamma_forms_index">
+                                                    <a class="submenu" href="<?= admin_url('gamma_forms'); ?>">
+                                                        <i class="fa fa-file-text-o"></i><span class="text">
+                                                            Gamma Forms</span>
+                                                    </a>
+                                                </li>
+                                                <li id="gamma_forms_import_forms_csv">
+                                                    <a class="submenu"
+                                                        href="<?= admin_url('gamma_forms/import_forms_csv'); ?>">
+                                                        <i class="fa fa-upload"></i><span class="text">
+                                                            Import Forms CSV</span>
+                                                    </a>
+                                                </li>
+                                                <li id="gamma_forms_import_inputs_csv">
+                                                    <a class="submenu"
+                                                        href="<?= admin_url('gamma_forms/import_inputs_csv'); ?>">
+                                                        <i class="fa fa-table"></i><span class="text">
+                                                            Import Inputs CSV</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
                                         <li class="mm_calendar">
                                             <a class="submenu" href="<?= admin_url('calendar'); ?>">
                                                 <i class="fa fa-calendar"></i><span class="text">
@@ -464,6 +499,52 @@
                                                             <?= lang('File_Manager'); ?></span>
                                                     </a>
                                                 </li>
+                                            </ul>
+                                        </li>
+                                        <?php } ?>
+                                        <?php
+                                        $show_gamma_forms_menu = !empty($GP['gamma-forms']);
+                                        $show_gamma_workspace  = !empty($GP['gamma-workspace']);
+                                        if ($show_gamma_workspace || $show_gamma_forms_menu) { ?>
+                                        <li class="mm_gamma mm_gamma_forms">
+                                            <a class="dropmenu" href="#">
+                                                <i class="fa fa-folder-open"></i>
+                                                <span class="text"> Gamma </span>
+                                                <span class="chevron closed"></span>
+                                            </a>
+                                            <ul>
+                                                <?php if ($show_gamma_workspace) { ?>
+                                                <li id="gamma_index">
+                                                    <a class="submenu" href="<?= admin_url('gamma'); ?>">
+                                                        <i class="fa fa-home"></i><span class="text">
+                                                            Gamma Workspace</span>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
+                                                <?php if ($show_gamma_forms_menu) { ?>
+                                                <li id="gamma_forms_index">
+                                                    <a class="submenu" href="<?= admin_url('gamma_forms'); ?>">
+                                                        <i class="fa fa-file-text-o"></i><span class="text">
+                                                            Gamma Forms</span>
+                                                    </a>
+                                                </li>
+                                                <?php if (!empty($GP['gamma-forms-import-form'])) { ?>
+                                                <li id="gamma_forms_import_forms_csv">
+                                                    <a class="submenu" href="<?= admin_url('gamma_forms/import_forms_csv'); ?>">
+                                                        <i class="fa fa-upload"></i><span class="text">
+                                                            Import Forms CSV</span>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
+                                                <?php if (!empty($GP['gamma-forms-import-inputs'])) { ?>
+                                                <li id="gamma_forms_import_inputs_csv">
+                                                    <a class="submenu" href="<?= admin_url('gamma_forms/import_inputs_csv'); ?>">
+                                                        <i class="fa fa-table"></i><span class="text">
+                                                            Import Inputs CSV</span>
+                                                    </a>
+                                                </li>
+                                                <?php } ?>
+                                                <?php } ?>
                                             </ul>
                                         </li>
                                         <?php } ?>

@@ -1,0 +1,14 @@
+FormID,47
+InputName,Name
+InputLabel,name
+InputType,TextBox
+DataType,String
+DefaultValue,null
+AllowedInput,null
+MaxSize,50
+InputFormDivisions,Heading1=Estimates
+LineCommand,1
+TableNumber,0
+TableDisplayed,0
+TableRow,0
+TableColumn,0

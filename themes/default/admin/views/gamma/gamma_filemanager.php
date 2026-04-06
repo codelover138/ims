@@ -1,0 +1,55 @@
+<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"/>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('vendor/studio-42/elfinder/css/elfinder.min.css'); ?>">
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('vendor/studio-42/elfinder/css/theme.css'); ?>">
+<script src="<?php echo base_url('vendor/studio-42/elfinder/js/elfinder.min.js'); ?>"></script>
+<style>.ui-dialog { background-color: #dbdee0; }</style>
+<script type="text/javascript" charset="utf-8">
+    function disableElfinderDrag() {
+        var $root = $('#elfinder');
+        $root.find('.elfinder-cwd-file, .elfinder-navbar-dir').each(function () {
+            var $node = $(this);
+            if ($node.data('uiDraggable')) { $node.draggable('disable'); }
+            if ($node.data('uiDroppable')) { $node.droppable('disable'); }
+        });
+        $root.find('.ui-draggable, .ui-droppable').css('cursor', 'default');
+    }
+    $().ready(function () {
+        window.setTimeout(function () {
+            var elf = $('#elfinder').elfinder({
+                url: '<?= admin_url() ?>document/gamma_elfinder_init',
+                height: 700,
+                enableAlways: true,
+                dragUploadAllow: false,
+                uiOptions: {
+                    toolbar: [
+                        ['back', 'forward'],
+                        ['mkdir', 'upload'],
+                        ['info'],
+                        ['quicklook'],
+                        ['copy', 'paste'],
+                        ['rm'],
+                        ['rename', 'edit'],
+                        ['search'],
+                        ['fullscreen'],
+                        ['view'],
+                    ],
+                },
+                handlers: {
+                    init: function () { disableElfinderDrag(); },
+                    open: function () { disableElfinderDrag(); },
+                    reload: function () { disableElfinderDrag(); }
+                }
+            }).elfinder('instance');
+            $('#elfinder').on('dragenter dragover drop dragstart', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            });
+        }, 200);
+    });
+</script>
+<div class="panel panel-custom">
+    <div id="elfinder" style="background-color:ghostwhite"></div>
+</div>
