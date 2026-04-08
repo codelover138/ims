@@ -89,6 +89,10 @@ class Gamma_document_runner
 
     protected function createMinimalDocx($absolute_path, array $lines)
     {
+        if (!class_exists('ZipArchive')) {
+            throw new RuntimeException('ZipArchive is not available for DOCX generation.');
+        }
+
         $zip = new ZipArchive();
         $this->ci->gamma_path_service->ensureParentDirectory($absolute_path);
 
@@ -152,10 +156,41 @@ class Gamma_document_runner
         $zip->close();
     }
 
+    protected function createLegacyWordDocument($absolute_path, array $lines)
+    {
+        $this->ci->gamma_path_service->ensureParentDirectory($absolute_path);
+
+        $html_lines = array();
+        foreach ($lines as $line) {
+            if (is_array($line)) {
+                if ($line['type'] === 'title') {
+                    $html_lines[] = '<h1 style="text-align:center;color:#1F3864;">' . $this->xml($line['text']) . '</h1>';
+                } elseif ($line['type'] === 'heading') {
+                    $html_lines[] = '<h2 style="color:#2F5496;border-bottom:1px solid #d9d9d9;padding-bottom:4px;">' . $this->xml($line['text']) . '</h2>';
+                } elseif ($line['type'] === 'meta') {
+                    $html_lines[] = '<p style="text-align:center;color:#7f7f7f;"><em>' . $this->xml($line['text']) . '</em></p>';
+                } elseif ($line['type'] === 'key_value') {
+                    $html_lines[] = '<p><strong>' . $this->xml($line['key']) . ':</strong> ' . $this->xml(trim((string) $line['value']) === '' ? ' ' : $line['value']) . '</p>';
+                }
+            } else {
+                $html_lines[] = '<p>' . nl2br($this->xml($line === '' ? ' ' : $line)) . '</p>';
+            }
+        }
+
+        $document = '<html><head><meta charset="UTF-8"></head><body style="font-family:Arial,sans-serif;font-size:12pt;">'
+            . implode('', $html_lines)
+            . '</body></html>';
+
+        if (file_put_contents($absolute_path, $document) === false) {
+            throw new RuntimeException('Unable to create output document.');
+        }
+    }
+
     public function run($form, $username, $output_file_id, array $input_values)
     {
         $base_name = trim((string) ($form->output_filename_base ?: $form->form_title ?: 'Output'));
-        $filename = date('YmdHi') . ' ' . preg_replace('/[\\\\\\/:\*\?"<>\|]+/', ' ', $base_name) . '.docx';
+        $extension = class_exists('ZipArchive') ? '.docx' : '.doc';
+        $filename = date('YmdHi') . ' ' . preg_replace('/[\\\\\\/:\*\?"<>\|]+/', ' ', $base_name) . $extension;
 
         // Always save into the logged-in user's own 4 OutputFiles folder,
         // regardless of what path is stored in the form row.
@@ -204,7 +239,11 @@ class Gamma_document_runner
             foreach ($gamma_flat_input_values as $key => $value) {
                 $lines[] = ['type' => 'key_value', 'key' => $key, 'value' => $value];
             }
-            $this->createMinimalDocx($absolute_output_path, $lines);
+            if ($extension === '.docx') {
+                $this->createMinimalDocx($absolute_output_path, $lines);
+            } else {
+                $this->createLegacyWordDocument($absolute_output_path, $lines);
+            }
         }
 
         return array(

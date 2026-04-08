@@ -363,14 +363,53 @@
 <script src="<?= $assets ?>js/jquery.cookie.js"></script>
 <script src="<?= $assets ?>js/login.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        localStorage.clear();
-        var hash = window.location.hash;
-        if (hash && hash != '') {
-            $("#login").hide();
-            $(hash).show();
+    (function (win, doc, jq) {
+        'use strict';
+
+        function onReady(callback) {
+            if (doc.readyState === 'loading') {
+                doc.addEventListener('DOMContentLoaded', callback);
+                return;
+            }
+            callback();
         }
-    });
+
+        function hideElement(selector) {
+            var element = doc.querySelector(selector);
+            if (element) {
+                element.style.display = 'none';
+            }
+        }
+
+        function showElement(selector) {
+            var element = doc.querySelector(selector);
+            if (element) {
+                element.style.display = '';
+            }
+        }
+
+        onReady(function () {
+            try {
+                if (win.localStorage) {
+                    win.localStorage.clear();
+                }
+            } catch (e) {}
+
+            var hash = win.location.hash;
+            if (!hash) {
+                return;
+            }
+
+            if (jq) {
+                jq('#login').hide();
+                jq(hash).show();
+                return;
+            }
+
+            hideElement('#login');
+            showElement(hash);
+        });
+    })(window, document, window.jQuery || window.$);
 </script>
 </body>
 </html>

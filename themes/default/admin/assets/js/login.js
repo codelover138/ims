@@ -1451,57 +1451,67 @@ if ( typeof Object.create !== 'function' ) {
 }(jQuery);
 
 
-$(document).ready( function(){
-        if($("#identity").val()==""){
-            $("#identity").focus()
-        } else { 
-            $("#password").focus();
-        }
-    $('.reload-captcha').click(function(event){
-        event.preventDefault();
-        $.ajax({
-           url: $(this).attr('href'),
-           success:function(data){
-              $('.captcha-image').html(data);
-           }
-        });            
-    });
-    $('input[type="checkbox"],[type="radio"]').iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'iradio_square-blue',
-        increaseArea: '20%'
-    });
-    if($.cookie('the_style')) {
-        if ($.cookie('the_style') == 'light') {
-            $('.page-back').addClass('bgrey');
-        }
-        if ($.cookie('the_style') == 'blue') {
-            $('.page-back').addClass('bblue');
-        }
-        if ($.cookie('the_style') == 'black') {
-            $('.page-back').addClass('bblack');
-        }
-    } else {
-        $('.page-back').addClass('bblue');
+(function (jq) {
+    'use strict';
+
+    if (!jq) {
+        return;
     }
-    
-    $('#forgot_password').hide();
-    $('#register').hide();
-    
-    $('.forgot_password_link').click(function(){
-        $('#login').slideUp();
-        $('#forgot_password').slideDown();
+
+    jq(function () {
+        if (jq("#identity").val() == "") {
+            jq("#identity").focus();
+        } else {
+            jq("#password").focus();
+        }
+
+        jq('.reload-captcha').click(function (event) {
+            event.preventDefault();
+            jq.ajax({
+                url: jq(this).attr('href'),
+                success: function (data) {
+                    jq('.captcha-image').html(data);
+                }
+            });
+        });
+
+        jq('input[type="checkbox"],[type="radio"]').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%'
+        });
+
+        if (jq.cookie('the_style')) {
+            if (jq.cookie('the_style') == 'light') {
+                jq('.page-back').addClass('bgrey');
+            }
+            if (jq.cookie('the_style') == 'blue') {
+                jq('.page-back').addClass('bblue');
+            }
+            if (jq.cookie('the_style') == 'black') {
+                jq('.page-back').addClass('bblack');
+            }
+        } else {
+            jq('.page-back').addClass('bblue');
+        }
+
+        jq('#forgot_password').hide();
+        jq('#register').hide();
+
+        jq('.forgot_password_link').click(function () {
+            jq('#login').slideUp();
+            jq('#forgot_password').slideDown();
+        });
+
+        jq('.register_link').click(function () {
+            jq('#login').slideUp();
+            jq('#register').slideDown();
+        });
+
+        jq('.login_link').click(function () {
+            jq('#register').slideUp();
+            jq('#forgot_password').slideUp();
+            jq('#login').slideDown();
+        });
     });
-    
-    $('.register_link').click(function(){
-        $('#login').slideUp();
-        $('#register').slideDown();
-    });
-    
-    $('.login_link').click(function(){
-        $('#register').slideUp();
-        $('#forgot_password').slideUp();
-        $('#login').slideDown();
-    });
-    
-});
+})(window.jQuery || window.$);
