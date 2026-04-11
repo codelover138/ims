@@ -235,7 +235,7 @@ class Gamma_forms extends MY_Controller
                     'form_title' => $form_title,
                     'description' => $this->input->post('description', true),
                     'button_label' => 'Submit',
-                    'input_form_location' => 'gamma_forms/inputs/' . $slug . '_' . $unique_id . '.php',
+                    'input_form_location' => null,
                     'precedent_clause_location' => 'gamma_forms/precedents/' . $slug . '_' . $unique_id . '.php',
                     'document_creation_location' => 'gamma_forms/generators/' . $slug . '_' . $unique_id . '.php',
                     'output_filename_base' => $slug,
@@ -244,6 +244,10 @@ class Gamma_forms extends MY_Controller
 
                 // Create the form
                 $form_id = $this->gamma_form_model->createForm($form_data);
+                $input_form_location = $this->gamma_path_service->buildInputFormRelativePath($form_title, $form_id);
+                $this->gamma_form_model->updateForm($form_id, array(
+                    'input_form_location' => $input_form_location,
+                ));
                 $form = $this->gamma_form_model->getFormById($form_id);
 
                 // Create support files

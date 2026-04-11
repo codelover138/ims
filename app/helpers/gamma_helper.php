@@ -18,3 +18,13 @@ if (!function_exists('gamma_safe_segment')) {
         return $value === '' ? 'Untitled' : $value;
     }
 }
+
+if (!function_exists('gamma_safe_compact_segment')) {
+    function gamma_safe_compact_segment($value)
+    {
+        $value = gamma_safe_segment($value);
+        $value = preg_replace('/[^A-Za-z0-9]+/', '', $value);
+
+        return $value === '' ? 'Untitled' : $value;
+    }
+}

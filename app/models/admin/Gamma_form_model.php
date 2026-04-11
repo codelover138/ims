@@ -141,6 +141,39 @@ class Gamma_form_model extends CI_Model
         return (int) $this->db->insert_id();
     }
 
+    public function updateForm($form_id, array $data)
+    {
+        $payload = array();
+
+        if (array_key_exists('input_form_location', $data)) {
+            $payload['input_form_location'] = $this->normalizeNullableValue($data['input_form_location']);
+        }
+
+        if (array_key_exists('precedent_clause_location', $data)) {
+            $payload['precedent_clause_location'] = $this->normalizeNullableValue($data['precedent_clause_location']);
+        }
+
+        if (array_key_exists('document_creation_location', $data)) {
+            $payload['document_creation_location'] = $this->normalizeNullableValue($data['document_creation_location']);
+        }
+
+        if (array_key_exists('output_filename_base', $data)) {
+            $payload['output_filename_base'] = $this->normalizeNullableValue($data['output_filename_base']);
+        }
+
+        if (array_key_exists('output_file_location', $data)) {
+            $payload['output_file_location'] = $this->normalizeNullableValue($data['output_file_location']);
+        }
+
+        if (empty($payload)) {
+            return true;
+        }
+
+        $payload['last_updated'] = $this->now();
+
+        return (bool) $this->db->update($this->forms_table, $payload, array('form_id' => (int) $form_id));
+    }
+
     public function createFormFromCsvRow(array $row)
     {
         $data = array(

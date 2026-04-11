@@ -232,7 +232,7 @@ class Welcome extends MY_Controller
             $shortcuts[] = array(
                 'label' => lang('File_Manager'),
                 'icon' => 'fa-folder-open',
-                'url' => admin_url('document'),
+                'url' => admin_url('document/file_manager'),
                 'description' => 'Browse and manage stored files.',
             );
         }

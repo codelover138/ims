@@ -57,6 +57,21 @@ class Gamma_path_service
         return (array) $this->item('gamma_user_folders', array());
     }
 
+    public function getInputFormFolderName()
+    {
+        return (string) $this->item('gamma_input_form_folder', '1 InputFile');
+    }
+
+    public function buildInputFormFilename($form_title, $form_id)
+    {
+        return 'IF_' . gamma_safe_compact_segment($form_title) . str_pad((string) ((int) $form_id), 3, '0', STR_PAD_LEFT) . '.php';
+    }
+
+    public function buildInputFormRelativePath($form_title, $form_id)
+    {
+        return $this->normalizeRelativePath($this->getInputFormFolderName() . '/' . $this->buildInputFormFilename($form_title, $form_id));
+    }
+
     public function getFormFolderName($form_id, $form_title)
     {
         return gamma_pad_form_id($form_id) . ' ' . gamma_safe_segment($form_title);

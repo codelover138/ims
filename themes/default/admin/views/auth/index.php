@@ -18,20 +18,21 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, null, null, null, null, <?php if ($has_award_points) { ?>null, <?php } ?>null, {"mRender": user_status}, {"bSortable": false}]
+            }, null, null, null, null, null, <?php if ($has_award_points) { ?>null, <?php } ?>null, {"mRender": user_status}, {"bSortable": false}]
         }).fnSetFilteringDelay().dtFilter([
-            {column_number: 1, filter_default_label: "[<?=lang('first_name');?>]", filter_type: "text", data: []},
-            {column_number: 2, filter_default_label: "[<?=lang('last_name');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('email_address');?>]", filter_type: "text", data: []},
-            {column_number: 4, filter_default_label: "[<?=lang('company');?>]", filter_type: "text", data: []},
+            {column_number: 1, filter_default_label: "[UserID]", filter_type: "text", data: []},
+            {column_number: 2, filter_default_label: "[<?=lang('first_name');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "[<?=lang('last_name');?>]", filter_type: "text", data: []},
+            {column_number: 4, filter_default_label: "[<?=lang('email_address');?>]", filter_type: "text", data: []},
+            {column_number: 5, filter_default_label: "[<?=lang('company');?>]", filter_type: "text", data: []},
             <?php if ($has_award_points) { ?>
-            {column_number: 5, filter_default_label: "[<?=lang('award_points');?>]", filter_type: "text", data: []},
-            {column_number: 6, filter_default_label: "[<?=lang('group');?>]", filter_type: "text", data: []},
+            {column_number: 6, filter_default_label: "[<?=lang('award_points');?>]", filter_type: "text", data: []},
+            {column_number: 7, filter_default_label: "[<?=lang('group');?>]", filter_type: "text", data: []},
             <?php } else { ?>
-            {column_number: 5, filter_default_label: "[<?=lang('group');?>]", filter_type: "text", data: []},
+            {column_number: 6, filter_default_label: "[<?=lang('group');?>]", filter_type: "text", data: []},
             <?php } ?>
             {
-                column_number: <?= $has_award_points ? 7 : 6 ?>, select_type: 'select2',
+                column_number: <?= $has_award_points ? 8 : 7 ?>, select_type: 'select2',
                 select_type_options: {
                     placeholder: '<?=lang('status');?>',
                     width: '100%',
@@ -44,12 +45,13 @@
         ], "footer");
     });
 </script>
-<style>.table td:nth-child(<?= $has_award_points ? 6 : 7 ?>) {
+<style><?php if ($has_award_points) { ?>.table td:nth-child(7) {
         text-align: right;
         width: 10%;
     }
+<?php } ?>
 
-    .table td:nth-child(<?= $has_award_points ? 8 : 7 ?>) {
+    .table td:nth-child(<?= $has_award_points ? 9 : 8 ?>) {
         text-align: center;
     }</style>
 <?php if ($Owner) {
@@ -86,6 +88,7 @@
                             <th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
+                            <th class="col-xs-1">UserID</th>
                             <th class="col-xs-2"><?php echo lang('first_name'); ?></th>
                             <th class="col-xs-2"><?php echo lang('last_name'); ?></th>
                             <th class="col-xs-2"><?php echo lang('email_address'); ?></th>
@@ -100,7 +103,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="<?= $has_award_points ? 8 : 7 ?>" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
+                            <td colspan="<?= $has_award_points ? 9 : 8 ?>" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
                         </tr>
                         </tbody>
                         <tfoot class="dtFilter">
@@ -108,6 +111,7 @@
                             <th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkft" type="checkbox" name="check"/>
                             </th>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>

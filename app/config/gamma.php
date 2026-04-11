@@ -3,7 +3,7 @@
 $config['gamma_enabled'] = true;
 $config['gamma_base_path'] = 'Gamma/Users/';
 $config['gamma_user_folders'] = array(
-    '1 UserInterfaceFiles',
+    '1 InputFile',
     '2 PrecedentClauses',
     '3 DocumentGeneration',
     '4 OutputFiles',

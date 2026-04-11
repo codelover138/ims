@@ -335,7 +335,7 @@ class Auth extends MY_Controller
         }
 
         $this->load->library('datatables');
-        $select = $this->db->dbprefix('users') . ".id as id, first_name, last_name, email, company";
+        $select = $this->db->dbprefix('users') . ".id as id, " . $this->db->dbprefix('users') . ".id as user_id, first_name, last_name, email, company";
         if ($this->db->field_exists('award_points', 'users')) {
             $select .= ", award_points";
         }
