@@ -184,6 +184,19 @@ class Gamma_forms extends MY_Controller
         return $form_id > 0 ? $form_id : null;
     }
 
+    protected function getAssignableUsers()
+    {
+        return $this->db
+            ->select('id, first_name, last_name, username, email')
+            ->from('users')
+            ->where('company_id', null)
+            ->order_by('first_name', 'asc')
+            ->order_by('last_name', 'asc')
+            ->order_by('username', 'asc')
+            ->get()
+            ->result();
+    }
+
     public function index()
     {
         $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
@@ -221,9 +234,20 @@ class Gamma_forms extends MY_Controller
                     throw new RuntimeException('At least one form field is required.');
                 }
 
-                $user = $this->site->getUser();
-                if (!$user) {
+                $current_user = $this->site->getUser();
+                if (!$current_user) {
                     throw new RuntimeException('Unable to resolve user.');
+                }
+
+                $assigned_user = $current_user;
+                if ($this->Owner || $this->Admin) {
+                    $selected_user_id = (int) $this->input->post('assigned_user_id');
+                    if ($selected_user_id > 0) {
+                        $assigned_user = $this->site->getUserById($selected_user_id);
+                        if (!$assigned_user) {
+                            throw new RuntimeException('The selected assigned user could not be found.');
+                        }
+                    }
                 }
 
                 // Auto-generate safe slug
@@ -231,7 +255,7 @@ class Gamma_forms extends MY_Controller
                 $unique_id = time(); // ensure uniqueness
                 
                 $form_data = [
-                    'user_id' => $user->id,
+                    'user_id' => $assigned_user->id,
                     'form_title' => $form_title,
                     'description' => $this->input->post('description', true),
                     'button_label' => 'Submit',
@@ -275,7 +299,7 @@ class Gamma_forms extends MY_Controller
                 // Generate input form PHP
                 $inputs = $this->gamma_form_model->getInputsForForm($form_id);
                 $html = $this->gamma_input_form_builder->build($form, $inputs, admin_url('gamma/submit_form/' . $form->form_id));
-                $absolute_path = $this->gamma_path_service->resolvePath($form->input_form_location, $user->username);
+                $absolute_path = $this->gamma_path_service->resolvePath($form->input_form_location, $assigned_user->username);
                 $this->gamma_path_service->ensureParentDirectory($absolute_path);
                 file_put_contents($absolute_path, $html);
 
@@ -289,6 +313,10 @@ class Gamma_forms extends MY_Controller
         } else {
             $this->data['error'] = $this->session->flashdata('error');
         }
+
+        $current_user = $this->site->getUser();
+        $this->data['assignable_users'] = ($this->Owner || $this->Admin) ? $this->getAssignableUsers() : array();
+        $this->data['selected_assigned_user_id'] = set_value('assigned_user_id', $current_user ? $current_user->id : '');
 
         $bc = array(
             array('link' => admin_url('gamma_forms'), 'page' => 'Gamma Forms'),

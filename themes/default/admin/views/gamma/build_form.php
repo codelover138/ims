@@ -19,12 +19,32 @@
                             <?= form_input('form_title', set_value('form_title'), 'class="form-control" id="form_title" required="required" placeholder="e.g. Employee Contract"'); ?>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <?= lang("description", "description"); ?>
                             <?= form_input('description', set_value('description'), 'class="form-control" id="description" placeholder="Optional brief description of this form"'); ?>
                         </div>
                     </div>
+                    <?php if (!empty($assignable_users)) { ?>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="assigned_user_id">Assign User</label>
+                            <select name="assigned_user_id" id="assigned_user_id" class="form-control">
+                                <option value="">Logged In User</option>
+                                <?php foreach ($assignable_users as $assignable_user) {
+                                    $label = trim(($assignable_user->first_name ?? '') . ' ' . ($assignable_user->last_name ?? ''));
+                                    $label = $label !== '' ? $label : $assignable_user->username;
+                                    $label .= ' (#' . (int) $assignable_user->id . ')';
+                                ?>
+                                <option value="<?= (int) $assignable_user->id; ?>" <?= (string) $selected_assigned_user_id === (string) $assignable_user->id ? 'selected="selected"' : ''; ?>>
+                                    <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>
+                                </option>
+                                <?php } ?>
+                            </select>
+                            <small class="text-muted">Leave blank to assign the form to the logged in user.</small>
+                        </div>
+                    </div>
+                    <?php } ?>
                 </div>
 
                 <hr>
